@@ -1,0 +1,196 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" >
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <!-- dropdown -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'transcript/css/grid.css'%}">
+    <link rel="stylesheet" href="{% static 'transcript/css/styles_transcript.css'%}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Bảng điểm môn học</title>
+</head>
+<body>
+    <div class="grid wide">
+        <div class = "">
+            <div class="content row">
+                <div class="sidebar col l-2">
+                    <div class="profile">
+                        <!-- <img
+                          src="https://cdn.dribbble.com/users/3960463/screenshots/13952774/media/1083c2b91054c7d7ee7c0bd47d60d5e0.png?compress=1&resize=800x600"
+                          alt=""
+                          class="profile-avatar"
+                        /> -->
+                        <h3 class="profile-name">Bảng điểm <br> môn học</h3>
+                    </div>
+                    <ul class="menu">
+                        <li class="menu-item">
+                          <a href="#" class="menu-link"
+                            ><i class="fa fa-book menu-icon"></i><span>Tạo mới</span></a
+                          >
+                        </li>
+                    </ul>
+                    <ul class="menu">
+                        <li class="menu-item">
+                          <a href="#" class="menu-link"
+                            ><i class="fa fa-bookmark menu-icon"></i><span>Hướng dẫn</span></a
+                          >
+                        </li>
+                    </ul>
+                </div>
+                <div class="main col l-9">
+                    <div class="main_form-header row">
+                        <div class="main_form_class col l-3">
+                            <div class="row">
+                                <div class="main_form_title col l-3">
+                                    <p>Lớp</p>
+                                </div>
+                                <div class="main_form_select col l-6">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                          <option>10A1</option>
+                                          <option>10A2</option>
+                                          <option>10A3</option>
+                                          <option>10A4</option>
+                                          <option>11A1</option>
+                                          <option>11A2</option>
+                                          <option>11A3</option>
+                                          <option>12A1</option>
+                                          <option>12A2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main_form_subject col l-4">
+                            <div class="row">
+                                <div class="main_form_title col l-4">
+                                    <p>Môn học</p>
+                                </div>
+                                <div class="main_form_select col l-6">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                          <option>Toán</option>
+                                          <option>Lý</option>
+                                          <option>Hóa</option>
+                                          <option>Sinh</option>
+                                          <option>Sử</option>
+                                          <option>Địa</option>
+                                          <option>Văn</option>
+                                          <option>Đạo Đức</option>
+                                          <option>Thể Dục</option>
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="main_form_term col l-3">
+                            <div class="row">
+                                <div class="main_form_title col l-4">
+                                    <p>Học kì</p>
+                                </div>
+                                <div class="main_form_select col l-6">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                          <option>1</option>
+                                          <option>2</option>
+                                    </select>
+                                </div>                               
+                            </div>
+                        </div>
+                        <div class="main_form_term col l-2">
+                            <div class="row">
+                                <button type="button" class="btn btn-outline-primary col l-11">Xem kết quả</button>                              
+                            </div>
+                        </div>
+
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>STT</th>
+                            <th>Họ Tên</th>
+                            <th>Điểm 15'</th>
+                            <th>Điểm 1 tiết</th>
+                            <th>Điểm cuối HK</th>
+                            <th>Điều chỉnh</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Nguyễn Đắc Thắng</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Đỗ Lê Khánh Đăng</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Nguyễn Minh Tú</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Lục Minh Bửu</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Ngô Hữu Đang</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <a href="#" class="item-center menu-link"
+                                ><i class="fa fa-pencil menu-icon"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
