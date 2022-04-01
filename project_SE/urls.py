@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('transcript', include('transcript.urls')),
     path('dangkylophoc', include("dangkylophoc.urls")),
+    path('tiepnhan', include("tiepNhanHocSinh.urls")),
+
 ]
 
