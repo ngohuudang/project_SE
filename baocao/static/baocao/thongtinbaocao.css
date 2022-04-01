@@ -1,23 +1,11 @@
-.cover {
-    background-color: white;
-    width: 80%;
-    text-align: center;
-    margin: auto;
-    padding-bottom: 300px;
-    margin-top: 10px;
-}
-.cover>a {
-    display: block;
-    width: 180px;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .search {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
-    margin: 10px 0;
+    margin: 10px;
     padding-top: 10px;
+}
+
+.label_select {
+    margin-left: 10px;
 }

@@ -1,9 +1,28 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
 .btn {
     color: white;
     text-decoration: none;
     background-color: lightgreen;
     padding: 10px;
     border-radius: 3px;
+    display: block;
+    max-width: 200px;
+    margin-top: 10px;
+    border: none;
+}
+
+.mid_btn {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn:hover {
+    background-color: green;
+    cursor: pointer;
 }
 
 #header h1 {

@@ -8,15 +8,15 @@
     <title>Báo Cáo Môn Học</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'baocao/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'baocao/taobaocaomonhoc.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'baocao/taobaocao.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'baocao/thongtinbaocao.css' %}">
 
 </head>
 <body>
-    <div class="cover">
+    <div class="form">
         <div class="search">
             <div class="search_type">
-                <span>Học kỳ:</span>
+                <span class="label_select">Học kỳ:</span>
                 <select name="" id="attribute">
                     <option>1</option>
                     <option>2</option>
@@ -24,7 +24,7 @@
                 </select>
             </div>
             <div class="search_type">
-                <span>Khối:</span>
+                <span class="label_select">Khối:</span>
                 <select name="" id="attribute">
                     <option>10</option>
                     <option>11</option>
@@ -32,7 +32,7 @@
                 </select>
             </div>
             <div class="search_type">
-                <span>Môn:</span>
+                <span class="label_select">Môn:</span>
                 <select name="" id="attribute">
                     <option>Toán</option>
                     <option>Lý</option>
@@ -73,7 +73,7 @@
                 </tr>
             </table>
         </div>
-        <a href="new/" class="btn">Tạo báo cáo môn học</a>
+        <a href="new/" class="btn mid_btn">Tạo báo cáo môn học</a>
     </div>
 </body>
 </html>
