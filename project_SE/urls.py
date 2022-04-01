@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('transcript', include('transcript.urls')),
     path('dangkylophoc/', include("dangkylophoc.urls")),
+    path('baocao/', include("baocao.urls")),
 ]
 

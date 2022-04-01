@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tạo Báo Cáo Môn Học</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'baocao/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'baocao/taobaocaomonhoc.css' %}">
+
+</head>
+<body>
+    <div class="form">
+        <h3 class="label">Báo cáo tổng kết môn</h3>
+        <div class="info">
+            <div class="subject_form">
+                <span class="child_label">Môn: </span>
+                <input type="text"/>
+            </div>
+            <div class="term_form">
+                <span class="child_label">Học kì: </span>
+                <input type="text"/>
+            </div>
+        </div>
+
+        <table class="form_detail">
+            <tr>
+                <th>STT</th>
+                <th>Lớp</th>
+                <th>Sĩ Số</th>
+                <th>Số Lượng Đạt</th>
+                <th>Tỷ Lệ</th>
+            </tr>
+            <tr>
+                <td class="form_input">1</td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+            </tr>
+            <tr>
+                <td class="form_input">2</td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+            </tr>
+            <tr>
+                <td class="form_input">3</td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+            </tr>
+            <tr>
+                <td class="form_input">4</td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+            </tr>
+            <tr>
+                <td class="form_input">5</td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+                <td class="form_input"><input type="text"></td>
+            </tr>
+
+        </table>
+        <button class="btn add-btn">Tạo báo cáo</button>
+    </div>
+</body>
+</html>
