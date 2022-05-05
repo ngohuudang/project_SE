@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Báo cáo</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'baocao/style.css' %}">
+</head>
+<body>
+    <div id="header">
+        <h1>
+            Hãy chọn thao tác bạn muốn!
+        </h1>
+    </div>
+    <div id="content">
+        <div class="options">
+            <div class="options_row">
+                <a href="baocaomon/new/" class="btn">Tạo báo cáo môn học</a>
+                <a href="baocaohocky/new/" class="btn">Tạo báo cáo học kỳ</a>
+            </div>
+            <div class="options_row">
+                <a href="baocaomon/" class="btn">Xem báo cáo môn học</a>
+                <a href="baocaohocky/" class="btn">Xem báo cáo học kỳ</a>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dangkylophoc.apps.TestappConfig',
+    'baocao.apps.BaocaoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'transcript',
     'dangkylophoc'
-    
+
 ]
 
 MIDDLEWARE = [
