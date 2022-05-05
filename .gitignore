@@ -17,7 +17,7 @@ notebook/static/*/js/main.min.js*
 notebook/static/lab/*bundle.js
 node_modules
 *.py[co]
-__pycache__
+__pycache__/
 *.egg-info
 *~
 *.bak
@@ -56,3 +56,4 @@ geckodriver.log
 docs/source/changelog.md
 
 .jupyter_releaser_checkout
+
