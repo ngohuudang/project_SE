@@ -22,5 +22,7 @@ urlpatterns = [
     path('baocao/', include("baocao.urls")),
     path('dangkylophoc', include("dangkylophoc.urls")),
     path('Tracuuhocsinh', include("Tracuuhocsinh.urls")),
+    path('tiepnhan', include("tiepNhanHocSinh.urls")),
+    
 ]
 
