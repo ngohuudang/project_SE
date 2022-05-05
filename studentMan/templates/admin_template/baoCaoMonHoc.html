@@ -1,0 +1,96 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <h3 class="label">Báo cáo tổng kết môn học</h3>
+    <div class="main_form-header row">
+        <div class="main_form_class col-lg-3">
+            <div class="row">
+                <div class="main_form_title col-lg-3">
+                    <p>Lớp</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>10A1</option>
+                            <option>10A2</option>
+                            <option>10A3</option>
+                            <option>10A4</option>
+                            <option>11A1</option>
+                            <option>11A2</option>
+                            <option>11A3</option>
+                            <option>12A1</option>
+                            <option>12A2</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="main_form_subject col-lg-4">
+            <div class="row">
+                <div class="main_form_title col-lg-4">
+                    <p>Môn học</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Toán</option>
+                            <option>Lý</option>
+                            <option>Hóa</option>
+                            <option>Sinh</option>
+                            <option>Sử</option>
+                            <option>Địa</option>
+                            <option>Văn</option>
+                            <option>Đạo Đức</option>
+                            <option>Thể Dục</option>
+                    </select>
+                </div>                                
+            </div>
+        </div>
+        <div class="main_form_term col-lg-3">
+            <div class="row">
+                <div class="main_form_title col-lg-4">
+                    <p>Học kì</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                    </select>
+                </div>                               
+            </div>
+        </div>
+        <div class="main_form_term col-lg-2">
+            <div class="row">
+                <button type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Lớp</th>
+            <th>Môn học</th>
+            <th>Sĩ Số</th>
+            <th>Số Lượng Đạt</th>
+            <th>Tỷ Lệ</th>
+        </tr>
+        <tr>
+            <td class="form_input">1</td>
+            <td class="form_input">10A2</td>
+            <td class="form_input">Toán</td>
+            <td class="form_input">30</td>
+            <td class="form_input">20</td>
+            <td class="form_input">66%</td>
+        </tr>
+        <tr>
+            <td class="form_input">2</td>
+            <td class="form_input">11A2</td>
+            <td class="form_input">Toán</td>
+            <td class="form_input">34</td>
+            <td class="form_input">34</td>
+            <td class="form_input">100%</td>
+        </tr>
+    </table>
+    <div>
+        <a href="#" type="button" class="btn btn-outline-primary">Tạo báo cáo môn học</a>                              
+    </div>
+
+{% endblock content %}

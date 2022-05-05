@@ -1,0 +1,84 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        table td{
+            padding: 5px 10px;
+        }
+        input, select{
+            border: solid 1px #ddd;
+            padding: 5px 20px;
+            width: 100%;
+        }
+        select{
+            width: 180px;
+        }
+        input[type="submit"]{
+            width: auto;
+            background: blue;
+            color:#fff;
+        
+        }
+    </style>
+    <h3 class="label">Tiếp nhận học sinh</h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <form class="row g-3">
+                <div class="col-lg-12">
+                    <label for="name" class="form-label">Họ tên</label>
+                    <input
+                        name="name"
+                        type="text"
+                        id="name"
+                        class="form-control"
+                        required
+                    />
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="form-label" for="datepicker">Ngày sinh</label>
+                    <input
+                        name="birthday"
+                        id="datepicker"
+                        class="form-control"
+                        required
+                    />
+                </div>
+
+                <div class="col-lg-6">
+                    <label for="inputState" class="form-label">Giới tính</label>
+                    <select id="inputState" class="form-select">
+                    <option selected>...</option>
+                    <option>Nam</option>
+                    <option>Nữ</option>
+                    </select>
+                </div>
+                
+                <div class="col-lg-12">
+                    <label for="inputAddress" class="form-label">Địa chỉ</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        d="inputAddress" 
+                        placeholder="12, đường 01, quận 1, tp HCM"
+                    />
+                </div>
+
+                <div class="col-lg-12">
+                    <label for="inputEmail4" class="form-label">Email</label>
+                    <input
+                        name="email"
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        required
+                    />
+                </div>
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+{% endblock content %}

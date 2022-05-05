@@ -1,0 +1,143 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <h3 class="label">Bảng điểm môn học</h3>
+    <div class="main_form-header row">
+        <div class="main_form_class col-lg-3">
+            <div class="row">
+                <div class="main_form_title col-lg-3">
+                    <p>Lớp</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>10A1</option>
+                            <option>10A2</option>
+                            <option>10A3</option>
+                            <option>10A4</option>
+                            <option>11A1</option>
+                            <option>11A2</option>
+                            <option>11A3</option>
+                            <option>12A1</option>
+                            <option>12A2</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="main_form_subject col-lg-4">
+            <div class="row">
+                <div class="main_form_title col-lg-4">
+                    <p>Môn học</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Toán</option>
+                            <option>Lý</option>
+                            <option>Hóa</option>
+                            <option>Sinh</option>
+                            <option>Sử</option>
+                            <option>Địa</option>
+                            <option>Văn</option>
+                            <option>Đạo Đức</option>
+                            <option>Thể Dục</option>
+                    </select>
+                </div>                                
+            </div>
+        </div>
+        <div class="main_form_term col-lg-3">
+            <div class="row">
+                <div class="main_form_title col-lg-4">
+                    <p>Học kì</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                    </select>
+                </div>                               
+            </div>
+        </div>
+        <div class="main_form_term col-lg-2">
+            <div class="row">
+                <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Họ Tên</th>
+            <th>Điểm 15'</th>
+            <th>Điểm 1 tiết</th>
+            <th>Điểm cuối HK</th>
+            <th>Điều chỉnh</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Nguyễn Đắc Thắng</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Đỗ Lê Khánh Đăng</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Nguyễn Minh Tú</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Lục Minh Bửu</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Ngô Hữu Đang</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href="#" class="item-center menu-link"
+                ><i class="fa fa-pencil menu-icon"></i></a>
+            </td>
+        </tr>
+    </table>
+
+{% endblock content %}
