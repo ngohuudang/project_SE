@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+    <meta charset="UTF-8">
+    <title>Đăng ký lớp học</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="./stylesheets/script/dangkylophoc.css">
+<script type="text/javascript" src="script/dangkylophoc.js"></script>
+</head>
+<body>
+<div
+  class="bg-image"
+  style="
+    background-image: linear-gradient(lightgreen,lightseagreen);
+    height: 100vh;
+  "
+>
+    <center>
+        <div class="container">
+        <div class="row">
+            <div class="col-sm  bg-light border  order-1">
+    <form>
+        <h1>Lập danh sách lớp</h1>
+        Lớp<br>
+        <input type="text" name="txtLop">
+        <br>
+        Sĩ số<br>
+        <input type="text" name="txtSiSo">
+        <br><br>
+        <input type="submit" value="Đăng ký" class="button">
+    </form>
+                </div>
+            <br>
+        <div class="col-sm  bg-light border  order-2">
+        <div class="main_form_select col l-6">
+                                    <select class="form-control" id="haveclass?" onchange=update()>
+                                          <option>Học sinh có lớp</option>
+                                          <option>Học sinh chưa có lớp</option>
+                                    </select>
+                                </div>
+        <br>
+        <table border="1" cellspacing=0 id="table" class="table table-hover" >
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Lớp</th>
+                <th>Giới tính</th>
+                <th>Năm sinh</th>
+                <th>Địa chỉ</th>
+            </tr>
+        </table>
+        </div>
+            </div>
+        </div>
+        </center>
+        </div>
+
+
+</body>
+</html>
