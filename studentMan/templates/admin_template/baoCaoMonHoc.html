@@ -1,7 +1,7 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Bảng điểm môn học</h3>
+    <h3 class="label">Báo cáo tổng kết môn học</h3>
     <div class="main_form-header row">
         <div class="main_form_class col-lg-3">
             <div class="row">
@@ -58,7 +58,7 @@
         </div>
         <div class="main_form_term col-lg-2">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+                <button type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
             </div>
         </div>
     </div>
@@ -66,78 +66,31 @@
     <table class="table">
         <tr>
             <th>STT</th>
-            <th>Họ Tên</th>
-            <th>Điểm 15'</th>
-            <th>Điểm 1 tiết</th>
-            <th>Điểm cuối HK</th>
-            <th>Điều chỉnh</th>
+            <th>Lớp</th>
+            <th>Môn học</th>
+            <th>Sĩ Số</th>
+            <th>Số Lượng Đạt</th>
+            <th>Tỷ Lệ</th>
         </tr>
         <tr>
-            <td>1</td>
-            <td>Nguyễn Đắc Thắng</td>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
+            <td class="form_input">1</td>
+            <td class="form_input">10A2</td>
+            <td class="form_input">Toán</td>
+            <td class="form_input">30</td>
+            <td class="form_input">20</td>
+            <td class="form_input">66%</td>
         </tr>
         <tr>
-            <td>2</td>
-            <td>Đỗ Lê Khánh Đăng</td>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Nguyễn Minh Tú</td>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>Lục Minh Bửu</td>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>Ngô Hữu Đang</td>
-            <td>10</td>
-            <td>10</td>
-            <td>10</td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <a href="#" class="item-center menu-link"
-                ><i class="fa fa-pencil menu-icon"></i></a>
-            </td>
+            <td class="form_input">2</td>
+            <td class="form_input">11A2</td>
+            <td class="form_input">Toán</td>
+            <td class="form_input">34</td>
+            <td class="form_input">34</td>
+            <td class="form_input">100%</td>
         </tr>
     </table>
+    <div>
+        <a href="#" type="button" class="btn btn-outline-primary">Tạo báo cáo môn học</a>                              
+    </div>
 
 {% endblock content %}

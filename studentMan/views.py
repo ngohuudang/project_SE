@@ -13,3 +13,22 @@ from django.contrib.auth.models import Group
 
 def admin_home(request):
     return render(request, 'admin_template/home_content.html')
+
+def tiepNhan(request):
+    return render(request, 'admin_template/tiepNhan.html')
+
+def dsLop(request):
+    return render(request, 'admin_template/dsLop.html')
+
+
+def traCuu(request):
+    return render(request,'admin_template/traCuu.html')
+
+def bangDiem(request):
+    return render(request, 'admin_template/bangDiem.html')
+
+def baoCaoMH(request):
+    return render(request,'admin_template/baoCaoMonHoc.html')
+
+def baoCaoHK(request):
+    return render(request,'admin_template/baoCaoHocKi.html')
