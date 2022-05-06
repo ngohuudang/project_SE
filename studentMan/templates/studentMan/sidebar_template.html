@@ -39,10 +39,6 @@
                         {% url 'lapDSLop' as lapDSLop %}
                         <a href="{{lapDSLop}}" class="{% if lapDSLop == request.path %} active {% endif %}">Giáo viên</a>
                     </li>
-                    <li>
-                        {% url '.' as . %}
-                        <a href="{{.}}" class="{% if . == request.path %} active {% endif %}">Admin</a>
-                    </li>
                 </ul>
             </li>
 
