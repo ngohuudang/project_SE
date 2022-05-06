@@ -8,135 +8,142 @@
         </a>
     </div>
 
+    <!-- Sidebar Menu -->
+    <nav>
+        <ul class="list-unstyled components">
+            <li>
+                {% url 'admin_home' as admin_home %}
+                <a href="{{admin_home}}" class="{% if admin_home == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Trang chủ
+                    </span>
+                </a>
+            </li>
 
-    <!-- Sidebar -->
-    <div >
+            <div class="sidebar-content"><p>Tài khoản</p></div>
 
-        <!-- Sidebar Menu -->
-        <nav>
-            <ul class="list-unstyled components">
-                <li>
-                    {% url 'admin_home' as admin_home %}
-                    <a href="{{admin_home}}" class="{% if admin_home == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Trang chủ
-                        </span>
-                    </a>
-                </li>
+            <li>
+                <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Thêm tài khoản
+                    </span>
+                </a>
+                <ul class="collapse list-unstyled" id="accountSubmenu">
+                    <li>
+                        {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
+                        <a href="{{tiep_nhan_hoc_sinh}}" class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
+                    </li>
+                    <li>
+                        {% url 'lapDSLop' as lapDSLop %}
+                        <a href="{{lapDSLop}}" class="{% if lapDSLop == request.path %} active {% endif %}">Giáo viên</a>
+                    </li>
+                    <li>
+                        {% url '.' as . %}
+                        <a href="{{.}}" class="{% if . == request.path %} active {% endif %}">Admin</a>
+                    </li>
+                </ul>
+            </li>
 
-                <div class="content" style='color: #fff;'><p>Tài khoản</p></div>
+            <li>
+                {% url 'admin_notify_staff' as admin_notify_staff %}
+                <a href="{{admin_notify_staff}}" class="{% if admin_notify_staff == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Hệ thống
+                    </span>
+                </a>
+            </li>
 
-                <li>
-                    {% url 'tiepNhan' as them_tai_khoan %}
-                    <a href="{{them_tai_khoan}}" class="{% if them_tai_khoan == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Thêm tài khoản
-                        </span>
-                    </a>
-                </li>
-                
-                <li>
-                    {% url 'admin_notify_staff' as admin_notify_staff %}
-                    <a href="{{admin_notify_staff}}" class="{% if admin_notify_staff == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Hệ thống
-                        </span>
-                    </a>
-                </li>
- 
-                <div class="content" style='color: #fff;'><p>Thông tin/Điểm</p></div>
+            <div class="sidebar-content"><p>Thông tin/Điểm</p></div>
 
-                <li>
-                    {% url 'dsLop' as dsLop %}
-                    <a href="{{dsLop}}" class="{% if dsLop == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Danh sách lớp
-                        </span>
-                    </a>
-                </li>
-                
-                <li>
-                    {% url 'traCuu' as tra_cuu_hoc_sinh %}
-                    <a href="{{tra_cuu_hoc_sinh}}" class="{% if tra_cuu_hoc_sinh == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Tra cứu học sinh
-                        </span>
-                    </a>
-                </li>
+            <li>
+                {% url 'dsLop' as dsLop %}
+                <a href="{{dsLop}}" class="{% if dsLop == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Danh sách lớp
+                    </span>
+                </a>
+            </li>
+            
+            <li>
+                {% url 'traCuu' as tra_cuu_hoc_sinh %}
+                <a href="{{tra_cuu_hoc_sinh}}" class="{% if tra_cuu_hoc_sinh == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Tra cứu học sinh
+                    </span>
+                </a>
+            </li>
 
-                <li>
-                    {% url 'bangDiem' as bangDiem %}
-                    <a href="{{bangDiem}}"
-                        class="{% if bangDiem == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Bảng điểm
-                        </span>
-                    </a>
-                </li>
+            <li>
+                {% url 'bangDiem' as bangDiem %}
+                <a href="{{bangDiem}}"
+                    class="{% if bangDiem == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Bảng điểm
+                    </span>
+                </a>
+            </li>
 
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Bảng tổng kết
-                        </span>
-                    </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            {% url 'baoCaoMonHoc' as mon_hoc %}
-                            <a href="{{mon_hoc}}" class="{% if mon_hoc == request.path %} active {% endif %}">Môn học</a>
-                        </li>
-                        <li>
-                            {% url 'baoCaoHocKi' as hoc_ki %}
-                            <a href="{{hoc_ki}}" class="{% if hoc_ki == request.path %} active {% endif %}">Học kì</a>
-                        </li>
+            <li>
+                <a href="#summarySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Bảng tổng kết
+                    </span>
+                </a>
+                <ul class="collapse list-unstyled" id="summarySubmenu">
+                    <li>
+                        {% url 'baoCaoMonHoc' as mon_hoc %}
+                        <a href="{{mon_hoc}}" class="{% if mon_hoc == request.path %} active {% endif %}">Môn học</a>
+                    </li>
+                    <li>
+                        {% url 'baoCaoHocKi' as hoc_ki %}
+                        <a href="{{hoc_ki}}" class="{% if hoc_ki == request.path %} active {% endif %}">Học kì</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <div class="sidebar-content"><p>Qui định</p></div>
 
-                    </ul>
-                </li>
-                
-                <div class="content" style='color: #fff;'><p>Qui định</p></div>
+            <li class="nav-item">
+                {% url 'manage_student' as manage_student %}
+                {% url 'edit_student' student_id as edit_student %}
+                <a href="{{manage_student}}"
+                    class="{% if edit_student == request.path or manage_student == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Độ tuổi
+                    </span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                {% url 'add_course' as add_course %}
+                <a href="{{add_course}}" class="{% if add_course == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Lớp học
+                    </span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    {% url 'manage_student' as manage_student %}
-                    {% url 'edit_student' student_id as edit_student %}
-                    <a href="{{manage_student}}"
-                        class="{% if edit_student == request.path or manage_student == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Độ tuổi
-                        </span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    {% url 'add_course' as add_course %}
-                    <a href="{{add_course}}" class="{% if add_course == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Lớp học
-                        </span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    {% url 'manage_course' as manage_course %}
-                    {% url 'edit_course' course_id as edit_course %}
-                    <a href="{{manage_course}}"
-                        class="{% if edit_course == request.path or manage_course == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
-                            Môn học
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+            <li class="nav-item">
+                {% url 'manage_course' as manage_course %}
+                {% url 'edit_course' course_id as edit_course %}
+                <a href="{{manage_course}}"
+                    class="{% if edit_course == request.path or manage_course == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Môn học
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </aside>
 

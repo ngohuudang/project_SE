@@ -9,7 +9,7 @@
                     <p>Lớp</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-control" id="exampleFormControlSelect1">
+                    <select class="form-select" aria-label="Default select example">
                             <option>10A1</option>
                             <option>10A2</option>
                             <option>10A3</option>
@@ -55,7 +55,7 @@
             <td>10, đường 11, quận 11, tp HCM</td>
         </tr>
     </table>
-    <div>
-        <a href="#" type="button" class="btn btn-outline-primary">Lập danh sách lớp</a>                               
+        {% url 'lapDSLop' as lapDSLop %}
+        <a href="{{lapDSLop}}" type="button" class="btn btn-outline-primary {% if lapDSLop == request.path %} active {% endif %}">Lập danh sách lớp</a>                               
     </div>
 {% endblock content %}
