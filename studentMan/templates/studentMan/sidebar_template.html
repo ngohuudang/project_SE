@@ -107,10 +107,9 @@
             <div class="sidebar-content"><p>Qui định</p></div>
 
             <li class="nav-item">
-                {% url 'manage_student' as manage_student %}
-                {% url 'edit_student' student_id as edit_student %}
-                <a href="{{manage_student}}"
-                    class="{% if edit_student == request.path or manage_student == request.path %} active {% endif %}">
+                {% url 'quanLiTuoi' as quan_li_do_tuoi %}
+                <a href="{{quan_li_do_tuoi}}"
+                    class="{% if quan_li_do_tuoi == request.path%} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Độ tuổi

@@ -1,0 +1,122 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.form-control[type="number"]::-webkit-inner-spin-button,
+.form-control[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+
+}
+
+.number-input{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    display: inline-flex;
+}
+
+.number-input,
+.number-input * {
+  box-sizing: border-box;
+}
+
+.number-input button {
+  outline:none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 38px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+}
+
+.number-input button:before,
+.number-input button:after {
+  display: inline-block;
+  position: absolute;
+  content: '';
+  width: 1rem;
+  height: 2px;
+  background-color: #212121;
+  transform: translate(-50%, -50%);
+}
+.number-input button.plus:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.number-input input[type=number] {
+  font-family: sans-serif;
+  max-width: 5rem;
+  border: solid #ddd;
+  border-width: 0 2px;
+  font-size: 20px;
+  height: 38px;
+  text-align: center;
+}
+
+</style>
+    <h3 class="label">Quản lí độ tuổi</h3>
+<div class="jus_center row">
+    <div class="col-lg-8">
+        <div class="main_form-header row">
+            <div class="main_form_class col-lg-6">
+                <div class="row">
+                    <div class="main_form_title col-lg-5">
+                        <p>Khối</p>
+                    </div>
+                    <div class="main_form_select col-lg-4">
+                        <select class="form-select" aria-label="Default select example">
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="main_form-header row">
+            <div class="main_form_subject col-lg-6">
+                <div class="row">
+                    <div class="main_form_title col-lg-5">
+                        <p>Tuổi tối thiểu</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        <div class="number-input">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="form-control quantity" min="0" name="quantity" value="16" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                    </div>                                
+                </div>
+            </div>
+            <div class="main_form_subject col-lg-6">
+                <div class="row">
+                    <div class="main_form_title col-lg-4">
+                        <p>Tuổi tối đa</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        <div class="number-input">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
+                            <input class="form-control quantity" min="0" name="quantity" value="18" type="number">
+                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+                        </div>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+    
+        <div class="main_form-header row">
+            <div class="main_form_subject col-lg-3">
+                <button type="button" class="btn btn-outline-primary col-lg-11">Cập nhật</button>  
+            </div>
+        </div>
+    </div>
+    
+</div>
+    
+{% endblock content %}
