@@ -37,3 +37,9 @@ def baoCaoHK(request):
 
 def quanLiTuoi(request):
     return render(request, 'admin_template/quanLiTuoi.html')
+
+def quanLiLop(request):
+    return render(request,'admin_template/quanLiLop.html')
+
+def quanLiMon(request):
+    return render(request,'admin_template/quanLiMon.html')

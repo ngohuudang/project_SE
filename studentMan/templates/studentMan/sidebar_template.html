@@ -118,8 +118,8 @@
             </li>
             
             <li class="nav-item">
-                {% url 'add_course' as add_course %}
-                <a href="{{add_course}}" class="{% if add_course == request.path %} active {% endif %}">
+                {% url 'quanLiLop' as quan_li_lop_hoc %}
+                <a href="{{quan_li_lop_hoc}}" class="{% if quan_li_lop_hoc == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Lớp học
@@ -128,10 +128,9 @@
             </li>
 
             <li class="nav-item">
-                {% url 'manage_course' as manage_course %}
-                {% url 'edit_course' course_id as edit_course %}
-                <a href="{{manage_course}}"
-                    class="{% if edit_course == request.path or manage_course == request.path %} active {% endif %}">
+                {% url 'quanLiMon' as quan_li_mon_hoc %}
+                <a href="{{quan_li_mon_hoc}}"
+                    class="{% if quan_li_mon_hoc == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Môn học

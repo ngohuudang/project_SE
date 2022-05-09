@@ -17,5 +17,7 @@ urlpatterns = [
     path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMonHoc'),
     path("baocaohocki/", views.baoCaoHK, name='baoCaoHocKi'),
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
+    path("quanlilop/", views.quanLiLop, name='quanLiLop'),
+    path("quanlimon/", views.quanLiMon, name='quanLiMon'),
 
 ]

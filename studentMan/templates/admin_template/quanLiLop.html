@@ -1,0 +1,33 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <h3 class="label">Quản lí lớp học</h3>
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Tên lớp</th>
+            <th>Sỉ số tối đa</th>
+            <th>Điều chỉnh</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>10A1</td>
+            <td>40</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a> -
+                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>11A2</td>
+            <td>40</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a> -
+                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
+            </td>
+        </tr>
+    </table>
+        <a href="#" type="button" class="btn btn-outline-primary">Thêm lớp</a>                               
+    </div>
+{% endblock content %}
