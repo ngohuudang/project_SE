@@ -1,5 +1,10 @@
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+.jus_center{
+    justify-content: center;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
@@ -71,13 +76,17 @@ a:focus {
     background: #6d7fcc;
 }
 
+#sidebar .sidebar-content {
+    color: #000;
+}
+
 #sidebar ul.components {
     padding: 20px 0;
     border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul p {
-    color: #fff;
+    color: #000;
     padding: 10px;
     margin-bottom: 0;
 
@@ -99,6 +108,8 @@ a[aria-expanded="true"] {
     color: #fff;
     background: #6d7fcc;
 }
+
+
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -152,6 +163,10 @@ a.article:hover {
     transition: all 0.3s;
 }
 
+#content .label {
+    text-align: center;
+    margin-bottom: 40px;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

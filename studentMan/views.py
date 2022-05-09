@@ -14,12 +14,14 @@ from django.contrib.auth.models import Group
 def admin_home(request):
     return render(request, 'admin_template/home_content.html')
 
-def tiepNhan(request):
-    return render(request, 'admin_template/tiepNhan.html')
+def tiepNhanHS(request):
+    return render(request, 'admin_template/tiepNhanHS.html')
 
 def dsLop(request):
     return render(request, 'admin_template/dsLop.html')
 
+def lapDSLop(request):
+    return render(request,'admin_template/lapDS.html')
 
 def traCuu(request):
     return render(request,'admin_template/traCuu.html')
@@ -32,3 +34,12 @@ def baoCaoMH(request):
 
 def baoCaoHK(request):
     return render(request,'admin_template/baoCaoHocKi.html')
+
+def quanLiTuoi(request):
+    return render(request, 'admin_template/quanLiTuoi.html')
+
+def quanLiLop(request):
+    return render(request,'admin_template/quanLiLop.html')
+
+def quanLiMon(request):
+    return render(request,'admin_template/quanLiMon.html')
