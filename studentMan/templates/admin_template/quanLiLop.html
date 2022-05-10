@@ -2,16 +2,41 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Quản lí lớp học</h3>
+    <div class="main_form-header row">
+        <div class="main_form_class col-lg-3">
+            <div class="row">
+                <div class="main_form_title col-lg-5">
+                    <p>Niên khóa</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select class="form-select" aria-label="Default select example">
+                            <option>tất cả</option>
+                            <option>19-20</option>
+                            <option>20-21</option>
+                            <option>21-22</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_form_term col-lg-2">
+            <div class="row">
+                <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+            </div>
+        </div>
+    </div>
     <table class="table">
         <tr>
             <th>STT</th>
             <th>Tên lớp</th>
+            <th>Niên khóa</th>
             <th>Sỉ số tối đa</th>
             <th>Điều chỉnh</th>
         </tr>
         <tr>
             <td>1</td>
             <td>10A1</td>
+            <td>21-22</td>
             <td>40</td>
             <td>
                 <a href="#" class="btn btn-primary">Cập nhật</a> -
@@ -21,6 +46,7 @@
         <tr>
             <td>2</td>
             <td>11A2</td>
+            <td>21-22</td>
             <td>40</td>
             <td>
                 <a href="#" class="btn btn-primary">Cập nhật</a> -
