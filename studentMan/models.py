@@ -10,12 +10,12 @@ class Age(models.Model):
         return self.year
 
 class ClassOfSchool(models.Model):
-    ClassId = models.CharField(max_length=200, null=False, unique=False)
+    classId = models.CharField(max_length=200, null=False, unique=False)
     max_number = models.IntegerField(null=False)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.ClassId
+        return self.classId
 
 
 class Subject(models.Model):
@@ -41,7 +41,7 @@ class Student(models.Model):
     address = models.TextField(null=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    ClassOfSchool = models.ForeignKey(ClassOfSchool, null=False, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -62,7 +62,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
-    ClassOfSchool = models.ForeignKey(ClassOfSchool, null=False, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -74,12 +74,12 @@ class Mark(models.Model):
         ('2', '2'),
         ('3', '3')
     )
-    StudentID_mark = models.ForeignKey(Student, related_name='ID_mark', null=False, on_delete=models.CASCADE)
-    year_mark = models.ForeignKey(Student, related_name='year_mark', null=False, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
     semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATELOGY)
-    SubjectID_mark = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
     markFifteen = models.FloatField(null=True)
-    markFinal = models.FloatField(null=True)
     markOne = models.FloatField(null=True)
+    markFinal = models.FloatField(null=True)
+    
 
 

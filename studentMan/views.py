@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+
+from studentMan.models import Mark, Student
+from .filters import *
 # Create your views here.
 
 def admin_home(request):
@@ -27,7 +30,22 @@ def traCuu(request):
     return render(request,'admin_template/traCuu.html')
 
 def bangDiem(request):
-    return render(request, 'admin_template/bangDiem.html')
+    marks = Mark.objects.all()
+    myFilter = MarkFilter(request.GET, queryset=marks)
+    marks = myFilter.qs
+    # total_customers = customers.count()
+    # total_orders = orders.count()
+    # delivered = orders.filter(status = 'Delivered').count()
+    # pending = orders.filter(status = 'Pending').count()
+
+    context = {
+        'marks':marks, 
+        'myFilter': myFilter,
+        # 'total_orders': total_orders,
+        # 'delivered': delivered,
+        # 'pending':pending
+    }
+    return render(request, 'admin_template/bangDiem.html',context=context)
 
 def baoCaoMH(request):
     return render(request,'admin_template/baoCaoMonHoc.html')
