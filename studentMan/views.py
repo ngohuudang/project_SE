@@ -89,3 +89,29 @@ def quanLiMon(request):
         'subjects':subjects, 
     }
     return render(request,'admin_template/quanLiMon.html',context)
+
+def capNhatMon(request, subject_id):
+    subject= get_object_or_404(Subject, id=subject_id)
+    form = subjectForm(request.POST or None, instance=subject)
+    context = {
+        'form': form,
+        'subject_id': subject_id,
+        'page_title': 'capNhatMon'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            approved_mark = form.cleaned_data.get('approved_mark')
+            try:
+                subject = Subject.objects.get(id=subject.id)
+                subject.name = name
+                subject.approved_mark = approved_mark
+                subject.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('capNhatMon', args=[subject_id]))
+            except Exception as e:
+                messages.error(request, "Could Not Update " + str(e))
+        else:
+            messages.error(request, "Please Fill Form Properly!")
+    else:
+        return render(request, "admin_template/capNhatMon.html", context)

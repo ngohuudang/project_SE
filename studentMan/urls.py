@@ -21,5 +21,6 @@ urlpatterns = [
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
     path("quanlilop/", views.quanLiLop, name='quanLiLop'),
     path("quanlimon/", views.quanLiMon, name='quanLiMon'),
+    path("quanlimon/capnhat/<int:subject_id>", views.capNhatMon, name='capNhatMon'),
 
 ]

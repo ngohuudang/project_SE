@@ -14,3 +14,9 @@ class transcriptForm(forms.ModelForm):
         self.fields['semester_mark'].widget.attrs.update(
             {'class': 'form-select'}
         )
+
+class subjectForm(forms.ModelForm):
+    class Meta:
+        model = Subject
+        fields = '__all__'
+

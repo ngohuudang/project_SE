@@ -16,7 +16,7 @@
                     <td>{{subject.name}}</td>
                     <td>{{subject.approved_mark}}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">Cập nhật</a> - 
+                        <a href="{% url 'capNhatMon' subject.id %}" class="btn btn-primary">Cập nhật</a> - 
                         <a href="#" onclick="return confirm('Xác nhận xóa môn học này ?')" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
