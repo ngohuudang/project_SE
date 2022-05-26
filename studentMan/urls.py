@@ -14,6 +14,8 @@ urlpatterns = [
     path("tracuu/", views.traCuu, name='traCuu'),
 
     path("bangdiem/", views.bangDiem, name='bangDiem'),
+    path("bangdiem/capnhat/<int:mark_id>", views.capNhatDiem, name='capNhatDiem'),
+
     path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMonHoc'),
     path("baocaohocki/", views.baoCaoHK, name='baoCaoHocKi'),
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),

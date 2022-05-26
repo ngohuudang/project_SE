@@ -5,6 +5,13 @@
     justify-content: center;
 }
 
+.jus_space-around{
+    justify-content: space-around;
+}
+
+.disable{
+    display: none;
+}
 body {
     font-family: "Open Sans", sans-serif;
     background: #fafafa;
@@ -182,3 +189,4 @@ a.article:hover {
         display: none;
     }
 }
+

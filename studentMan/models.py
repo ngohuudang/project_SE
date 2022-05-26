@@ -69,14 +69,14 @@ class Teacher(models.Model):
 
 
 class Mark(models.Model):
-    SEMESTER_CATELOGY = (
+    SEMESTER_CATEGORY = (
         ('1', '1'),
         ('2', '2'),
         ('3', '3')
     )
     student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
-    semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATELOGY)
+    semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
     markFifteen = models.FloatField(null=True)
     markOne = models.FloatField(null=True)
     markFinal = models.FloatField(null=True)

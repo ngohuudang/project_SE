@@ -1,0 +1,67 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="card card-body ">
+        <div class="card-header">
+            <h3 class="card-title label">Cập nhật điểm</h3>
+        </div>
+        <div class="jus_center row">
+            <form role="form" method="POST" enctype="multipart/form-data" class="col-lg-6">
+                {% csrf_token %}
+                <div class="card-body">
+                    {% for field in form  %}
+                        {% if field == form.markFifteen %}
+                            <div class="form-group row jus_center">
+                                <div class="col-lg-4">
+                                    Điểm 15':
+                                </div>
+                                <div class="col-lg-6">
+                                {{form.markFifteen}}
+                                </div>
+                            </div>
+                            <br>
+                        {% elif field == form.markOne %}
+                            <div class="form-group row jus_center">
+                                <div class="col-lg-4">
+                                    Điểm 1 tiết:
+                                </div>
+                                <div class="col-lg-6">
+                                {{form.markOne}}
+                                </div>
+                            </div>
+                            <br>
+                        {% elif field == form.markFinal %}
+                            <div class="form-group row jus_center">
+                                <div class="col-lg-4">
+                                    Điểm cuối học kì:
+                                </div>
+                                <div class="col-lg-6">
+                                {{form.markFinal}}
+                                </div>
+                            </div>
+                            <br>
+                        {% else %}
+                            <div class="disable">
+                                {{field}}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-group row jus_space-around ">
+                        <div class="col-lg-4">
+                            <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">
+                                {% if button_text %}
+                                    {{button_text}}
+                                {% else %}
+                                    Submit
+                                {% endif %}
+                            </button>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="{% url 'bangDiem' %}" class="btn btn-primary" style="width: 100%;">Trở về</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
