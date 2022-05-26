@@ -13,7 +13,7 @@
 
 # Môi trường thực thi
 
-- Hệ điều hành Windows 10, Windows 11, Linux(Kubuntu 20.04)
+- Hệ điều hành Windows 10, Windows 11, Linux
 - Framework: Django
 - Database: MySQL
 
