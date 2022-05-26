@@ -1,10 +1,8 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="card card-body ">
-        <div class="card-header">
-            <h3 class="card-title label">Cập nhật điểm</h3>
-        </div>
+    <h3 class="label">Cập nhật điểm</h3>
+    <div class="card card-body">
         <div class="jus_center row">
             <form role="form" method="POST" enctype="multipart/form-data" class="col-lg-6">
                 {% csrf_token %}
@@ -48,11 +46,11 @@
                     {% endfor %}
                     <div class="form-group row jus_space-around ">
                         <div class="col-lg-4">
-                            <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">
+                            <button type="submit" onclick="return confirm('Xác nhận cập nhật điểm ?')" class="btn btn-primary btn-block" style="width: 100%;">
                                 {% if button_text %}
                                     {{button_text}}
                                 {% else %}
-                                    Submit
+                                    Câp nhật
                                 {% endif %}
                             </button>
                         </div>

@@ -2,32 +2,27 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Quản lí môn học</h3>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Tên môn học</th>
-            <th>Điểm chuẩn đạt môn</th>
-            <th>Điều chỉnh</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Toán</td>
-            <td>5.0</td>
-            <td>
-                <a href="#" class="btn btn-primary">Cập nhật</a> -
-                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
-            </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Văn</td>
-            <td>4.5</td>
-            <td>
-                <a href="#" class="btn btn-primary">Cập nhật</a> -
-                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
-            </td>
-        </tr>
-    </table>
-        <a href="#" type="button" class="btn btn-outline-primary">Thêm môn học</a>                               
+    <div class="card card-body">
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Tên môn học</th>
+                <th>Điểm chuẩn đạt môn</th>
+                <th>Điều chỉnh</th>
+            </tr>
+            {% for subject in subjects %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{subject.name}}</td>
+                    <td>{{subject.approved_mark}}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">Cập nhật</a> - 
+                        <a href="#" onclick="return confirm('Xác nhận xóa môn học này ?')" class="btn btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
+    <br>
+    <a href="#" type="button" class="btn btn-outline-primary">Thêm môn học</a>                               
 {% endblock content %}

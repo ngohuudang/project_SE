@@ -41,7 +41,7 @@ class Student(models.Model):
     address = models.TextField(null=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    classOfSchool = models.ForeignKey(ClassOfSchool, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -62,7 +62,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
-    classOfSchool = models.ForeignKey(ClassOfSchool, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -77,9 +77,9 @@ class Mark(models.Model):
     student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
     semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
-    markFifteen = models.FloatField(null=True)
-    markOne = models.FloatField(null=True)
-    markFinal = models.FloatField(null=True)
+    markFifteen = models.FloatField(null=True, blank=True)
+    markOne = models.FloatField(null=True, blank=True)
+    markFinal = models.FloatField(null=True, blank=True)
     
 
 

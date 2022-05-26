@@ -84,4 +84,8 @@ def quanLiLop(request):
     return render(request,'admin_template/quanLiLop.html')
 
 def quanLiMon(request):
-    return render(request,'admin_template/quanLiMon.html')
+    subjects = Subject.objects.all()
+    context = {
+        'subjects':subjects, 
+    }
+    return render(request,'admin_template/quanLiMon.html',context)

@@ -4,23 +4,6 @@
 {% load static %}
 {% block content %}
 
-    <h3 class="label">Bảng điểm môn học</h3>
-    <br>
-    <div class="row">
-        <div class="col">
-            <div class="card card-body">
-                <form method="get">
-                    {% csrf_token %}
-                    {{myFilter.form}}
-                    {% comment %} widget_tweaks để cập nhật frontend {% endcomment %}
-                    {% comment %} {{ myFilter.form.direction.label_tag }}
-                    {% render_field filter.form.direction class="form-select" %} {% endcomment %}
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-            </div>
-        </div>
-    </div>
-    <br>
     {% comment %} <div class="main_form-header row">
         <div class="main_form_class col-lg-3">
             <div class="row">
@@ -81,8 +64,19 @@
             </div>
         </div>
     </div> {% endcomment %}
-
+    <h3 class="label">Bảng điểm môn học</h3>
     <div class="card card-body">
+        <form method="get">
+            {% csrf_token %}
+            {{myFilter.form}}
+            {% comment %} widget_tweaks để cập nhật frontend {% endcomment %}
+            {% comment %} {{ myFilter.form.direction.label_tag }}
+            {% render_field filter.form.direction class="form-select" %} {% endcomment %}
+            <button class="btn btn-primary" type="submit">Xem kết quả</button>
+        </form>
+        <br>
+        <br>
+
         <table class="table table-sm">
             <tr>
                 <th>STT</th>
