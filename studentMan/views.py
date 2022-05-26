@@ -115,3 +115,36 @@ def capNhatMon(request, subject_id):
             messages.error(request, "Please Fill Form Properly!")
     else:
         return render(request, "admin_template/capNhatMon.html", context)
+
+
+def xoaMon(request, subject_id):
+    subject = get_object_or_404(Subject, id=subject_id)
+    subject.delete()
+    messages.success(request, "Subject deleted successfully!")
+    return redirect(reverse('quanLiMon'))
+
+
+def themMon(request):
+    form = subjectForm(request.POST or None)
+    context = {
+        'form': form,
+        'page_title': 'themMon'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            SubjectID = form.cleaned_data.get('SubjectID')
+            name = form.cleaned_data.get('name')
+            approved_mark = form.cleaned_data.get('approved_mark')
+            try:
+                subject = Subject()
+                subject.SubjectID = SubjectID
+                subject.name = name
+                subject.approved_mark = approved_mark
+                subject.save()
+                messages.success(request, "Successfully Added")
+                return redirect(reverse('themMon'))
+            except:
+                messages.error(request, "Could Not Add")
+        else:
+            messages.error(request, "Could Not Add")
+    return render(request, 'admin_template/themMon.html', context)

@@ -17,12 +17,12 @@
                     <td>{{subject.approved_mark}}</td>
                     <td>
                         <a href="{% url 'capNhatMon' subject.id %}" class="btn btn-primary">Cập nhật</a> - 
-                        <a href="#" onclick="return confirm('Xác nhận xóa môn học này ?')" class="btn btn-danger">Xóa</a>
+                        <a href="{% url 'xoaMon' subject.id %}" onclick="return confirm('Xác nhận xóa môn học này ?')" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
     </div>
     <br>
-    <a href="#" type="button" class="btn btn-outline-primary">Thêm môn học</a>                               
+    <a href="{% url 'themMon' %}" type="button" class="btn btn-outline-primary">Thêm môn học</a>                               
 {% endblock content %}
