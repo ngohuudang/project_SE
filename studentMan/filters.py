@@ -1,4 +1,3 @@
-from crypt import methods
 from logging import Filter
 from random import choices
 from re import A
