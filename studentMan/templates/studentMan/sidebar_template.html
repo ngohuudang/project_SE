@@ -63,6 +63,16 @@
                     </span>
                 </a>
             </li>
+
+            <li>
+                {% url 'tiepNhanHS' as tiepNhanHS %}
+                <a href="{{tiepNhanHS}}" class="{% if dsLop == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Tiếp nhận học sinh
+                    </span>
+                </a>
+            </li>
             
             <li>
                 {% url 'traCuu' as tra_cuu_hoc_sinh %}
