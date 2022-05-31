@@ -9,21 +9,16 @@ class Report:
         self.tiLe = tiLe
 
     def findClassID(self, currentID):
-        currentUser = Teacher.objects.filter(TeacherID=currentID)
+        currentUser = Teacher.objects.filter(user=currentID)
         if not currentUser:
             currentUser = Student.objects.filter(StudentID=currentID)
-        currentUser = currentUser[0]
-        classID = currentUser.ClassOfSchool.id
-        return classID
+        return currentUser[0].classOfSchool.id
 
     def countPassedSubject(self, student, semester):
-        marks = Mark.objects.filter(StudentID_mark=student,
-                                    year_mark=student,
-                                    semester_mark=semester)
+        marks = Mark.objects.filter(student=student, semester_mark=semester)
         count = 0
         for mark in marks:
-            subject = Subject.objects.filter(SubjectID=mark.SubjectID_mark)[0]
-            minMark = subject.approved_mark
+            minMark = mark.subject.approved_mark
             m = (mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6
             if m >= minMark:
                 count += 1
@@ -44,8 +39,8 @@ class Report:
         return [count, (count / len(students)) * 100]
 
     def createReport(self, classID, semester):
-        students = Student.objects.filter(ClassOfSchool__id=classID)
-        Lop = ClassOfSchool.objects.filter(id=classID)[0].ClassId
+        students = Student.objects.filter(classOfSchool__id=classID)
+        Lop = ClassOfSchool.objects.filter(id=classID)[0].classId
         passed_count, passed_rate = self.passedRate(students, semester)
         return Report(Lop, len(students), passed_count, passed_rate)
 
@@ -53,6 +48,6 @@ class Report:
         if className == "---":
             classID = self.findClassID(currentID)
         else:
-            classID = ClassOfSchool.objects.filter(ClassId=className, year__year=year)[0].id
+            classID = ClassOfSchool.objects.filter(classId=className, year__year=year)[0].id
 
         return self.createReport(classID, semester)

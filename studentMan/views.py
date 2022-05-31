@@ -110,24 +110,41 @@ def baoCaoMH(request):
 
 
 @unauthenticated_user
+# def baoCaoHocKy(request, lop, hocKy, nienKhoa):
+#     all_classes = ClassOfSchool.objects.all()
+#     id = request.user.username
+#     report = Report()
+#     report1 = [report.show(id, lop, hocKy, nienKhoa)]
+#     all_nienKhoa = Age.objects.all()
+#     context = {'reports': report1,
+#                'classes': all_classes,
+#                'lop': lop,
+#                'hocky': hocKy,
+#                'nienKhoa': nienKhoa,
+#                'all_nienKhoa': all_nienKhoa}
+
+#     return render(request, 'admin_template/baoCaoHocKi.html', context)
+
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
     all_classes = ClassOfSchool.objects.all()
-    id = request.user.username
+    print('all_classes',all_classes)
+    id = request.user.id
     report = Report()
     report1 = [report.show(id, lop, hocKy, nienKhoa)]
     all_nienKhoa = Age.objects.all()
-    context = {'reports': report1,
-               'classes': all_classes,
-               'lop': lop,
-               'hocky': hocKy,
-               'nienKhoa': nienKhoa,
-               'all_nienKhoa': all_nienKhoa}
+    context = {
+        'reports': report1, 
+        'classes': all_classes,
+        'lop': lop,
+        'hocky': hocKy,
+        'nienKhoa': nienKhoa,
+        'all_nienKhoa': all_nienKhoa
+    }
 
     return render(request, 'admin_template/baoCaoHocKi.html', context)
 
-
 def baoCaoHK(request):
-    return baoCaoHocKy(request, "---", 1, 2020)
+    return baoCaoHocKy(request, '---', '1', '2021-2022')
 
 
 def quanLiTuoi(request):

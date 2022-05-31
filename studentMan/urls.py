@@ -33,8 +33,8 @@ urlpatterns = [
 
     path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMonHoc'),
     path("baocaohocki/", views.baoCaoHK, name='baoCaoHocKi'),
-    path("baocaohocki/<str:lop>/<int:hocKy>/<str:nienKhoa>/", views.baoCaoHocKy, name='baoCaoHK'),
-    
+    path("baocaohocki/<str:lop>/<str:hocKy>/<str:nienKhoa>/", views.baoCaoHocKy, name='baoCaoHK'),
+
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
 
     path("quanlilop/", views.quanLiLop, name='quanLiLop'),

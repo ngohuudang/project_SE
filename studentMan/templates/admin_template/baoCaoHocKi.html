@@ -14,7 +14,7 @@
                         <select id="class_select" class="form-select" aria-label="Default select example">
                             <option>---</option>
                             {% for class in classes %}
-                                <option>{{ class.ClassId }}</option>
+                                <option>{{ class.classId }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -35,9 +35,9 @@
                     </div>
                 </div>
             </div>
-            <div class="main_form_term col-lg-3">
+            <div class="main_form_term col-lg-4">
                 <div class="row">
-                    <div class="main_form_title col-lg-4" style="width: fit-content">
+                    <div class="main_form_title col-lg-4">
                         <p>Niên khóa</p>
                     </div>
                     <div class="main_form_select col-lg-6">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="main_form_term col-lg-2" style="margin-left: 20px">
+            <div class="main_form_term col-lg-2">
                 <div class="row">
                     <button id="search" type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm
                     </button>
@@ -68,7 +68,7 @@
             </tr>
             {% for report in reports %}
                 <tr>
-                    <td>1</td>
+                    <td>{{ forloop.counter }}</td>
                     <td>{{ report.lop }}</td>
                     <td>{{ report.siSo }}</td>
                     <td>{{ report.soLuongDat }}</td>
