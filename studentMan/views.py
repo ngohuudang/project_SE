@@ -20,7 +20,16 @@ def admin_home(request):
     return render(request, 'admin_template/home_content.html')
 
 def tiepNhanHS(request):
-    return render(request, 'admin_template/tiepNhanHS.html')
+    students = Student.objects.all()
+    total_students = students.count()
+
+    form = tiepNhanHSForm()
+    context = {'form':form,'total_students':total_students}
+    if request.method == 'POST':
+        form = tiepNhanHSForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return render(request, 'admin_template/tiepNhanHS.html',context)
 
 def dsLop(request):
     return render(request, 'admin_template/dsLop.html')
