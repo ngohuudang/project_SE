@@ -20,3 +20,7 @@ class subjectForm(forms.ModelForm):
         model = Subject
         fields = '__all__'
 
+class tiepNhanHSForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = '__all__'
