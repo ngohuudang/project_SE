@@ -75,6 +75,16 @@
             </li>
             
             <li>
+                {% url 'themTaiKhoanGV' as themTaiKhoanGV %}
+                <a href="{{themTaiKhoanGV}}" class="{% if themTaiKhoanGV == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
+                        Thêm tài khoản giáo viên
+                    </span>
+                </a>
+            </li>
+            
+            <li>
                 {% url 'traCuu' as tra_cuu_hoc_sinh %}
                 <a href="{{tra_cuu_hoc_sinh}}" class="{% if tra_cuu_hoc_sinh == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
