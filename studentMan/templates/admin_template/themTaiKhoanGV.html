@@ -1,0 +1,23 @@
+{% extends 'studentMan/base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <h3>Số giáo viên hiện tại: {{total_teachers}}</h3>
+    </div>
+
+    <h3 class="label">Thêm tài khoản giáo viên</h3>
+    <div class="jus_center row">
+        <div class="col-lg-6">
+            <form class="row g-3" action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{form}}
+                </table>
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary" value="Submit">Thêm giáo viên</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+{% endblock content %}
