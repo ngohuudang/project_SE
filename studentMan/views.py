@@ -29,7 +29,22 @@ def tiepNhanHS(request):
         form = tiepNhanHSForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('tiepNhanHS')
     return render(request, 'admin_template/tiepNhanHS.html',context)
+
+def themTaiKhoanGV(request):
+    teachers = Teacher.objects.all()
+    total_teachers = teachers.count()
+
+    form = themTaiKhoanGVForm()
+    context = {'form':form,'total_teachers':total_teachers}
+    if request.method == 'POST':
+        form = themTaiKhoanGVForm(request.POST)
+        if form.is_valid():
+            print('Valid form')
+            form.save()
+            return redirect('themTaiKhoanGV')
+    return render(request, 'admin_template/themTaiKhoanGV.html',context)
 
 def dsLop(request):
     return render(request, 'admin_template/dsLop.html')
