@@ -2,12 +2,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 
+
 class Age(models.Model):
     year = models.CharField(max_length=200, null=False, unique=True)
     max_age = models.IntegerField(null=False)
     min_age = models.IntegerField(null=False)
+
     def __str__(self):
         return self.year
+
 
 class ClassOfSchool(models.Model):
     classId = models.CharField(max_length=200, null=False, unique=False)
@@ -37,11 +40,11 @@ class Student(models.Model):
     sex = models.CharField(max_length=200, null=True, choices=SEX_CATELOGY)
     dateOfBirth = models.DateTimeField()
     phone = models.CharField(max_length=200, null=True)
-    email = models.EmailField(unique=True,null=True)
+    email = models.EmailField(unique=True, null=True)
     address = models.TextField(null=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -55,14 +58,14 @@ class Teacher(models.Model):
     TeacherID = models.CharField(max_length=200, null=False, unique=True)
     name = models.CharField(max_length=200, null=True)
     sex = models.CharField(max_length=200, null=True, choices=SEX_CATELOGY)
-    dateOfBirth = models.DateTimeField(blank = True, null=True)
+    dateOfBirth = models.DateTimeField(blank=True, null=True)
     phone = models.CharField(max_length=200, null=True)
-    email = models.EmailField(unique=True,null=True)
+    email = models.EmailField(unique=True, null=True)
     address = models.TextField(null=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, blank =True, null=True, on_delete=models.CASCADE)
-    classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, blank=True, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -74,12 +77,9 @@ class Mark(models.Model):
         ('2', '2'),
         ('3', '3')
     )
-    student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.CASCADE)
     semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
     markFifteen = models.FloatField(null=True, blank=True)
     markOne = models.FloatField(null=True, blank=True)
     markFinal = models.FloatField(null=True, blank=True)
-    
-
-

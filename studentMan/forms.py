@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from .models import *
 from django import forms
 
+
 class transcriptForm(forms.ModelForm):
     class Meta:
         model = Mark
@@ -15,8 +16,14 @@ class transcriptForm(forms.ModelForm):
             {'class': 'form-select'}
         )
 
+
 class subjectForm(forms.ModelForm):
     class Meta:
         model = Subject
         fields = '__all__'
 
+
+class AgeForm(forms.ModelForm):
+    class Meta:
+        model = Age
+        fields = '__all__'

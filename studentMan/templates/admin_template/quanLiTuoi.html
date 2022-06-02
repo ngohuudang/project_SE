@@ -70,9 +70,12 @@
                     </div>
                     <div class="main_form_select col-lg-6">
                         <select class="form-select" aria-label="Default select example">
-                                <option>19-20</option>
-                                <option>20-21</option>
-                                <option>21-22</option>
+{#                                <option>19-20</option>#}
+{#                                <option>20-21</option>#}
+{#                                <option>21-22</option>#}
+                            {% for index in age %}
+                                <option>{{index.year}}</option>
+                            {%  endfor %}
                         </select>
                     </div>
                 </div>
