@@ -9,11 +9,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.urls import reverse
-
-from studentMan.models import Mark, Student
-from .filters import *
+from .models import *
+from django.forms import ModelForm
+from django import forms
 from . forms import *
+from django.urls import reverse
 # Create your views here.
 
 def admin_home(request):
