@@ -57,7 +57,29 @@ def dsLop(request):
 
 
 def lapDSLop(request):
-    return render(request, 'admin_template/lapDS.html')
+    students = Student.objects.filter(classOfSchool__classId =None)
+    form = CreateClassForm()
+    if request.method == 'POST':
+        id_list = request.POST.getlist('docid')
+        cl = request.POST.get('classOfSchool')
+        class_list = ClassOfSchool.objects.all()
+        for classOfSchool in class_list:
+            if classOfSchool.classId == cl:
+                studentsInClass = Student.objects.filter(classOfSchool__classId =cl)
+                if classOfSchool.max_number >= (len(studentsInClass) + len(id_list)):
+                    for id in id_list:
+                        student = Student.objects.get(StudentID=id)
+                        student.classOfSchool = classOfSchool
+                        student.save()
+                    messages.success(request, "Thêm thành công")
+                else:
+                    messages.success(request, "Số lượng học sinh vượt quá qui định")
+
+    context = {
+        'students':students, 
+        'form': form,
+    }
+    return render(request, 'admin_template/lapDS.html',context=context)
 
 
 def traCuu(request):

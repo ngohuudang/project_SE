@@ -29,6 +29,15 @@
             </div>
         </div>
     </div>
+    <div class="choice">
+        {% for field in form  %}
+            {{field}}
+        {% endfor %}
+        <button type="submit" onclick="return confirm('Xác nhận cập nhật điểm ?')" class="btn btn-primary btn-block">
+            Câp nhật
+        </button>
+    </div>
+
     <table class="table">
         <tr>
             <th>STT</th>

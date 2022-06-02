@@ -1,3 +1,4 @@
+from cProfile import label
 from django.forms import ModelForm
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
@@ -26,4 +27,14 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+class CreateClassForm(forms.ModelForm):
+    class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()])
+    classOfSchool = forms.CharField(label="",widget=forms.Select(
+        choices=class_choices, 
+        attrs={'class': 'form-select'
+    }))
+    class Meta:
+        model = ClassOfSchool
+        fields = []
 

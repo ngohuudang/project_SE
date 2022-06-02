@@ -82,4 +82,3 @@ class Mark(models.Model):
     markFinal = models.FloatField(null=True, blank=True)
     
 
-

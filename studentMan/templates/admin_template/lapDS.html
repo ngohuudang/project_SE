@@ -2,154 +2,57 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Lập danh sách lớp</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
+    <form method="post">
+        {% csrf_token %}
+        <div class="main_form-header row">
+            <div class="main_form_class col-lg-3">
             <div class="row">
                 <div class="main_form_title col-lg-3">
                     <p>Lớp</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>10A1</option>
-                            <option>10A2</option>
-                            <option>10A3</option>
-                            <option>10A4</option>
-                            <option>11A1</option>
-                            <option>11A2</option>
-                            <option>11A3</option>
-                            <option>12A1</option>
-                            <option>12A2</option>
-                    </select>
+                    {{form}}
                 </div>
             </div>
+        </div> 
         </div>
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Thêm vào lớp</button>                              
-            </div>
-        </div>
-    </div>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Họ tên</th>
-            <th>Ngày sinh</th>
-            <th>Giới tính</th>
-            <th>Email</th>
-            <th>Địa chỉ</th>
-            <th>lựa chọn</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Đỗ Lê Khánh Đăng</td>
-            <td>1/1/2001</td>
-            <td>Nam</td>
-            <td>khanhdang@gmail.com</td>
-            <td>10, đường 01, quận 1, tp HCM</td>
-            <td>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                    <label class="custom-control-label" for="customCheck1"></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Nguyễn Đắc Thắng</td>
-            <td>11/11/2001</td>
-            <td>Nam</td>
-            <td>dacthang@gmail.com</td>
-            <td>10, đường 11, quận 11, tp HCM</td>
-            <td>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                    <label class="custom-control-label" for="customCheck2"></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Nguyễn Minh Tú</td>
-            <td>11/11/2001</td>
-            <td>Nam</td>
-            <td>minhtu@gmail.com</td>
-            <td>10, đường 11, quận 11, tp HCM</td>
-            <td>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                    <label class="custom-control-label" for="customCheck2"></label>
-                </div>
-            </td>
-        </tr>
-    </table>
-{% endblock content %}
-
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-<link>
-    <meta charset="UTF-8">
-    <title>Đăng ký lớp học</title>
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="./stylesheets/script/dangkylophoc.css">
-<script type="text/javascript" src="script/dangkylophoc.js"></script>
-</head>
-<body>
-<div
-  class="bg-image"
-  style="
-    background-image: linear-gradient(lightgreen,lightseagreen);
-    height: 100vh;
-  "
->
-    <center>
-        <div class="container">
-        <div class="row">
-            <div class="col-sm  bg-light border  order-1">
-    <form>
-        <h1>Lập danh sách lớp</h1>
-        Lớp<br>
-        <input type="text" name="txtLop">
-        <br>
-        Sĩ số<br>
-        <input type="text" name="txtSiSo">
-        <br><br>
-        <input type="submit" value="Đăng ký" class="button">
-    </form>
-                </div>
-            <br>
-        <div class="col-sm  bg-light border  order-2">
-        <div class="main_form_select col l-6">
-                                    <select class="form-control" id="haveclass?" onchange=update()>
-                                          <option>Học sinh có lớp</option>
-                                          <option>Học sinh chưa có lớp</option>
-                                    </select>
-                                </div>
-        <br>
-        <table border="1" cellspacing=0 id="table" class="table table-hover" >
+        
+        <table class="table">
             <tr>
                 <th>STT</th>
                 <th>Họ tên</th>
-                <th>Lớp</th>
+                <th>Ngày sinh</th>
                 <th>Giới tính</th>
-                <th>Năm sinh</th>
+                <th>Email</th>
                 <th>Địa chỉ</th>
+                <th>lựa chọn</th>
+            </tr>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{student.name}}</td>
+                        <td>{{student.dateOfBirth}}</td>
+                        <td>{{student.sex}}</td>
+                        <td>{{student.email}}</td>
+                        <td>{{student.address}}</td>
+                        <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{{ student.StudentID }}" id ="{{ student.StudentID }}" name="docid">
+                            <label class="form-check-label" for="{{ student.StudentID }}">chọn</label>
+                        </div>
+                {% endfor %}
             </tr>
         </table>
-        </div>
+        <div class="main_form_term col-lg-6">
+        <div class="row">  
+            <div class="col-lg-5">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Thêm học sinh
+                </button>
             </div>
+            <div class="col-lg-5">
+                <a href="{% url 'dsLop' %}" class="btn btn-primary" style="width: 100%;">Trở về</a>
+            </div>                  
         </div>
-        </center>
-        </div>
-
-
-</body>
-</html> {% endcomment %}
+    </div>
+{% endblock content %}

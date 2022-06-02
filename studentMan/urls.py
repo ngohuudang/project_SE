@@ -25,6 +25,7 @@ urlpatterns = [
     path("tiepnhanhocsinh/", views.tiepNhanHS, name='tiepNhanHS'),
     path("danhsachlop/", views.dsLop, name='dsLop'),
     path("lapdanhsachlop/", views.lapDSLop, name='lapDSLop'),
+#     path('lapdanhsachlop/taoDS',views.taoDS,name='taoDS'),
 
     path("tracuu/", views.traCuu, name='traCuu'),
 
