@@ -27,4 +27,6 @@ urlpatterns = [
     path("Class/delete/<int:class_id>", views.xoaLop, name='xoaLop'),
     path("Class/add", views.themLop, name='themLop'),
     path("quanlilop/<str:pk_test>/", views.quanLiLopFilter, name='quanLiLopFilter'),
+
+    path("logout/", views.logoutUser, name='logout'),
 ]

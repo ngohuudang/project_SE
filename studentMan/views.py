@@ -228,3 +228,7 @@ def themLop(request):
         else:
             messages.error(request, "Could Not Add")
     return render(request, 'admin_template/themLop.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
