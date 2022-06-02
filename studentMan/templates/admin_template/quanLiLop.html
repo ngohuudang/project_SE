@@ -9,11 +9,10 @@
                     <p>Niên khóa</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>tất cả</option>
-                            <option>19-20</option>
-                            <option>20-21</option>
-                            <option>21-22</option>
+                    <select id="combobox" class="form-select" aria-label="Default select example">
+                        {% for y in nienkhoa %}
+                            <option>{{ y.year }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -21,8 +20,14 @@
 
         <div class="main_form_term col-lg-2">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+                <button id="buttonKQ" type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>
             </div>
+            <script>  var input = document.getElementById('buttonKQ');
+    input.onclick = function(){
+        var message = document.getElementById('combobox');
+    var valueChoose = message.value;
+    location.href = "http://127.0.0.1:8000/quanlilop/"+valueChoose;
+    };</script>
         </div>
     </div>
     <table class="table">
@@ -33,27 +38,32 @@
             <th>Sỉ số tối đa</th>
             <th>Điều chỉnh</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>10A1</td>
-            <td>21-22</td>
-            <td>40</td>
+        {% for class in quanLiLopFilter %}
+                <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ class.ClassId }}</td>
+            <td>{{ class.year }}</td>
+            <td>{{class.max_number}}</td>
             <td>
-                <a href="#" class="btn btn-primary">Cập nhật</a> -
-                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
+                <a href="{% url 'capNhatLop' class.id %}" class="btn btn-primary">Cập nhật</a> -
+                <a href="{% url 'xoaLop' class.id %}" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a>
             </td>
         </tr>
-        <tr>
-            <td>2</td>
-            <td>11A2</td>
-            <td>21-22</td>
-            <td>40</td>
+            {% endfor %}
+
+        {% for class in classes %}
+                <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ class.ClassId }}</td>
+            <td>{{ class.year }}</td>
+            <td>{{class.max_number}}</td>
             <td>
-                <a href="#" class="btn btn-primary">Cập nhật</a> -
-                <a href="#" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a> 
+                <a href="{% url 'capNhatLop' class.id %}" class="btn btn-primary">Cập nhật</a> -
+                <a href="{% url 'xoaLop' class.id %}" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a>
             </td>
         </tr>
+            {% endfor %}
     </table>
-        <a href="#" type="button" class="btn btn-outline-primary">Thêm lớp</a>                               
+        <a href="{% url 'themLop' %}" type="button" class="btn btn-outline-primary">Thêm lớp</a>
     </div>
 {% endblock content %}

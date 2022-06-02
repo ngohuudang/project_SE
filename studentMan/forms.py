@@ -20,3 +20,7 @@ class subjectForm(forms.ModelForm):
         model = Subject
         fields = '__all__'
 
+class classForm(forms.ModelForm):
+    class Meta:
+        model = ClassOfSchool
+        fields = '__all__'
