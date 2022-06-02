@@ -8,51 +8,59 @@ class Report:
         self.soLuongDat = soLuongDat
         self.tiLe = tiLe
 
-    def findClassID(self, currentID):
-        currentUser = Teacher.objects.filter(TeacherID=currentID)
-        if not currentUser:
-            currentUser = Student.objects.filter(StudentID=currentID)
-        currentUser = currentUser[0]
-        classID = currentUser.ClassOfSchool.id
-        return classID
+    def find_class_of_user(self, current_user_id):
+        current_user = Teacher.objects.filter(TeacherID=current_user_id)
+        if not current_user:
+            current_user = Student.objects.filter(StudentID=current_user_id)
+        current_user = current_user[0]
+        current_class = current_user.ClassOfSchool
+        return [current_class]
 
-    def countPassedSubject(self, student, semester):
+    def count_passed_subject(self, student, semester, subject_num):
         marks = Mark.objects.filter(StudentID_mark=student,
                                     year_mark=student,
                                     semester_mark=semester)
+        print(len(marks))
+        print(subject_num)
+        if len(marks) != subject_num:
+            return -1
         count = 0
         for mark in marks:
+            if (mark.markFifteen == None) or (mark.markOne == None) or (mark.markFinal == None):
+                return -1
             subject = Subject.objects.filter(SubjectID=mark.SubjectID_mark)[0]
-            minMark = subject.approved_mark
+            min_mark = subject.approved_mark
             m = (mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6
-            if m >= minMark:
+            if m >= min_mark:
                 count += 1
         return count
 
-    def passedSemester(self, student, semester):
-        passedSubject = self.countPassedSubject(student, semester)
-        if passedSubject == 9:
-            return True
-        else:
-            False
-
-    def passedRate(self, students, semester):
+    def passed_rate(self, students, semester, subject_number):
         count = 0
         for student in students:
-            if self.passedSemester(student, semester):
+            counted = self.count_passed_subject(student, semester, subject_number)
+            if counted == -1:
+                return -1, -1
+            if counted == subject_number:
                 count += 1
-        return [count, (count / len(students)) * 100]
+        return count, (count / len(students)) * 100
 
-    def createReport(self, classID, semester):
-        students = Student.objects.filter(ClassOfSchool__id=classID)
-        Lop = ClassOfSchool.objects.filter(id=classID)[0].ClassId
-        passed_count, passed_rate = self.passedRate(students, semester)
-        return Report(Lop, len(students), passed_count, passed_rate)
-
-    def show(self, currentID, className, semester, year):
-        if className == "---":
-            classID = self.findClassID(currentID)
+    def report_to_show(self, current_user_id, class_name, semester, year, subject_num):
+        # find current class
+        if class_name == "---":
+            classes = self.find_class_of_user(current_user_id)
         else:
-            classID = ClassOfSchool.objects.filter(ClassId=className, year__year=year)[0].id
+            classes = ClassOfSchool.objects.filter(ClassId=class_name, year__year=year)
 
-        return self.createReport(classID, semester)
+        reports = []
+        for c in classes:
+            # find all student in that class
+            students_in_class = Student.objects.filter(ClassOfSchool=c)
+            student_number = len(students_in_class)
+
+            current_class = c.ClassId
+            passed_num, passed_rate = self.passed_rate(students_in_class, semester, subject_num)
+            if passed_num == -1:
+                continue
+            reports.append(Report(current_class, student_number, passed_num, round(passed_rate, 2)))
+        return reports

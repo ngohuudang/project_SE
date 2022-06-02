@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
+from .subject_report import *
 
 from .decorators import unauthenticated_user
 
@@ -63,18 +64,35 @@ def bangDiem(request):
     return render(request, 'admin_template/bangDiem.html')
 
 
+def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
+    all_classes = ClassOfSchool.objects.all()
+    subjects = Subject.objects.all()
+    years = Age.objects.all()
+    id = request.user.username
+    reports = Subject_Report().report_to_show(id, lop, mon, hocKy, nienKhoa)
+    context = {'reports': reports,
+               'classes': all_classes,
+               'current_class': lop,
+               'semester': hocKy,
+               'years': years,
+               'year': nienKhoa,
+               'subjects': subjects,
+               'subject': mon}
+    return render(request, 'admin_template/baoCaoMonHoc.html', context)
+
+
 def baoCaoMH(request):
-    return render(request, 'admin_template/baoCaoMonHoc.html')
+    return baoCaoMonHoc(request, '---', '---', 1, 2020)
 
 
 @unauthenticated_user
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
+    subject_num = len(Subject.objects.all())
     all_classes = ClassOfSchool.objects.all()
     id = request.user.username
-    report = Report()
-    report1 = [report.show(id, lop, hocKy, nienKhoa)]
+    reports = Report().report_to_show(id, lop, hocKy, nienKhoa, subject_num)
     all_nienKhoa = Age.objects.all()
-    context = {'reports': report1,
+    context = {'reports': reports,
                'classes': all_classes,
                'lop': lop,
                'hocky': hocKy,

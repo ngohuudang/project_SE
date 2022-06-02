@@ -29,7 +29,8 @@ urlpatterns = [
     path("tracuu/", views.traCuu, name='traCuu'),
 
     path("bangdiem/", views.bangDiem, name='bangDiem'),
-    path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMonHoc'),
+    path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMH'),
+    path("baocaomonhoc/<str:lop>/<str:mon>/<int:hocKy>/<str:nienKhoa>", views.baoCaoMonHoc, name='baoCaoMonHoc'),
     path("baocaohocki/", views.baoCaoHK, name='baoCaoHocKi'),
     path("baocaohocki/<str:lop>/<int:hocKy>/<str:nienKhoa>/", views.baoCaoHocKy, name='baoCaoHK'),
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
