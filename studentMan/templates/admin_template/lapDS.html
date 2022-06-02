@@ -25,8 +25,15 @@
         </div>
         <div class="main_form_term col-lg-2">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Thêm vào lớp</button>                              
+                <button id="Buttonadd" type="button" class="btn btn-outline-primary col-lg-11">Thêm vào lớp</button>
             </div>
+            <script>  var input = document.getElementById('Buttonadd');
+    input.onclick = function(){
+        {% for i in lapDsLop %}
+        var checkbox=document.getElementById("{{ std.StudentID }}");
+        alert(checkbox)
+        {% endfor %}
+    };</script>
         </div>
     </div>
     <table class="table">
@@ -39,48 +46,21 @@
             <th>Địa chỉ</th>
             <th>lựa chọn</th>
         </tr>
+        {% for std in lapDsLop %}
         <tr>
-            <td>1</td>
-            <td>Đỗ Lê Khánh Đăng</td>
-            <td>1/1/2001</td>
-            <td>Nam</td>
-            <td>khanhdang@gmail.com</td>
-            <td>10, đường 01, quận 1, tp HCM</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{std.name}}</td>
+            <td>{{std.dateOfBirth}}</td>
+            <td>{{ std.sex }}</td>
+            <td>{{ std.email }}</td>
+            <td>{{ std.address }}</td>
             <td>
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                    <label class="custom-control-label" for="customCheck1"></label>
+                    <input type="checkbox" class="custom-control-input" id="{{ std.StudentID }}">
                 </div>
             </td>
         </tr>
-        <tr>
-            <td>2</td>
-            <td>Nguyễn Đắc Thắng</td>
-            <td>11/11/2001</td>
-            <td>Nam</td>
-            <td>dacthang@gmail.com</td>
-            <td>10, đường 11, quận 11, tp HCM</td>
-            <td>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                    <label class="custom-control-label" for="customCheck2"></label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Nguyễn Minh Tú</td>
-            <td>11/11/2001</td>
-            <td>Nam</td>
-            <td>minhtu@gmail.com</td>
-            <td>10, đường 11, quận 11, tp HCM</td>
-            <td>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                    <label class="custom-control-label" for="customCheck2"></label>
-                </div>
-            </td>
-        </tr>
+    {% endfor %}
     </table>
 {% endblock content %}
 
