@@ -1,10 +1,8 @@
 {% extends 'studentMan/base.html' %}
-{% comment %} {% load widget_tweaks %} {% endcomment %}
-
 {% load static %}
 {% block content %}
-
-    {% comment %} <div class="main_form-header row">
+    <h3 class="label">Bảng điểm môn học</h3>
+    <div class="main_form-header row">
         <div class="main_form_class col-lg-3">
             <div class="row">
                 <div class="main_form_title col-lg-3">
@@ -63,42 +61,67 @@
                 <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
             </div>
         </div>
-    </div> {% endcomment %}
-    <h3 class="label">Bảng điểm môn học</h3>
-    <div class="card card-body">
-        <form method="get">
-            {% csrf_token %}
-            {{myFilter.form}}
-            {% comment %} widget_tweaks để cập nhật frontend {% endcomment %}
-            {% comment %} {{ myFilter.form.direction.label_tag }}
-            {% render_field filter.form.direction class="form-select" %} {% endcomment %}
-            <button class="btn btn-primary" type="submit">Xem kết quả</button>
-        </form>
-        <br>
-        <br>
-
-        <table class="table table-sm">
-            <tr>
-                <th>STT</th>
-                <th>Họ Tên</th>
-                <th>Điểm 15'</th>
-                <th>Điểm 1 tiết</th>
-                <th>Điểm cuối học kì</th>
-                <th>Điều chỉnh</th>
-            </tr>
-            {% for mark in marks %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{mark.student.name}}</td>
-                    <td>{{mark.markFifteen}}</td>
-                    <td>{{mark.markOne}}</td>
-                    <td>{{mark.markFinal}}</td>
-                    <td>
-                        <a href="{% url 'capNhatDiem' mark.id %}" class="btn btn-primary">Cập nhật</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
     </div>
+
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Họ Tên</th>
+            <th>Điểm 15'</th>
+            <th>Điểm 1 tiết</th>
+            <th>Điểm cuối HK</th>
+            <th>Điều chỉnh</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Nguyễn Đắc Thắng</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Đỗ Lê Khánh Đăng</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Nguyễn Minh Tú</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Lục Minh Bửu</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a>
+            </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Ngô Hữu Đang</td>
+            <td>10</td>
+            <td>10</td>
+            <td>10</td>
+            <td>
+                <a href="#" class="btn btn-primary">Cập nhật</a>
+            </td>
+        </tr>
+    </table>
 
 {% endblock content %}
