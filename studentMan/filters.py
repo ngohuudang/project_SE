@@ -7,7 +7,7 @@ from django_filters import CharFilter,ChoiceFilter
 from .models import *
 from django import forms
 class MarkFilter(django_filters.FilterSet):
-    class_list = set([mark.student.classOfSchool for mark in Mark.objects.all()])
+    class_list = set([mark.student.classOfSchool for mark in Mark.objects.all() if mark.student.classOfSchool is not None])
     class_choices = [(c,c) for c in class_list]
     student = ChoiceFilter(
         label= 'Lớp',

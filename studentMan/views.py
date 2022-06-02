@@ -21,6 +21,7 @@ from studentMan.models import Mark, Student
 from .filters import *
 from . forms import *
 
+semester =3
 # Create your views here.
 
 @login_required(login_url='login')
@@ -88,6 +89,7 @@ def traCuu(request):
 
 def bangDiem(request):
     marks = Mark.objects.all()
+    # print("marks ", marks)
     myFilter = MarkFilter(request.GET, queryset=marks)
     marks = myFilter.qs
     context = {
@@ -235,6 +237,14 @@ def themMon(request):
                 subject.name = name
                 subject.approved_mark = approved_mark
                 subject.save()
+                students = Student.objects.all()
+                for student in students:
+                    for semester_mark in range(1,semester+1):
+                        mark = Mark()
+                        mark.student = student
+                        mark.subject = subject
+                        mark.semester_mark = semester_mark
+                        mark.save()
                 messages.success(request, "Successfully Added")
                 return redirect(reverse('themMon'))
             except:
