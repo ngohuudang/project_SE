@@ -1,9 +1,6 @@
-from ast import Or
-from curses.ascii import HT
 from functools import total_ordering
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
-from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -124,8 +121,6 @@ def traCuu(request):
             else:
                 avgMarks2.append(None)
     marks = zip(students, avgMarks1, avgMarks2)
-
-
     context = {
         'marks': marks,
         'marksFilter': marksFilter
@@ -221,7 +216,73 @@ def quanLiTuoi(request):
 
 
 def quanLiLop(request):
-    return render(request, 'admin_template/quanLiLop.html')
+    classes = ClassOfSchool.objects.all()
+    nienkhoa = Age.objects.all()
+    context = {
+        'classes': classes,
+        'nienkhoa':nienkhoa
+    }
+    return render(request,'admin_template/quanLiLop.html',context)
+
+def capNhatLop(request, class_id):
+    Class = get_object_or_404(ClassOfSchool, id=class_id)
+    form = classForm(request.POST or None, instance=Class)
+    context = {
+        'form': form,
+        'page_title': 'capNhatLop'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            ClassId = form.cleaned_data.get('ClassId')
+            year = form.cleaned_data.get('year')
+            max_number = form.cleaned_data.get('max_number')
+            try:
+                Class = ClassOfSchool.objects.get(id=Class.id)
+                Class.ClassId = ClassId
+                Class.year = year
+                Class.max_number = max_number
+                Class.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('quanLiLop'))
+            except Exception as e:
+                messages.error(request, "Could Not Update " + str(e))
+        else:
+            messages.error(request, "Please Fill Form Properly!")
+    else:
+        return render(request, "admin_template/capNhatLop.html", context)
+
+
+def xoaLop(request, class_id):
+    Class = get_object_or_404(ClassOfSchool, id=class_id)
+    Class.delete()
+    messages.success(request, "Class deleted successfully!")
+    return redirect(reverse('quanLiLop'))
+
+
+def themLop(request):
+    form = classForm(request.POST or None)
+    context = {
+        'form': form,
+        'page_title': 'themLop'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            classId = form.cleaned_data.get('ClassId')
+            year = form.cleaned_data.get('year')
+            max_number = form.cleaned_data.get('max_number')
+            try:
+                Class = ClassOfSchool()
+                Class.classId = classId
+                Class.year = year
+                Class.max_number = max_number
+                Class.save()
+                messages.success(request, "Successfully Added")
+                return redirect(reverse('quanLiLop'))
+            except:
+                messages.error(request, "Could Not Add")
+        else:
+            messages.error(request, "Could Not Add")
+    return render(request, 'admin_template/themLop.html', context)
 
 
 def quanLiMon(request):

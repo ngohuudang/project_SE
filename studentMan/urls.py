@@ -1,7 +1,5 @@
 from django.urls import path
-
 from django.contrib.auth import views as auth_views
-
 from . import views
 
 urlpatterns = [
@@ -41,11 +39,13 @@ urlpatterns = [
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
 
     path("quanlilop/", views.quanLiLop, name='quanLiLop'),
+    path("quanlilop/capnhat/<int:class_id>", views.capNhatLop, name='capNhatLop'),
+    path("class/delete/<int:class_id>", views.xoaLop, name='xoaLop'),
+    path("class/add", views.themLop, name='themLop'),
 
     path("quanlimon/", views.quanLiMon, name='quanLiMon'),
     path("quanlimon/capnhat/<int:subject_id>", views.capNhatMon, name='capNhatMon'),
     path("subject/delete/<int:subject_id>",views.xoaMon, name='xoaMon'),
     path("subject/add", views.themMon, name='themMon'),
 ]
-
 

@@ -1,5 +1,3 @@
-from cProfile import label
-from django.forms import ModelForm
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -38,3 +36,7 @@ class CreateClassForm(forms.ModelForm):
         model = ClassOfSchool
         fields = []
 
+class classForm(forms.ModelForm):
+    class Meta:
+        model = ClassOfSchool
+        fields = '__all__'
