@@ -13,7 +13,7 @@
                         <select id="class_select" class="form-select" aria-label="Default select example">
                             <option>---</option>
                             {% for class in classes %}
-                                <option>{{ class.ClassId }}</option>
+                                <option>{{ class }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -67,11 +67,11 @@
             </tr>
             {% for report in reports %}
                 <tr>
-                    <td>1</td>
-                    <td>{{ report.lop }}</td>
-                    <td>{{ report.siSo }}</td>
-                    <td>{{ report.soLuongDat }}</td>
-                    <td>{{ report.tiLe }} %</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ report.class_id }}</td>
+                    <td>{{ report.student_number }}</td>
+                    <td>{{ report.passed_number }}</td>
+                    <td>{{ report.passed_rate }} %</td>
                 </tr>
             {% endfor %}
         </table>

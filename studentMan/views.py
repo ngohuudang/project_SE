@@ -9,8 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
-from .report import *
-from .subject_report import *
+from .report_child_classes import *
 
 from .decorators import unauthenticated_user
 
@@ -65,7 +64,7 @@ def bangDiem(request):
 
 
 def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
-    all_classes = ClassOfSchool.objects.all()
+    all_classes = Subject_Report().remove_duplicate(ClassOfSchool.objects.all())
     subjects = Subject.objects.all()
     years = Age.objects.all()
     id = request.user.username
@@ -87,10 +86,10 @@ def baoCaoMH(request):
 
 @unauthenticated_user
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
+    all_classes = Semester_Report().remove_duplicate(ClassOfSchool.objects.all())
     subject_num = len(Subject.objects.all())
-    all_classes = ClassOfSchool.objects.all()
     id = request.user.username
-    reports = Report().report_to_show(id, lop, hocKy, nienKhoa, subject_num)
+    reports = Semester_Report().report_to_show(id, lop, hocKy, nienKhoa, subject_num)
     all_nienKhoa = Age.objects.all()
     context = {'reports': reports,
                'classes': all_classes,

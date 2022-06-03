@@ -4,21 +4,21 @@ from django.contrib.auth.models import User
 
 
 class Age(models.Model):
-    year = models.CharField(max_length=200, null=False, unique=True)
-    max_age = models.IntegerField(null=False)
-    min_age = models.IntegerField(null=False)
+    year = models.CharField(max_length=200, null=False, unique=True, blank=True)
+    max_age = models.IntegerField(null=False, blank=True)
+    min_age = models.IntegerField(null=False, blank=True)
 
     def __str__(self):
         return self.year
 
 
 class ClassOfSchool(models.Model):
-    ClassId = models.CharField(max_length=200, null=False, unique=False)
-    max_number = models.IntegerField(null=False)
+    classId = models.CharField(max_length=200, null=False, unique=False)
+    max_number = models.IntegerField(null=False, blank=True)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.ClassId
+        return self.classId
 
 
 class Subject(models.Model):
@@ -44,7 +44,7 @@ class Student(models.Model):
     address = models.TextField(null=True, blank=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    ClassOfSchool = models.ForeignKey(ClassOfSchool, null=False, on_delete=models.CASCADE)
+    classOfSchool = models.ForeignKey(ClassOfSchool, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -64,23 +64,24 @@ class Teacher(models.Model):
     address = models.TextField(null=True, blank=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
-    ClassOfSchool = models.ForeignKey(ClassOfSchool, null=False, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, blank=True, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ManyToManyField(ClassOfSchool, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Mark(models.Model):
-    SEMESTER_CATELOGY = (
+    SEMESTER_CATEGORY = (
         ('1', '1'),
-        ('2', '2'),
-        ('3', '3')
+        ('2', '2')
     )
-    StudentID_mark = models.ForeignKey(Student, related_name='ID_mark', null=False, on_delete=models.CASCADE)
-    year_mark = models.ForeignKey(Student, related_name='year_mark', null=False, on_delete=models.CASCADE)
-    semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATELOGY)
-    SubjectID_mark = models.ForeignKey(Subject, null=False, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.CASCADE)
+    semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
     markFifteen = models.FloatField(null=True, blank=True)
-    markFinal = models.FloatField(null=True, blank=True)
     markOne = models.FloatField(null=True, blank=True)
+    markFinal = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.student.StudentID + '_' + self.semester_mark
