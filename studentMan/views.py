@@ -81,7 +81,9 @@ def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
 
 
 def baoCaoMH(request):
-    return baoCaoMonHoc(request, '---', '---', 1, 2020)
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoMonHoc(request, '---', '---', 1, current_year['year__max'])
 
 
 @unauthenticated_user
@@ -102,7 +104,9 @@ def baoCaoHocKy(request, lop, hocKy, nienKhoa):
 
 
 def baoCaoHK(request):
-    return baoCaoHocKy(request, "---", 1, 2020)
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoHocKy(request, "---", 1, current_year['year__max'])
 
 
 def quanLiTuoi(request):
