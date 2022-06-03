@@ -1,6 +1,7 @@
 from logging import Filter
 from random import choices
 from re import A
+from tkinter import NONE
 import django_filters
 from django_filters import CharFilter,ChoiceFilter
 
@@ -69,3 +70,18 @@ class StudentInMarkFilter(django_filters.FilterSet):
     
     def filter_by_class(self, queryset, name, value):
         return queryset.filter(student__classOfSchool__classId =value)
+
+class ClassFilter(django_filters.FilterSet):
+    class_list = set([student.classOfSchool for student in Student.objects.all() if student.classOfSchool != None])
+    class_choices = [(c,c) for c in class_list]
+    classOfSchool = ChoiceFilter(
+        label= '',
+        choices = class_choices, 
+        method= 'filter_by_class',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    class Meta:
+        model = Student
+        fields = []
+    def filter_by_class(self, queryset, name, value):
+        return queryset.filter(classOfSchool__classId =value)

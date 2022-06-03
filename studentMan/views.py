@@ -27,7 +27,17 @@ semester =2
 
 @login_required(login_url='login')
 def admin_home(request):
-    return render(request, 'admin_template/home_content.html')
+    total_teachers = Teacher.objects.all().count()
+    total_students = Student.objects.all().count()
+    total_subjects = Subject.objects.all().count()
+    total_classes = ClassOfSchool.objects.all().count()
+    context = {
+        'total_students': total_students,
+        'total_teachers': total_teachers,
+        'total_subjects': total_subjects,
+        'total_classes': total_classes,
+    }
+    return render(request, 'admin_template/home_content.html',context=context)
 
 
 def loginPage(request):
@@ -53,12 +63,18 @@ def logoutUser(request):
 def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html')
 
+def dsTaiKhoan(request):
+    return render(request, 'admin_template/dsTaiKhoan.html')
+
+
 
 def dsLop(request):
     students = Student.objects.all()
+    classFilter = ClassFilter(request.GET, queryset=students)
+    students = classFilter.qs
     context = {
         'students':students, 
-        # 'form': form,
+        'classFilter': classFilter,
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
@@ -180,7 +196,7 @@ def baoCaoMH(request):
 
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
     all_classes = ClassOfSchool.objects.all()
-    print('all_classes',all_classes)
+    # print('all_classes',all_classes)
     id = request.user.id
     report = Report()
     report1 = [report.show(id, lop, hocKy, nienKhoa)]

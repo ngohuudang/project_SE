@@ -1,5 +1,49 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <div class="card text-center mb-3 bg-info">
+                        <div class="card-body text-white ">
+                            <h3>{{total_students}}</h3>
+                            <p class = 'text-white'>Học sinh</p>
+                        </div>
+                        <a href="{% url 'dsTaiKhoan' %}" class="card-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
 
+                <div class="col-lg-3 col-6">
+                    <div class="card text-center mb-3 bg-success">
+                        <div class="card-body text-white">
+                            <h3>{{total_teachers}}</h3>
+                            <p class = 'text-white'>Giáo viên</p>
+                        </div>
+                        <a href="{% url 'dsTaiKhoan' %}" class="card-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="card text-center mb-3 bg-warning">
+                        <div class="card-body text-white">
+                            <h3>{{total_classes}}</h3>
+                            <p class = 'text-white'>Lớp học</p>
+                        </div>
+                        <a href="{% url 'quanLiMon' %}" class="card-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="card text-center mb-3 bg-danger">
+                        <div class="card-body text-white">
+                            <h3>{{total_subjects}}</h3>
+                            <p class = 'text-white'>Môn học</p>
+                        </div>
+                        <a href="{% url 'quanLiMon' %}" class="card-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
