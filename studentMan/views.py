@@ -217,12 +217,13 @@ def quanLiTuoi(request):
 
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()
-    nienkhoa = Age.objects.all()
+    yearFilter = YearFilter(request.GET, queryset=classes)
+    classes = yearFilter.qs
     context = {
         'classes': classes,
-        'nienkhoa':nienkhoa
+        'yearFilter':yearFilter
     }
-    return render(request,'admin_template/quanLiLop.html',context)
+    return render(request,'admin_template/quanLiLop.html',context= context)
 
 def capNhatLop(request, class_id):
     Class = get_object_or_404(ClassOfSchool, id=class_id)
@@ -267,7 +268,7 @@ def themLop(request):
     }
     if request.method == 'POST':
         if form.is_valid():
-            classId = form.cleaned_data.get('ClassId')
+            classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
             try:

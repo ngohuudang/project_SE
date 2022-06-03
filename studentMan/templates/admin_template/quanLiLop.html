@@ -7,12 +7,12 @@
             {% csrf_token %}
             {% for m in yearFilter.form %}
                 {% if  forloop.counter == 1 %}
-                    <div class="main_form_class col-lg-3">
+                    <div class="main_form_class col-lg-4">
                         <div class="row">
-                            <div class="main_form_title col-lg-3">
+                            <div class="main_form_title col-lg-4">
                                 <p>Niên khóa</p>
                             </div>
-                            <div class="main_form_select col-lg-6">
+                            <div class="main_form_select col-lg-5">
                                 {{m}}
                             </div>
                         </div>
@@ -37,7 +37,7 @@
             {% for class in classes %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ class.ClassId }}</td>
+                    <td>{{ class.classId }}</td>
                     <td>{{ class.year }}</td>
                     <td>{{class.max_number}}</td>
                     <td>
@@ -47,6 +47,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <a href="{% url 'themLop' %}" type="button" class="btn btn-outline-primary">Thêm lớp</a>
     </div>
+    <br>
+    <a href="{% url 'themLop' %}" type="button" class="btn btn-outline-primary">Thêm lớp</a>
 {% endblock content %}

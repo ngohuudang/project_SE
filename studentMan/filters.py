@@ -85,3 +85,17 @@ class ClassFilter(django_filters.FilterSet):
         fields = []
     def filter_by_class(self, queryset, name, value):
         return queryset.filter(classOfSchool__classId =value)
+
+class YearFilter(django_filters.FilterSet):
+    years = set([c.year.year for c in ClassOfSchool.objects.all()])
+    year = ChoiceFilter(
+        label= '',
+        choices = [(c,c) for c in years], 
+        method= 'filter_by_year',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    class Meta:
+        model = ClassOfSchool
+        fields = []
+    def filter_by_year(self, queryset, name, value):
+        return queryset.filter(year__year =value)
