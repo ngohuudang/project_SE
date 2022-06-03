@@ -3,87 +3,58 @@
 {% block content %}
 
     <h3 class="label">Tra cứu học sinh</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-5">
-            <div class="row">
-                <div class="main_form_title col-lg-2">
-                    <p>Tên</p>
-                </div>
-                <div class="main_form_select col-lg-7">
-                    <input type="text" class="form-control">
+    <div class="card card-body">
+        <form method="get" class="main_form-header row">
+            {% csrf_token %}
+            {% for m in marksFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-4">
+                        <div class="row">
+                            <div class="main_form_title col-lg-2">
+                                <p>Tên</p>
+                            </div>
+                            <div class="main_form_select col-lg-8">
+                                {{m}}
+                            </div>
+                        </div>
+                    </div>
+                {% elif forloop.counter == 2 %}
+                    <div class="main_form_subject col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-3">
+                                <p>Lớp</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>                                
+                        </div>
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
                 </div>
             </div>
-        </div>
+        </form>
 
-        <div class="main_form_class col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-3">
-                    <p>Lớp</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-control" id="exampleFormControlSelect1">
-                            <option>10A1</option>
-                            <option>10A2</option>
-                            <option>10A3</option>
-                            <option>10A4</option>
-                            <option>11A1</option>
-                            <option>11A2</option>
-                            <option>11A3</option>
-                            <option>12A1</option>
-                            <option>12A2</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
-            </div>
-        </div>
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Họ Tên</th>
+                <th>Lớp</th>
+                <th>TB học kì 1</th>
+                <th>TB học kì 2</th>
+            </tr>
+            {% for student,avg1,avg2 in marks %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.classOfSchool}}</td>
+                    <td>{{avg1}}</td>
+                    <td>{{avg2}}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Họ tên</th>
-            <th>Lớp</th>
-            <th>TB Học Kỳ 1</th>
-            <th>TB Học Kỳ 2</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Đỗ Lê Khánh Đăng</td>
-            <td>10A1</td>
-            <td>10</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Nguyễn Minh Tú</td>
-            <td>10A1</td>
-            <td>10</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Lục Minh Bửu</td>
-            <td>10A1</td>
-            <td>10</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>Ngô Hữu Đang</td>
-            <td>10A1</td>
-            <td>10</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>Nguyễn Đắc Thắng</td>
-            <td>10A1</td>
-            <td>10</td>
-            <td>10</td>
-        </tr>
-    </table>
 {% endblock content %}

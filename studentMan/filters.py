@@ -9,7 +9,7 @@ from django import forms
 class MarkFilter(django_filters.FilterSet):
     class_list = set([mark.student.classOfSchool for mark in Mark.objects.all() if mark.student.classOfSchool is not None])
     class_choices = [(c,c) for c in class_list]
-    student = ChoiceFilter(
+    classOfSchool = ChoiceFilter(
         label= 'Lớp',
         choices = class_choices, 
         method= 'filter_by_class',
@@ -26,8 +26,7 @@ class MarkFilter(django_filters.FilterSet):
     )
     SEMESTER_CATEGORY = (
         ('1', '1'),
-        ('2', '2'),
-        ('3', '3')
+        ('2', '2')
     )
     semester_mark = ChoiceFilter(
         label= 'Học kì',
@@ -48,3 +47,25 @@ class MarkFilter(django_filters.FilterSet):
 
     def filter_by_semester(self, queryset, name, value):
         return queryset.filter(semester_mark =value)
+
+class StudentInMarkFilter(django_filters.FilterSet):
+    name = CharFilter(
+        field_name='student__name', 
+        label = '', 
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        lookup_expr='icontains'
+    )
+    class_list = set([mark.student.classOfSchool for mark in Mark.objects.all() if mark.student.classOfSchool is not None])
+    class_choices = [(c,c) for c in class_list]
+    classOfSchool = ChoiceFilter(
+        label= '',
+        choices = class_choices, 
+        method= 'filter_by_class',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    class Meta:
+        model = Mark
+        fields = []
+    
+    def filter_by_class(self, queryset, name, value):
+        return queryset.filter(student__classOfSchool__classId =value)

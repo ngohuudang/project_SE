@@ -71,8 +71,7 @@ class Teacher(models.Model):
 class Mark(models.Model):
     SEMESTER_CATEGORY = (
         ('1', '1'),
-        ('2', '2'),
-        ('3', '3')
+        ('2', '2')
     )
     student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.CASCADE)
@@ -81,3 +80,5 @@ class Mark(models.Model):
     markOne = models.FloatField(null=True, blank=True)
     markFinal = models.FloatField(null=True, blank=True)
     
+    def __str__(self):
+        return self.student.StudentID+ '_'+ self.semester_mark

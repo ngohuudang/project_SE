@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
+from numpy import round_
 from .report import *
 
 from .decorators import unauthenticated_user
@@ -21,7 +22,7 @@ from studentMan.models import Mark, Student
 from .filters import *
 from . forms import *
 
-semester =3
+semester =2
 # Create your views here.
 
 @login_required(login_url='login')
@@ -84,7 +85,31 @@ def lapDSLop(request):
 
 
 def traCuu(request):
-    return render(request, 'admin_template/traCuu.html')
+    marks = Mark.objects.all()
+    marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
+    marks = marksFilter.qs
+    students = set([mark.student for mark in marks])
+    avgMarks1 = []
+    avgMarks2 = []
+    for mark in marks:
+        if mark.semester_mark == '1':
+            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
+                avgMarks1.append(round((mark.markFifteen + 2*mark.markOne + 3*mark.markFinal)/6, 2))
+            else:
+                avgMarks1.append(None)
+        elif mark.semester_mark == '2':
+            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
+                avgMarks2.append(round((mark.markFifteen + 2*mark.markOne + 3*mark.markFinal)/6, 2))
+            else:
+                avgMarks2.append(None)
+    marks = zip(students, avgMarks1, avgMarks2)
+
+
+    context = {
+        'marks': marks,
+        'marksFilter': marksFilter
+    }
+    return render(request, 'admin_template/traCuu.html',context=context)
 
 
 def bangDiem(request):
