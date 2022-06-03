@@ -62,7 +62,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, blank =True, null=True, on_delete=models.CASCADE)
-    classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
+    classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
 
     def __str__(self):
         return self.name
@@ -81,4 +81,3 @@ class Mark(models.Model):
     markOne = models.FloatField(null=True, blank=True)
     markFinal = models.FloatField(null=True, blank=True)
     
-
