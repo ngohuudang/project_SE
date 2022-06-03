@@ -55,7 +55,12 @@ def tiepNhanHS(request):
 
 
 def dsLop(request):
-    return render(request, 'admin_template/dsLop.html')
+    students = Student.objects.all()
+    context = {
+        'students':students, 
+        # 'form': form,
+    }
+    return render(request, 'admin_template/dsLop.html', context=context)
 
 
 def lapDSLop(request):
@@ -114,7 +119,6 @@ def traCuu(request):
 
 def bangDiem(request):
     marks = Mark.objects.all()
-    # print("marks ", marks)
     myFilter = MarkFilter(request.GET, queryset=marks)
     marks = myFilter.qs
     context = {

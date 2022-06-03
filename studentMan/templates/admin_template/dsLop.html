@@ -29,14 +29,6 @@
             </div>
         </div>
     </div>
-    <div class="choice">
-        {% for field in form  %}
-            {{field}}
-        {% endfor %}
-        <button type="submit" onclick="return confirm('Xác nhận cập nhật điểm ?')" class="btn btn-primary btn-block">
-            Câp nhật
-        </button>
-    </div>
 
     <table class="table">
         <tr>
@@ -64,7 +56,75 @@
             <td>10, đường 11, quận 11, tp HCM</td>
         </tr>
     </table>
-        {% url 'lapDSLop' as lapDSLop %}
-        <a href="{{lapDSLop}}" type="button" class="btn btn-outline-primary {% if lapDSLop == request.path %} active {% endif %}">Lập danh sách lớp</a>                               
+
+    <div class="card card-body">
+        <form method="get" class="main_form-header row">
+            {% csrf_token %}
+            {% for m in myFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-3">
+                                <p>Lớp</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>
+                        </div>
+                    </div>
+                {% elif forloop.counter == 2 %}
+                    <div class="main_form_subject col-lg-4">
+                    <div class="row">
+                        <div class="main_form_title col-lg-4">
+                            <p>Môn học</p>
+                        </div>
+                        <div class="main_form_select col-lg-6">
+                            {{m}}
+                        </div>                                
+                    </div>
+                </div>
+                {% else %}
+                    <div class="main_form_term col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-4">
+                                <p>Học kì</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>                               
+                        </div>
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+            </tr>
+            {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.dateOfBirth}}</td>
+                    <td>{{student.sex}}</td>
+                    <td>{{student.email}}</td>
+                    <td>{{student.address}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{% url 'lapDSLop' %}" type="button" class="btn btn-outline-primary" >Lập danh sách lớp</a> 
+    </div>
     </div>
 {% endblock content %}
