@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'studentMan',
     'django_filters',
-    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

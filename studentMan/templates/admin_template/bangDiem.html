@@ -1,81 +1,52 @@
 {% extends 'studentMan/base.html' %}
-{% comment %} {% load widget_tweaks %} {% endcomment %}
-
 {% load static %}
 {% block content %}
-
-    {% comment %} <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-3">
-                    <p>Lớp</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>10A1</option>
-                            <option>10A2</option>
-                            <option>10A3</option>
-                            <option>10A4</option>
-                            <option>11A1</option>
-                            <option>11A2</option>
-                            <option>11A3</option>
-                            <option>12A1</option>
-                            <option>12A2</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="main_form_subject col-lg-4">
-            <div class="row">
-                <div class="main_form_title col-lg-4">
-                    <p>Môn học</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>Toán</option>
-                            <option>Lý</option>
-                            <option>Hóa</option>
-                            <option>Sinh</option>
-                            <option>Sử</option>
-                            <option>Địa</option>
-                            <option>Văn</option>
-                            <option>Đạo Đức</option>
-                            <option>Thể Dục</option>
-                    </select>
-                </div>                                
-            </div>
-        </div>
-        <div class="main_form_term col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-4">
-                    <p>Học kì</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>1</option>
-                            <option>2</option>
-                    </select>
-                </div>                               
-            </div>
-        </div>
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
-            </div>
-        </div>
-    </div> {% endcomment %}
     <h3 class="label">Bảng điểm môn học</h3>
     <div class="card card-body">
-        <form method="get">
+        <form method="get" class="main_form-header row">
             {% csrf_token %}
-            {{myFilter.form}}
-            {% comment %} widget_tweaks để cập nhật frontend {% endcomment %}
-            {% comment %} {{ myFilter.form.direction.label_tag }}
-            {% render_field filter.form.direction class="form-select" %} {% endcomment %}
-            <button class="btn btn-primary" type="submit">Xem kết quả</button>
+            {% for m in myFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-3">
+                                <p>Lớp</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>
+                        </div>
+                    </div>
+                {% elif forloop.counter == 2 %}
+                    <div class="main_form_subject col-lg-4">
+                    <div class="row">
+                        <div class="main_form_title col-lg-4">
+                            <p>Môn học</p>
+                        </div>
+                        <div class="main_form_select col-lg-6">
+                            {{m}}
+                        </div>                                
+                    </div>
+                </div>
+                {% else %}
+                    <div class="main_form_term col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-4">
+                                <p>Học kì</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>                               
+                        </div>
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+                </div>
+            </div>
         </form>
-        <br>
-        <br>
 
         <table class="table table-sm">
             <tr>

@@ -25,6 +25,7 @@ body {
     width: 95%;
     margin: auto;
     border-radius: 3px;
+
 }
 
 .form_detail td {
@@ -33,7 +34,7 @@ body {
 }
 
 .form_input input {
-    width: 90%;
+    width: 60%;
     height: 24px;
 }
 

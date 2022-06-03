@@ -1,73 +1,183 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Báo cáo tổng kết học kì</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-3">
-                    <p>Lớp</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>10A1</option>
-                            <option>10A2</option>
-                            <option>10A3</option>
-                            <option>10A4</option>
-                            <option>11A1</option>
-                            <option>11A2</option>
-                            <option>11A3</option>
-                            <option>12A1</option>
-                            <option>12A2</option>
-                    </select>
+    <link rel="stylesheet" href="{% static './css/create_report.css' %}">
+    <div class="wrap">
+        <h3 class="label">Báo cáo tổng kết học kì</h3>
+        <div class="main_form-header row">
+            <div class="main_form_class col-lg-3">
+                <div class="row">
+                    <div class="main_form_title col-lg-3">
+                        <p>Lớp</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        <select id="class_select" class="form-select" aria-label="Default select example">
+                            <option>---</option>
+                            {% for class in classes %}
+                                <option>{{ class.classId }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="main_form_term col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-4">
-                    <p>Học kì</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
+
+            <div class="main_form_term col-lg-3">
+                <div class="row">
+                    <div class="main_form_title col-lg-4">
+                        <p>Học kì</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        <select id="semester_select" class="form-select" aria-label="Default select example">
                             <option>1</option>
                             <option>2</option>
-                    </select>
-                </div>                               
+                            <option>3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="main_form_term col-lg-4">
+                <div class="row">
+                    <div class="main_form_title col-lg-4">
+                        <p>Niên khóa</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        <select id="year_select" class="form-select" aria-label="Default select example">
+                            {% for nk in all_nienKhoa %}
+                                <option>
+                                    {{ nk.year }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button id="search" type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
-            </div>
+        <table class="table">
+            <tr>
+                <th>STT</th>
+                <th>Lớp</th>
+                <th>Sĩ Số</th>
+                <th>Số Lượng Đạt</th>
+                <th>Tỷ Lệ</th>
+            </tr>
+            {% for report in reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ report.lop }}</td>
+                    <td>{{ report.siSo }}</td>
+                    <td>{{ report.soLuongDat }}</td>
+                    <td>{{ report.tiLe }} %</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div>
+            <a href="#" onclick="showAddReport()" type="button" class="btn btn-outline-primary">Tạo báo cáo học kì</a>
         </div>
     </div>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Lớp</th>
-            <th>Sĩ Số</th>
-            <th>Số Lượng Đạt</th>
-            <th>Tỷ Lệ</th>
-        </tr>
-        <tr>
-            <td class="form_input">1</td>
-            <td class="form_input">10A2</td>
-            <td class="form_input">30</td>
-            <td class="form_input">20</td>
-            <td class="form_input">66%</td>
-        </tr>
-        <tr>
-            <td class="form_input">2</td>
-            <td class="form_input">11A2</td>
-            <td class="form_input">34</td>
-            <td class="form_input">34</td>
-            <td class="form_input">100%</td>
-        </tr>
-    </table>
+
     <div>
-        <a href="#" type="button" class="btn btn-outline-primary">Tạo báo cáo học kì</a>                               
+        <div id="addReport" class="add_report">
+            <h3 class="label">Báo cáo tổng kết học kỳ</h3>
+            <div class="info one_attribute">
+                <span class="child_label">Học kì: </span>
+                <select class="select_semester">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+            </div>
+
+            <table id="report_table" class="form_detail">
+                <tr>
+                    <th class="stt">STT</th>
+                    <th class="form_input">Lớp</th>
+                    <th class="form_input">Sĩ Số</th>
+                    <th class="form_input">Số Lượng Đạt</th>
+                    <th class="form_input">Tỷ Lệ</th>
+                </tr>
+                <tr>
+                    <td class="stt">1</td>
+                    <td class="form_input"><input type="text"></td>
+                    <td class="form_input"><input type="text"></td>
+                    <td class="form_input"><input type="text"></td>
+                    <td class="form_input"><input type="text"></td>
+                </tr>
+            </table>
+            <div class="add_btns">
+                <button onclick="addRow()" class="btn btn-outline-primary">Thêm dòng</button>
+                <button onclick="submitReports()" class="btn btn-outline-primary">Tạo báo cáo</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        var count = 2;
+        addRow = () => {
+            stt = document.createElement("td");
+            stt.classList.add("stt")
+            stt.appendChild(document.createTextNode(count))
+
+            lop = document.createElement("td");
+            lop.appendChild(document.createElement("input"));
+            lop.classList.add("form_input");
+
+            siso = document.createElement("td");
+            siso.appendChild(document.createElement("input"));
+            siso.classList.add("form_input");
+
+            soluongdat = document.createElement("td");
+            soluongdat.appendChild(document.createElement("input"));
+            soluongdat.classList.add("form_input");
+
+            tile = document.createElement("td");
+            tile.appendChild(document.createElement("input"));
+            tile.classList.add("form_input");
+
+            TR = document.createElement("tr");
+            TR.appendChild(stt);
+            TR.appendChild(lop);
+            TR.appendChild(siso);
+            TR.appendChild(soluongdat);
+            TR.appendChild(tile);
+
+            document.getElementById("report_table").appendChild(TR);
+            count += 1;
+        }
+    </script>
+
+    <script>
+        const showAddReport = () => document.getElementById("content").classList.add("active");
+        const submitReports = () => document.getElementById("content").classList.remove("active");
+    </script>
+
+    <script>
+        document.getElementById("class_select").value = "{{lop}}"
+        document.getElementById("semester_select").value = "{{ hocky }}"
+        document.getElementById("year_select").value = "{{ nienKhoa }}"
+    </script>
+    
+    <script>
+        function getNewViews() {
+            var e = document.getElementById("class_select");
+            var classSelected = e.options[e.selectedIndex].text;
+            var semesters = document.getElementById("semester_select");
+            var semester = semesters.options[semesters.selectedIndex].text;
+            var years = document.getElementById("year_select");
+            var year = years.options[years.selectedIndex].text;
+            window.location.href = {% url 'baoCaoHocKi' %} +classSelected + "/" + semester + "/" + year;
+        }
+
+        btn = document.getElementById("search");
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            getNewViews();
+        })
+    </script>
 
 {% endblock content %}

@@ -2,68 +2,52 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Quản lí lớp học</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-5">
-                    <p>Niên khóa</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select id="combobox" class="form-select" aria-label="Default select example">
-                        {% for y in nienkhoa %}
-                            <option>{{ y.year }}</option>
-                        {% endfor %}
-                    </select>
+    <div class="card card-body">
+        <form method="get" class="main_form-header row">
+            {% csrf_token %}
+            {% for m in yearFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-4">
+                        <div class="row">
+                            <div class="main_form_title col-lg-4">
+                                <p>Niên khóa</p>
+                            </div>
+                            <div class="main_form_select col-lg-5">
+                                {{m}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
                 </div>
             </div>
-        </div>
+        </form>
 
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button id="buttonKQ" type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>
-            </div>
-            <script>  var input = document.getElementById('buttonKQ');
-    input.onclick = function(){
-        var message = document.getElementById('combobox');
-    var valueChoose = message.value;
-    location.href = "http://127.0.0.1:8000/quanlilop/"+valueChoose;
-    };</script>
-        </div>
-    </div>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Tên lớp</th>
-            <th>Niên khóa</th>
-            <th>Sỉ số tối đa</th>
-            <th>Điều chỉnh</th>
-        </tr>
-        {% for class in quanLiLopFilter %}
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Tên lớp</th>
+                <th>Niên khóa</th>
+                <th>Sỉ số tối đa</th>
+                <th>Điều chỉnh</th>
+            </tr>
+            {% for class in classes %}
                 <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ class.ClassId }}</td>
-            <td>{{ class.year }}</td>
-            <td>{{class.max_number}}</td>
-            <td>
-                <a href="{% url 'capNhatLop' class.id %}" class="btn btn-primary">Cập nhật</a> -
-                <a href="{% url 'xoaLop' class.id %}" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a>
-            </td>
-        </tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ class.classId }}</td>
+                    <td>{{ class.year }}</td>
+                    <td>{{class.max_number}}</td>
+                    <td>
+                        <a href="{% url 'capNhatLop' class.id %}" class="btn btn-primary">Cập nhật</a> -
+                        <a href="{% url 'xoaLop' class.id %}" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a>
+                    </td>
+                </tr>
             {% endfor %}
-
-        {% for class in classes %}
-                <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ class.ClassId }}</td>
-            <td>{{ class.year }}</td>
-            <td>{{class.max_number}}</td>
-            <td>
-                <a href="{% url 'capNhatLop' class.id %}" class="btn btn-primary">Cập nhật</a> -
-                <a href="{% url 'xoaLop' class.id %}" onclick="return confirm('Bạn có muốn xóa lớp này ?')" class="btn btn-danger">Xóa</a>
-            </td>
-        </tr>
-            {% endfor %}
-    </table>
-        <a href="{% url 'themLop' %}" type="button" class="btn btn-outline-primary">Thêm lớp</a>
+        </table>
     </div>
+    <br>
+    <a href="{% url 'themLop' %}" type="button" class="btn btn-outline-primary">Thêm lớp</a>
 {% endblock content %}

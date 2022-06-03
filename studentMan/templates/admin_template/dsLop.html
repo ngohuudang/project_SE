@@ -2,64 +2,51 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Danh sách lớp</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
-            <div class="row">
-                <div class="main_form_title col-lg-3">
-                    <p>Lớp</p>
-                </div>
-                <div class="main_form_select col-lg-6">
-                    <select id="chonLop" class="form-select" aria-label="Default select example">
-                        {% for class in classes %}
-                            <option>{{ class.ClassId }}</option>
-                        {% endfor %}
-                    </select>
+    <div class="card card-body">
+        <form method="get" class="main_form-header row">
+            {% csrf_token %}
+            {% for m in classFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-3">
+                        <div class="row">
+                            <div class="main_form_title col-lg-3">
+                                <p>Lớp</p>
+                            </div>
+                            <div class="main_form_select col-lg-6">
+                                {{m}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
                 </div>
             </div>
-        </div>
-        <div class="main_form_term col-lg-2">
-            <div class="row">
-                <button id="buttonXem" type="button" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>
-            </div>
-            <script>  var input = document.getElementById('buttonXem');
-    input.onclick = function(){
-        var message = document.getElementById('chonLop');
-    var valueChoose = message.value;
-    location.href = "http://127.0.0.1:8000/danhsachlop/"+valueChoose;
-    };</script>
-        </div>
+        </form>
+
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+            </tr>
+            {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.dateOfBirth}}</td>
+                    <td>{{student.sex}}</td>
+                    <td>{{student.email}}</td>
+                    <td>{{student.address}}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
-    <table class="table">
-        <tr>
-            <th>STT</th>
-            <th>Họ tên</th>
-            <th>Ngày sinh</th>
-            <th>Giới tính</th>
-            <th>Email</th>
-            <th>Địa chỉ</th>
-        </tr>
-        {% for std in dsLop  %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{std.name}}</td>
-            <td>{{std.dateOfBirth}}</td>
-            <td>{{ std.sex }}</td>
-            <td>{{ std.email }}</td>
-            <td>{{ std.address }}</td>
-        </tr>
-    {% endfor %}
-    {% for std in dsLopFilter  %}
-        <tr>
-            <td>{{std.StudentID}}</td>
-            <td>{{std.name}}</td>
-            <td>{{std.dateOfBirth}}</td>
-            <td>{{ std.sex }}</td>
-            <td>{{ std.email }}</td>
-            <td>{{ std.address }}</td>
-        </tr>
-    {% endfor %}
-    </table>
-        {% url 'lapDSLop' as lapDSLop %}
-        <a href="{{lapDSLop}}" type="button" class="btn btn-outline-primary {% if lapDSLop == request.path %} active {% endif %}">Lập danh sách lớp</a>                               
-    </div>
+    <br>
+    <a href="{% url 'lapDSLop' %}" type="button" class="btn btn-outline-primary" >Lập danh sách lớp</a> 
 {% endblock content %}
