@@ -9,8 +9,8 @@ from django import forms
 class MarkFilter(django_filters.FilterSet):
     class_list = set([mark.student.classOfSchool for mark in Mark.objects.all() if mark.student.classOfSchool is not None])
     class_choices = [(c,c) for c in class_list]
-    classOfSchool = ChoiceFilter(
-        label= 'Lớp',
+    student = ChoiceFilter(
+        label= '',
         choices = class_choices, 
         method= 'filter_by_class',
         widget=forms.Select(attrs={'class': 'form-select'})
