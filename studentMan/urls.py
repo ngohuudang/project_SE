@@ -37,6 +37,9 @@ urlpatterns = [
     path("baocaohocki/<str:lop>/<str:hocKy>/<str:nienKhoa>/", views.baoCaoHocKy, name='baoCaoHK'),
 
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
+    path("quanlituoi/capnhat/<int:age_id>", views.capNhatTuoi, name='capNhatTuoi'),
+    path("quanlituoi/delete/<int:age_id>", views.xoaTuoi, name='xoaTuoi'),
+    path("class/add", views.themTuoi, name='themTuoi'),
 
     path("quanlilop/", views.quanLiLop, name='quanLiLop'),
     path("quanlilop/capnhat/<int:class_id>", views.capNhatLop, name='capNhatLop'),

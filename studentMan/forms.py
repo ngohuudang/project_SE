@@ -40,3 +40,8 @@ class classForm(forms.ModelForm):
     class Meta:
         model = ClassOfSchool
         fields = '__all__'
+
+class ageForm(forms.ModelForm):
+    class Meta:
+        model = Age
+        fields = '__all__'

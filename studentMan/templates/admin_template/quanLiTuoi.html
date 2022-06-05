@@ -1,121 +1,52 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-<style>
-.form-control[type="number"]::-webkit-inner-spin-button,
-.form-control[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-
-}
-
-.number-input{
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    display: inline-flex;
-}
-
-.number-input,
-.number-input * {
-  box-sizing: border-box;
-}
-
-.number-input button {
-  outline:none;
-  -webkit-appearance: none;
-  background-color: transparent;
-  border: none;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 38px;
-  cursor: pointer;
-  margin: 0;
-  position: relative;
-}
-
-.number-input button:before,
-.number-input button:after {
-  display: inline-block;
-  position: absolute;
-  content: '';
-  width: 1rem;
-  height: 2px;
-  background-color: #212121;
-  transform: translate(-50%, -50%);
-}
-.number-input button.plus:after {
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-
-.number-input input[type=number] {
-  font-family: sans-serif;
-  max-width: 5rem;
-  border: solid #ddd;
-  border-width: 0 2px;
-  font-size: 20px;
-  height: 38px;
-  text-align: center;
-}
-
-</style>
-    <h3 class="label">Quản lí độ tuổi</h3>
-<div class="jus_center row">
-    <div class="col-lg-8">
-        <div class="main_form-header row">
-            <div class="main_form_class col-lg-5">
-                <div class="row">
-                    <div class="main_form_title col-lg-5">
-                        <p>Niên khóa</p>
-                    </div>
-                    <div class="main_form_select col-lg-6">
-                        <select class="form-select" aria-label="Default select example">
-                                <option>19-20</option>
-                                <option>20-21</option>
-                                <option>21-22</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="main_form-header row">
-            <div class="main_form_subject col-lg-6">
-                <div class="row">
-                    <div class="main_form_title col-lg-5">
-                        <p>Tuổi tối thiểu</p>
-                    </div>
-                    <div class="main_form_select col-lg-6">
-                        <div class="number-input">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="form-control quantity" min="0" name="quantity" value="16" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+    <h3 class="label">Quản lí Tuổi</h3>
+    <div class="card card-body">
+         <form method="get" class="main_form-header row">
+            {% csrf_token %}
+            {% for m in myFilter.form %}
+                {% if  forloop.counter == 1 %}
+                    <div class="main_form_class col-lg-4">
+                        <div class="row">
+                            <div class="main_form_title col-lg-4">
+                                <p>Niên khóa</p>
+                            </div>
+                            <div class="main_form_select col-lg-5">
+                                {{m}}
+                            </div>
                         </div>
-                    </div>                                
-                </div>
-            </div>
-            <div class="main_form_subject col-lg-6">
-                <div class="row">
-                    <div class="main_form_title col-lg-4">
-                        <p>Tuổi tối đa</p>
                     </div>
-                    <div class="main_form_select col-lg-6">
-                        <div class="number-input">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"></button>
-                            <input class="form-control quantity" min="0" name="quantity" value="18" type="number">
-                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
-                        </div>
-                    </div>                                
+                {% endif %}
+            {% endfor %}
+            <div class="main_form_term col-lg-2">
+                <div class="row">
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>
                 </div>
             </div>
-        </div>
-    
-        <div class="main_form-header row">
-            <div class="main_form_subject col-lg-3">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Cập nhật</button>  
-            </div>
-        </div>
+        </form>
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Năm</th>
+                <th>Tuổi tối thiểu</th>
+                <th>Tuổi tối đa</th>
+                <th>Điều chỉnh</th>
+            </tr>
+            {% for year in age %}
+                <tr>
+                    <td>{{forloop.counter }}</td>
+                    <td>{{year.year}}</td>
+                    <td>{{year.min_age}}</td>
+                    <td>{{year.max_age}}</td>
+                    <td>
+                        <a href="{% url 'capNhatTuoi' year.id %}" class="btn btn-primary">Cập nhật</a> -
+                        <a href="{% url 'xoaTuoi' year.id %}" onclick="return confirm('Xác nhận xóa tuổi này ?')" class="btn btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
-    
-</div>
-    
+    <br>
+    <a href="{% url 'themTuoi' %}" type="button" class="btn btn-outline-primary">Thêm Tuổi</a>
 {% endblock content %}
