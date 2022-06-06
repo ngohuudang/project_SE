@@ -47,15 +47,11 @@
                     <div class="form-group row jus_space-around ">
                         <div class="col-lg-4">
                             <button type="submit" onclick="return confirm('Xác nhận cập nhật tuổi ?')" class="btn btn-primary btn-block" style="width: 100%;">
-                                {% if button_text %}
-                                    {{button_text}}
-                                {% else %}
-                                    Câp nhật
-                                {% endif %}
+                                Câp nhật
                             </button>
                         </div>
                         <div class="col-lg-4">
-                            <a href="{% url 'bangDiem' %}" class="btn btn-primary" style="width: 100%;">Trở về</a>
+                            <a href="{% url 'quanLiTuoi' %}" class="btn btn-primary" style="width: 100%;">Trở về</a>
                         </div>
                     </div>
                 </div>
