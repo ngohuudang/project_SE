@@ -1,5 +1,5 @@
 from functools import total_ordering
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -17,9 +17,11 @@ from django.urls import reverse
 
 from studentMan.models import Mark, Student
 from .filters import *
-from . forms import *
+from .forms import *
 
-semester =2
+semester = 2
+
+
 # Create your views here.
 
 @login_required(login_url='login')
@@ -34,7 +36,7 @@ def admin_home(request):
         'total_subjects': total_subjects,
         'total_classes': total_classes,
     }
-    return render(request, 'admin_template/home_content.html',context=context)
+    return render(request, 'admin_template/home_content.html', context=context)
 
 
 def loginPage(request):
@@ -60,9 +62,9 @@ def logoutUser(request):
 def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html')
 
+
 def dsTaiKhoan(request):
     return render(request, 'admin_template/dsTaiKhoan.html')
-
 
 
 def dsLop(request):
@@ -70,14 +72,14 @@ def dsLop(request):
     classFilter = ClassFilter(request.GET, queryset=students)
     students = classFilter.qs
     context = {
-        'students':students, 
+        'students': students,
         'classFilter': classFilter,
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
 
 def lapDSLop(request):
-    students = Student.objects.filter(classOfSchool__classId =None)
+    students = Student.objects.filter(classOfSchool__classId=None)
     form = CreateClassForm()
     if request.method == 'POST':
         id_list = request.POST.getlist('docid')
@@ -85,7 +87,7 @@ def lapDSLop(request):
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
             if classOfSchool.classId == cl:
-                studentsInClass = Student.objects.filter(classOfSchool__classId =cl)
+                studentsInClass = Student.objects.filter(classOfSchool__classId=cl)
                 if classOfSchool.max_number >= (len(studentsInClass) + len(id_list)):
                     for id in id_list:
                         student = Student.objects.get(StudentID=id)
@@ -96,10 +98,10 @@ def lapDSLop(request):
                     messages.success(request, "Số lượng học sinh vượt quá qui định")
 
     context = {
-        'students':students, 
+        'students': students,
         'form': form,
     }
-    return render(request, 'admin_template/lapDS.html',context=context)
+    return render(request, 'admin_template/lapDS.html', context=context)
 
 
 def traCuu(request):
@@ -112,12 +114,12 @@ def traCuu(request):
     for mark in marks:
         if mark.semester_mark == '1':
             if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks1.append(round((mark.markFifteen + 2*mark.markOne + 3*mark.markFinal)/6, 2))
+                avgMarks1.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
             else:
                 avgMarks1.append(None)
         elif mark.semester_mark == '2':
             if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks2.append(round((mark.markFifteen + 2*mark.markOne + 3*mark.markFinal)/6, 2))
+                avgMarks2.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
             else:
                 avgMarks2.append(None)
     marks = zip(students, avgMarks1, avgMarks2)
@@ -125,7 +127,7 @@ def traCuu(request):
         'marks': marks,
         'marksFilter': marksFilter
     }
-    return render(request, 'admin_template/traCuu.html',context=context)
+    return render(request, 'admin_template/traCuu.html', context=context)
 
 
 def bangDiem(request):
@@ -133,13 +135,14 @@ def bangDiem(request):
     myFilter = MarkFilter(request.GET, queryset=marks)
     marks = myFilter.qs
     context = {
-        'marks':marks, 
+        'marks': marks,
         'myFilter': myFilter,
     }
-    return render(request, 'admin_template/bangDiem.html',context=context)
+    return render(request, 'admin_template/bangDiem.html', context=context)
+
 
 def capNhatDiem(request, mark_id):
-    mark= get_object_or_404(Mark, id=mark_id)
+    mark = get_object_or_404(Mark, id=mark_id)
     form = transcriptForm(request.POST or None, instance=mark)
     context = {
         'form': form,
@@ -166,7 +169,6 @@ def capNhatDiem(request, mark_id):
             messages.error(request, "Please Fill Form Properly!")
     else:
         return render(request, "admin_template/capNhatDiem.html", context)
-
 
 
 def baoCaoMH(request):
@@ -197,7 +199,7 @@ def baoCaoHocKy(request, lop, hocKy, nienKhoa):
     report1 = [report.show(id, lop, hocKy, nienKhoa)]
     all_nienKhoa = Age.objects.all()
     context = {
-        'reports': report1, 
+        'reports': report1,
         'classes': all_classes,
         'lop': lop,
         'hocky': hocKy,
@@ -207,13 +209,78 @@ def baoCaoHocKy(request, lop, hocKy, nienKhoa):
 
     return render(request, 'admin_template/baoCaoHocKi.html', context)
 
+
 def baoCaoHK(request):
     return baoCaoHocKy(request, '---', '1', '2021-2022')
 
 
 def quanLiTuoi(request):
-    return render(request, 'admin_template/quanLiTuoi.html')
+    age = Age.objects.all()
+    myFilter = AgeFilter(request.GET, queryset=age)
+    age = myFilter.qs
+    context = {'age': age, 'myFilter': myFilter}
+    return render(request, 'admin_template/quanLiTuoi.html', context=context)
 
+
+def capNhatTuoi(request, age_id):
+    age = get_object_or_404(Age, id=age_id)
+    form = ageForm(request.POST or None, instance=age)
+    context = {
+        'form': form,
+        'subject_id': age_id,
+        'page_title': 'capNhatTuoi'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            year = form.cleaned_data.get('year')
+            max_age = form.cleaned_data.get('max_age')
+            min_age = form.cleaned_data.get('min_age')
+            try:
+                Year = Age.objects.get(id=age.id)
+                Year.year = year
+                Year.max_age = max_age
+                Year.min_age = min_age
+                Year.save()
+                messages.success(request, "Successfully Updated")
+                return redirect(reverse('quanLiTuoi'))
+            except Exception as e:
+                messages.error(request, "Could Not Update " + str(e))
+        else:
+            messages.error(request, "Please Fill Form Properly!")
+    else:
+        return render(request, "admin_template/capNhatTuoi.html", context)
+
+
+def xoaTuoi(request, age_id):
+    age = get_object_or_404(Age, id=age_id)
+    age.delete()
+    messages.success(request, "Age deleted successfully!")
+    return redirect(reverse('quanLiTuoi'))
+
+def themTuoi(request):
+    form = ageForm(request.POST or None)
+    context = {
+        'form': form,
+        'page_title': 'themTuoi'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            year = form.cleaned_data.get('year')
+            max_age = form.cleaned_data.get('max_age')
+            min_age = form.cleaned_data.get('min_age')
+            try:
+                Year = Age()
+                Year.year = year
+                Year.max_age = max_age
+                Year.min_age = min_age
+                Year.save()
+                messages.success(request, "Successfully Added")
+                return redirect(reverse('quanLiTuoi'))
+            except:
+                messages.error(request, "Could Not Add")
+        else:
+            messages.error(request, "Could Not Add")
+    return render(request, 'admin_template/themTuoi.html', context)
 
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()
@@ -221,9 +288,10 @@ def quanLiLop(request):
     classes = yearFilter.qs
     context = {
         'classes': classes,
-        'yearFilter':yearFilter
+        'yearFilter': yearFilter
     }
-    return render(request,'admin_template/quanLiLop.html',context= context)
+    return render(request, 'admin_template/quanLiLop.html', context=context)
+
 
 def capNhatLop(request, class_id):
     Class = get_object_or_404(ClassOfSchool, id=class_id)
@@ -289,12 +357,13 @@ def themLop(request):
 def quanLiMon(request):
     subjects = Subject.objects.all()
     context = {
-        'subjects':subjects, 
+        'subjects': subjects,
     }
-    return render(request,'admin_template/quanLiMon.html',context)
+    return render(request, 'admin_template/quanLiMon.html', context)
+
 
 def capNhatMon(request, subject_id):
-    subject= get_object_or_404(Subject, id=subject_id)
+    subject = get_object_or_404(Subject, id=subject_id)
     form = subjectForm(request.POST or None, instance=subject)
     context = {
         'form': form,
@@ -346,7 +415,7 @@ def themMon(request):
                 subject.save()
                 students = Student.objects.all()
                 for student in students:
-                    for semester_mark in range(1,semester+1):
+                    for semester_mark in range(1, semester + 1):
                         mark = Mark()
                         mark.student = student
                         mark.subject = subject
