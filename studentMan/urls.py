@@ -25,5 +25,5 @@ urlpatterns = [
     path("subject/delete/<int:subject_id>",views.xoaMon, name='xoaMon'),
     path("subject/add", views.themMon, name='themMon'),
     path("themtaikhoangv/",views.themTaiKhoanGV,name='themTaiKhoanGV'),
-    path("themtaikhoangv/",views.themTaiKhoanGV,name='themTaiKhoanGV'),
+    path("taotkhocsinh/",views.taoTKHocSinh,name='taoTKHocSinh')
 ]
