@@ -2,22 +2,24 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, AbstractUser
 # Create your models here.
 from django.contrib.auth.hashers import make_password
-from django.utils.timezone import now
+from datetime import datetime
+
+
 
 
 class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extra_fields):
         user = CustomUser(username=username, **extra_fields)
         user.password = make_password(password)
-        user.save(using=self._db)
+        # user.save()
         return user
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, password, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(username, password, **extra_fields)
 
-    def create_superuser(self, username, password=None, **extra_fields):
+    def create_superuser(self, username, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -29,18 +31,20 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractUser):
     USER_TYPE = (('1', "Admin"), ('2', "Teacher"), ('3', "Student"))
     SEX_CATELOGY = [("1", "Nam"), ("0", "Nữ")]
-    
+    now = datetime.now().strftime('%Y-%m-%d')
     username = models.CharField(max_length=200, unique=True)
     role = models.CharField(default='1', choices=USER_TYPE, max_length=1)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     name = models.CharField(default='', max_length=200)
-    dateOfBirth = models.DateTimeField(default=now)
+    dateOfBirth = models.DateTimeField(default=datetime.strptime(now,'%Y-%m-%d'))
     sex = models.CharField(default='1', choices=SEX_CATELOGY,max_length=1)
     phone = models.CharField(default='', max_length=20)
     email = models.EmailField(default='')
     address = models.TextField(default='')
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
     def __str__(self):
@@ -74,19 +78,19 @@ class Admin(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 class Mark(models.Model):
     SEMESTER_CATEGORY = (

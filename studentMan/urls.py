@@ -21,7 +21,9 @@ urlpatterns = [
 
 
     path("home/", views.admin_home, name='admin_home'),
-    path("tiepnhanhocsinh/", views.tiepNhanHS, name='tiepNhanHS'),
+
+    path("themAdmin/", views.themAdmin, name='themAdmin'),
+    path("themHS/", views.tiepNhanHS, name='tiepNhanHS'),
 
     path("danhsachtaikhoan/", views.dsTaiKhoan, name = 'dsTaiKhoan'),
     path("danhsachlop/", views.dsLop, name='dsLop'),

@@ -1,17 +1,19 @@
+from ast import NamedExpr
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
+from datetime import datetime
 
 from .decorators import unauthenticated_user
 
 
 from django.urls import reverse
 
-from studentMan.models import *
+from .models import *
 from .filters import *
 from .forms import *
 
@@ -54,6 +56,51 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
+def themAdmin(request):
+    form = AdminForm(request.POST or None)
+    hiddenForm = HiddenUserForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            try:
+                admin = Admin()
+                a = CustomUser(username = username, name = name)
+                user = CustomUser.objects.create_superuser(
+                    username = username, password= password, name = name,
+                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
+                    sex = sex, email = email, phone = phone, address = address)
+                # user.name = name
+                # user.dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d')
+                # user.sex = sex
+                # user.email = email
+                # user.phone = phone
+                # user.address = address
+
+                print('user: ',user.address)
+                user.save()
+                print('user save')
+                admin.user = user
+                admin.save()
+                print('admin save')
+
+                messages.success(request, "Thêm thành công")
+                return redirect(reverse('quanLiMon'))
+            except:
+                messages.error(request, "Không thể thêm")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    return render(request, 'admin_template/themAdmin.html', context=context)
 
 def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html')
