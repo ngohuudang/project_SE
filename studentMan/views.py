@@ -9,7 +9,7 @@ from django.forms import *
 from numpy import round_
 from .report import *
 
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 from django.contrib.auth.models import Group
 
@@ -57,6 +57,36 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['student'])
+def quanLyTaiKhoan_HS(request):
+    if request.method == 'POST':
+        profile_form = studentUpdateForm(request.POST, request.FILES, instance=request.user.student)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='users-profile')
+    else:
+        profile_form = studentUpdateForm(instance=request.user.student)
+
+    return render(request, 'admin_template/quanLyTaiKhoan.html', {'profile_form': profile_form})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['teacher'])
+def quanLyTaiKhoan_GV(request):
+    if request.method == 'POST':
+        profile_form = teacherUpdateForm(request.POST, request.FILES, instance=request.user.teacher)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='users-profile')
+    else:
+        profile_form = teacherUpdateForm(instance=request.user.teacher)
+
+    return render(request, 'admin_template/quanLyTaiKhoan.html', {'profile_form': profile_form})
 
 
 def tiepNhanHS(request):
@@ -257,6 +287,7 @@ def xoaTuoi(request, age_id):
     messages.success(request, "Age deleted successfully!")
     return redirect(reverse('quanLiTuoi'))
 
+
 def themTuoi(request):
     form = ageForm(request.POST or None)
     context = {
@@ -281,6 +312,7 @@ def themTuoi(request):
         else:
             messages.error(request, "Could Not Add")
     return render(request, 'admin_template/themTuoi.html', context)
+
 
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()

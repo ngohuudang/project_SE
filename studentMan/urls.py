@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-
+from .views import User
 urlpatterns = [
 
     path('login/', views.loginPage, name='login'),
@@ -19,7 +19,8 @@ urlpatterns = [
             auth_views.PasswordResetCompleteView.as_view(),
             name='password_reset_complete'),
 
-
+    path('quanlytaikhoanHS/',views.quanLyTaiKhoan_HS,name='quanLyTaiKhoan_HS'),
+    path('quanlytaikhoanGV/',views.quanLyTaiKhoan_GV,name='quanLyTaiKhoan_GV'),
     path("home/", views.admin_home, name='admin_home'),
     path("tiepnhanhocsinh/", views.tiepNhanHS, name='tiepNhanHS'),
 

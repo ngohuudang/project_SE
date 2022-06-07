@@ -39,7 +39,7 @@ class Student(models.Model):
     phone = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True,null=True)
     address = models.TextField(null=True)
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE,related_name='student')
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
     classOfSchool = models.ForeignKey(ClassOfSchool,blank =True, null=True, on_delete=models.CASCADE)
 
@@ -59,7 +59,7 @@ class Teacher(models.Model):
     phone = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True,null=True)
     address = models.TextField(null=True)
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE,related_name='teacher')
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, blank =True, null=True, on_delete=models.CASCADE)
     classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
