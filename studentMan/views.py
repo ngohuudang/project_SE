@@ -1,21 +1,17 @@
-from functools import total_ordering
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
-from numpy import round_
 from .report import *
 
 from .decorators import unauthenticated_user
 
-from django.contrib.auth.models import Group
 
 from django.urls import reverse
 
-from studentMan.models import Mark, Student
+from studentMan.models import *
 from .filters import *
 from .forms import *
 
@@ -161,12 +157,12 @@ def capNhatDiem(request, mark_id):
                 mark.markOne = markOne
                 mark.markFinal = markFinal
                 mark.save()
-                messages.success(request, "Successfully Updated")
-                return redirect(reverse('capNhatDiem', args=[mark_id]))
+                messages.success(request, "Cập nhật thành công")
+                return redirect(reverse('bangDiem'))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please Fill Form Properly!")
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
     else:
         return render(request, "admin_template/capNhatDiem.html", context)
 
@@ -241,12 +237,12 @@ def capNhatTuoi(request, age_id):
                 Year.max_age = max_age
                 Year.min_age = min_age
                 Year.save()
-                messages.success(request, "Successfully Updated")
+                messages.success(request, "Cập nhật thành công")
                 return redirect(reverse('quanLiTuoi'))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please Fill Form Properly!")
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
     else:
         return render(request, "admin_template/capNhatTuoi.html", context)
 
@@ -311,12 +307,12 @@ def capNhatLop(request, class_id):
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
-                messages.success(request, "Successfully Updated")
+                messages.success(request, "Cập nhật thành công")
                 return redirect(reverse('quanLiLop'))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please Fill Form Properly!")
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
     else:
         return render(request, "admin_template/capNhatLop.html", context)
 
@@ -379,12 +375,12 @@ def capNhatMon(request, subject_id):
                 subject.name = name
                 subject.approved_mark = approved_mark
                 subject.save()
-                messages.success(request, "Successfully Updated")
-                return redirect(reverse('capNhatMon', args=[subject_id]))
+                messages.success(request, "Cập nhật thành công")
+                return redirect(reverse('quanLiMon'))
             except Exception as e:
                 messages.error(request, "Could Not Update " + str(e))
         else:
-            messages.error(request, "Please Fill Form Properly!")
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
     else:
         return render(request, "admin_template/capNhatMon.html", context)
 
@@ -422,9 +418,26 @@ def themMon(request):
                         mark.semester_mark = semester_mark
                         mark.save()
                 messages.success(request, "Successfully Added")
-                return redirect(reverse('themMon'))
+                return redirect(reverse('quanLiMon'))
             except:
                 messages.error(request, "Could Not Add")
         else:
             messages.error(request, "Could Not Add")
     return render(request, 'admin_template/themMon.html', context)
+
+
+# Teacher
+
+
+# Student
+
+def student_bangDiem(request):
+    student = get_object_or_404(Student, user=request.user)
+    if request.method != 'POST':
+        classOfSchool = get_object_or_404(ClassOfSchool, classId=student.classOfSchool.classId)
+
+        context = {
+            # 'subjects': Subject.objects.filter(course=course),
+            # 'page_title': 'View Attendance'
+        }
+        return render(request, 'admin_template/bangDiem.html', context)
