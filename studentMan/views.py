@@ -1,21 +1,17 @@
-from functools import total_ordering
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
-from numpy import round_
 from .report import *
 
 from .decorators import unauthenticated_user
 
-from django.contrib.auth.models import Group
 
 from django.urls import reverse
 
-from studentMan.models import Mark, Student
+from studentMan.models import *
 from .filters import *
 from .forms import *
 
