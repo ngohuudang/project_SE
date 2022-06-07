@@ -32,6 +32,18 @@ def tiepNhanHS(request):
             return redirect('tiepNhanHS')
     return render(request, 'admin_template/tiepNhanHS.html',context)
 
+def taoTKHocSinh(request):
+    form = createUserStudent()
+    if request.method == 'POST':
+        form = createUserStudent(request.POST)
+        if form.is_valid:
+            user = form.save()
+            return redirect('tiepNhanHS')
+        else:
+            print(form.errors)
+    context = {'form':form}
+    return render(request,'admin_template/taoTKHocSinh.html',context)
+
 def themTaiKhoanGV(request):
     teachers = Teacher.objects.all()
     total_teachers = teachers.count()
