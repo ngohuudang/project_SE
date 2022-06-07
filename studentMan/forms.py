@@ -29,3 +29,8 @@ class themTaiKhoanGVForm(forms.ModelForm):
     class Meta:
         model = Teacher
         fields = '__all__'
+      
+class createUserStudent(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username','email','password1','password2']
