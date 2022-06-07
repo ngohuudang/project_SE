@@ -116,3 +116,10 @@ class AdminForm(CustomUserForm):
     class Meta:
         model = Admin
         fields = CustomUserForm.Meta.fields
+
+class TeacherForm(CustomUserForm):
+    def __init__(self, *args, **kwargs):
+        super(TeacherForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = Teacher
+        fields = CustomUserForm.Meta.fields +  ['classOfSchool']

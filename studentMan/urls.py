@@ -23,6 +23,7 @@ urlpatterns = [
     path("home/", views.admin_home, name='admin_home'),
 
     path("themAdmin/", views.themAdmin, name='themAdmin'),
+    path("themGV/", views.themGV, name='themGV'),
     path("themHS/", views.tiepNhanHS, name='tiepNhanHS'),
 
     path("danhsachtaikhoan/", views.dsTaiKhoan, name = 'dsTaiKhoan'),

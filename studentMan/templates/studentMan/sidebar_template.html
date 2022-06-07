@@ -32,13 +32,16 @@
                 </a>
                 <ul class="collapse list-unstyled" id="accountSubmenu">
                     <li>
-                        {% url 'themAdmin' as them_tk_Admin %}
-                        <a href="{{them_tk_Admin}}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
-                    </li>
-
-                    <li>
                         {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
                         <a href="{{tiep_nhan_hoc_sinh}}" class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
+                    </li>
+                    <li>
+                        {% url 'themGV' as them_tk_GV %}
+                        <a href="{{them_tk_GV}}" class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo viên</a>
+                    </li>
+                    <li>
+                        {% url 'themAdmin' as them_tk_Admin %}
+                        <a href="{{them_tk_Admin}}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
                     </li>
                 </ul>
             </li>
