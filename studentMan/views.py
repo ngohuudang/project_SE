@@ -59,7 +59,6 @@ def logoutUser(request):
 
 def themAdmin(request):
     form = AdminForm(request.POST or None)
-    hiddenForm = HiddenUserForm(request.POST or None)
     context = {
         'form': form,
     }
@@ -75,18 +74,13 @@ def themAdmin(request):
             address = form.cleaned_data.get('address')
             try:
                 admin = Admin()
-                a = CustomUser(username = username, name = name)
                 user = CustomUser.objects.create_superuser(
                     username = username, password= password, name = name,
                     dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
                     sex = sex, email = email, phone = phone, address = address)
-                print('user: ',user.address)
                 user.save()
-                print('user save')
                 admin.user = user
                 admin.save()
-                print('admin save')
-
                 messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:
@@ -110,20 +104,13 @@ def themGV(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
+
             try:
-                admin = Admin()
-                a = CustomUser(username = username, name = name)
                 user = CustomUser.objects.create_superuser(
                     username = username, password= password, name = name,
                     dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
                     sex = sex, email = email, phone = phone, address = address)
-                print('user: ',user.address)
                 user.save()
-                print('user save')
-                admin.user = user
-                admin.save()
-                print('admin save')
-
                 messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:
@@ -289,9 +276,7 @@ def baoCaoHK(request):
 
 def quanLiTuoi(request):
     age = Age.objects.all()
-    myFilter = AgeFilter(request.GET, queryset=age)
-    age = myFilter.qs
-    context = {'age': age, 'myFilter': myFilter}
+    context = {'age': age}
     return render(request, 'admin_template/quanLiTuoi.html', context=context)
 
 

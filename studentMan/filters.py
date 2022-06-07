@@ -113,18 +113,3 @@ class YearFilter(django_filters.FilterSet):
         return queryset.filter(year__year=value)
 
 
-class AgeFilter(django_filters.FilterSet):
-    years = set([index.year for index in Age.objects.all()])
-    year = ChoiceFilter(
-        label='',
-        choices=[(c, c) for c in years],
-        method='filter_by_age',
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
-
-    class Meta:
-        model = ClassOfSchool
-        fields = []
-
-    def filter_by_age(self, queryset, name, value):
-        return queryset.filter(year=value)

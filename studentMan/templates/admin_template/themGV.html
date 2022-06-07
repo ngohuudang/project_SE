@@ -1,7 +1,7 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Thêm tài khoản Admin</h3>
+    <h3 class="label">Thêm tài khoản Giáo viên</h3>
     <div class="card card-body">
         <div class="jus_center row">
             <form role="form" method="POST" enctype="multipart/form-data" class="col-lg-10">
@@ -86,6 +86,15 @@
                         </div>
                         <div class="col-lg-10">
                         {{form.address}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row jus_center">
+                        <div for='address_user' class="col-lg-2">
+                            Lớp:
+                        </div>
+                        <div class="col-lg-10">
+                        {{form.classOfSchool}}
                         </div>
                     </div>
                     <br>

@@ -11,7 +11,7 @@ class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extra_fields):
         user = CustomUser(username=username, **extra_fields)
         user.password = make_password(password)
-        # user.save()
+        user.save(using=self._db)
         return user
 
     def create_user(self, username, password, **extra_fields):
@@ -61,7 +61,7 @@ class Age(models.Model):
 class ClassOfSchool(models.Model):
     classId = models.CharField(max_length=200, null=False, unique=False)
     max_number = models.IntegerField(null=False)
-    year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
+    year = models.ForeignKey(Age, null=False, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.classId
@@ -97,8 +97,8 @@ class Mark(models.Model):
         ('1', '1'),
         ('2', '2')
     )
-    student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student,null=True, on_delete=models.DO_NOTHING)
+    subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.DO_NOTHING)
     semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
     markFifteen = models.FloatField(null=True, blank=True)
     markOne = models.FloatField(null=True, blank=True)
