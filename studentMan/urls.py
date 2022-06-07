@@ -24,5 +24,6 @@ urlpatterns = [
     path("quanlimon/capnhat/<int:subject_id>", views.capNhatMon, name='capNhatMon'),
     path("subject/delete/<int:subject_id>",views.xoaMon, name='xoaMon'),
     path("subject/add", views.themMon, name='themMon'),
-    path("themtaikhoangv/",views.themTaiKhoanGV,name='themTaiKhoanGV')
+    path("themtaikhoangv/",views.themTaiKhoanGV,name='themTaiKhoanGV'),
+    path("themtaikhoangv/",views.themTaiKhoanGV,name='themTaiKhoanGV'),
 ]
