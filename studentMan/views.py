@@ -165,9 +165,9 @@ def dsTaiKhoan(request):
 
 
 def dsLop(request):
-    students = Student.objects.all()
+    students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
-    students = classFilter.qs
+    students = classFilter.qs.order_by('user__name')
     context = {
         'students': students,
         'classFilter': classFilter,
@@ -179,16 +179,18 @@ def lapDSLop(request):
     students = Student.objects.filter(classOfSchool__classId=None)
     form = CreateClassForm()
     if request.method == 'POST':
-        id_list = request.POST.getlist('docid')
+        usernames = request.POST.getlist('username_class')
+        print('usernames: ',usernames)
         cl = request.POST.get('classOfSchool')
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
             if classOfSchool.classId == cl:
                 studentsInClass = Student.objects.filter(classOfSchool__classId=cl)
-                if classOfSchool.max_number >= (len(studentsInClass) + len(id_list)):
-                    for id in id_list:
-                        student = Student.objects.get(StudentID=id)
-                        student.classOfSchool = classOfSchool
+                if classOfSchool.max_number >= (len(studentsInClass) + len(usernames)):
+                    for username in usernames:
+                        student = Student.objects.get(user__username=username)
+                        print('classOfSchool: ',classOfSchool)
+                        student.classOfSchool.add(classOfSchool)
                         student.save()
                     messages.success(request, "Thêm thành công")
                 else:
