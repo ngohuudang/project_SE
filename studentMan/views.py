@@ -1,4 +1,3 @@
-from ast import NamedExpr
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
@@ -82,7 +81,7 @@ def themAdmin(request):
                 admin.user = user
                 admin.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('quanLiMon'))
+                return redirect(reverse('dsTaiKhoan'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -104,15 +103,24 @@ def themGV(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-
+            subject = form.cleaned_data.get('subject')
+            classOfSchool = form.cleaned_data.get('classOfSchool')
+            print(classOfSchool)
             try:
-                user = CustomUser.objects.create_superuser(
-                    username = username, password= password, name = name,
+                user = CustomUser.objects.create_user(
+                    username = username, password= password, name = name, role ='2',
                     dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
                     sex = sex, email = email, phone = phone, address = address)
-                user.save()
+                teacher = Teacher(user = user)
+                if subject:
+                    teacher.subject = subject
+                teacher.save()
+                print(classOfSchool)
+                for c  in classOfSchool:
+                    teacher.classOfSchool.add(c)
+                teacher.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('quanLiMon'))
+                return redirect(reverse('dsTaiKhoan'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -120,7 +128,40 @@ def themGV(request):
     return render(request, 'admin_template/themGV.html', context=context)
 
 def tiepNhanHS(request):
-    return render(request, 'admin_template/tiepNhanHS.html')
+    form = StudentForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            subject = form.cleaned_data.get('subject')
+            classOfSchool = form.cleaned_data.get('classOfSchool')
+            try:
+                user = CustomUser.objects._create_user(
+                    username = username, password= password, name = name, role ='3',
+                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
+                    sex = sex, email = email, phone = phone, address = address)
+                
+                student = Student(user = user)
+                student.save()
+                for c  in classOfSchool:
+                    student.classOfSchool.add(c)
+                student.save()
+                messages.success(request, "Thêm thành công")
+                return redirect(reverse('dsTaiKhoan'))
+            except:
+                messages.error(request, "Không thể thêm")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    return render(request, 'admin_template/tiepNhanHS.html',context=context)
 
 
 def dsTaiKhoan(request):

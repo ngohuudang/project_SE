@@ -1,3 +1,4 @@
+from matplotlib import widgets
 from .models import *
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
@@ -20,7 +21,6 @@ class CustomUserChangeForm(UserChangeForm):
 class transcriptForm(forms.ModelForm):
     class Meta:
         model = Mark
-        # fields = ['student','subject','semester_mark']
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
@@ -82,10 +82,11 @@ class CustomUserForm(forms.ModelForm):
         attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
     }))
 
-    address = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'class': 'form-control', 'id': 'address_user', 
+    address = forms.CharField(label="",widget=forms.Textarea(
+        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
             'placeholder':"12, đường 01, quận 1, tp HCM"
     }))
+
 
     phone = forms.CharField(label="",widget=forms.TextInput(
         attrs={'id':'phone_user', 'class': 'form-control',
@@ -120,6 +121,31 @@ class AdminForm(CustomUserForm):
 class TeacherForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
         super(TeacherForm, self).__init__(*args, **kwargs)
+        self.fields['subject'].required = False
+        self.fields['classOfSchool'].required = False
+        self.fields['subject'].widget.attrs.update({'class': 'form-select'})
+        self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
+
     class Meta:
         model = Teacher
+        fields = CustomUserForm.Meta.fields +  ['subject', 'classOfSchool']
+
+class StudentForm(CustomUserForm):
+    class_choices = {(None, '-----')}
+    class_choices.update(set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()]))
+    classOfSchool = forms.CharField(label="",widget=forms.Select(
+        choices=class_choices, 
+        attrs={'class': 'form-select'
+    }), required = False)
+    
+    def __init__(self, *args, **kwargs):
+        super(StudentForm, self).__init__(*args, **kwargs)
+        self.fields['classOfSchool'].required = False
+        self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
+
+    class Meta:
+        model = Student
         fields = CustomUserForm.Meta.fields +  ['classOfSchool']
+        # widgets = {
+        #     'classOfSchool': forms.Select()
+        # }

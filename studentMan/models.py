@@ -11,11 +11,11 @@ class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extra_fields):
         user = CustomUser(username=username, **extra_fields)
         user.password = make_password(password)
-        user.save(using=self._db)
+        user.save(using=self._db)        
         return user
 
-    def create_user(self, username, password, **extra_fields):
-        extra_fields.setdefault("is_staff", False)
+    def create_staff(self, username, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(username, password, **extra_fields)
 
@@ -72,7 +72,7 @@ class Subject(models.Model):
     approved_mark = models.FloatField(null=False)
     
     def __str__(self):
-        return self.SubjectID
+        return self.name
 
 class Admin(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -89,6 +89,7 @@ class Student(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
+    subject = models.ForeignKey(Subject,blank =True, on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.user.username
 

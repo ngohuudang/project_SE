@@ -10,7 +10,7 @@
                     <div class="form-group row jus_center">
                         <div class='col-lg-6'>
                             <div class='row '>
-                                <div for='name_user' class="col-lg-4">
+                                <div for='username_user' class="col-lg-4">
                                     Username:
                                 </div>
                                 <div class="col-lg-8">
@@ -20,7 +20,7 @@
                         </div>
                         <div class='col-lg-6'>
                             <div class='row'>
-                                <div for='name_user' class="col-lg-4">
+                                <div for='password_user' class="col-lg-4">
                                     Password:
                                 </div>
                                 <div class="col-lg-8">
@@ -67,41 +67,60 @@
                             Email:
                         </div>
                         <div class="col-lg-10">
-                        {{form.email}}
+                            {{form.email}}
                         </div>
                     </div>
                     <br>
                     <div class="form-group row jus_center">
-                        <div for='phone_user' class="col-lg-2">
-                            Số điện thoại:
+                        <div class='col-lg-6'>
+                            <div class='row'>
+                                <div for='phone_user' class="col-lg-4">
+                                    Số điện thoại:
+                                </div>
+                                <div class="col-lg-8">
+                                    {{form.phone}}
+                                </div>
+                            </div>     
                         </div>
-                        <div class="col-lg-10">
-                        {{form.phone}}
+                        <div class='col-lg-6'>
+                            <div class='row'>
+                                <div class="col-lg-4">
+                                    Môn học:
+                                </div>
+                                <div class="col-lg-8">
+                                    {{form.subject}}
+                                </div>
+                            </div>     
                         </div>
                     </div>
                     <br>
                     <div class="form-group row jus_center">
-                        <div for='address_user' class="col-lg-2">
-                            Địa chỉ:
+                        <div class='col-lg-8'>
+                            <div class='row'>
+                                <div for='address_user' class="col-lg-3">
+                                    Địa chỉ:
+                                </div>
+                                <div class="col-lg-9">
+                                    {{form.address}}
+                                </div>
+                            </div>     
                         </div>
-                        <div class="col-lg-10">
-                        {{form.address}}
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group row jus_center">
-                        <div for='address_user' class="col-lg-2">
-                            Lớp:
-                        </div>
-                        <div class="col-lg-10">
-                        {{form.classOfSchool}}
+                        <div class='col-lg-4'>
+                            <div class='row'>
+                                <div class="col-lg-4">
+                                    Lớp học
+                                </div>
+                                <div class="col-lg-8">
+                                    {{form.classOfSchool}}
+                                </div>
+                            </div>     
                         </div>
                     </div>
                     <br>
                     <div class="form-group row jus_space-around ">
                         <div class="col-lg-3">
                             <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">
-                                Thêm Admin
+                                Thêm giáo viên
                             </button>
                         </div>
                     </div>

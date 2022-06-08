@@ -38,11 +38,15 @@
             {% for student in students %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{student.name}}</td>
-                    <td>{{student.dateOfBirth}}</td>
-                    <td>{{student.sex}}</td>
-                    <td>{{student.email}}</td>
-                    <td>{{student.address}}</td>
+                    <td>{{student.user.name}}</td>
+                    <td>{{student.user.dateOfBirth}}</td>
+                    {%if student.user.sex == '1'%}
+                        <td>Nam</td>
+                    {%else%}
+                        <td>Nữ</td>
+                    {%endif%}
+                    <td>{{student.user.email}}</td>
+                    <td>{{student.user.address}}</td>
                 </tr>
             {% endfor %}
         </table>

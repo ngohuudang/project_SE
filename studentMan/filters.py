@@ -79,8 +79,11 @@ class StudentInMarkFilter(django_filters.FilterSet):
 
 
 class ClassFilter(django_filters.FilterSet):
-    class_list = set([student.classOfSchool for student in Student.objects.all() if student.classOfSchool != None])
-    class_choices = [(c, c) for c in class_list]
+    class_list =[]
+    for student in Student.objects.all():
+        for c in student.classOfSchool.all():
+            class_list.append(c)
+    class_choices = [(c, c) for c in set(class_list)]
     classOfSchool = ChoiceFilter(
         label='',
         choices=class_choices,
@@ -111,5 +114,6 @@ class YearFilter(django_filters.FilterSet):
 
     def filter_by_year(self, queryset, name, value):
         return queryset.filter(year__year=value)
+
 
 
