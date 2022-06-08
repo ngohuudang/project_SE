@@ -28,7 +28,8 @@ urlpatterns = [
 
     path("danhsachtaikhoan/", views.dsTaiKhoan, name = 'dsTaiKhoan'),
     path("danhsachlop/", views.dsLop, name='dsLop'),
-    path("lapdanhsachlop/", views.lapDSLop, name='lapDSLop'),
+    path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
+    path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
 
     path("tracuu/", views.traCuu, name='traCuu'),
 

@@ -5,20 +5,26 @@
     <div class="card card-body">
         <form method="get" class="main_form-header row">
             {% csrf_token %}
-            {% for m in classFilter.form %}
-                {% if  forloop.counter == 1 %}
-                    <div class="main_form_class col-lg-3">
-                        <div class="row">
-                            <div class="main_form_title col-lg-3">
-                                <p>Lớp</p>
-                            </div>
-                            <div class="main_form_select col-lg-6">
-                                {{m}}
-                            </div>
-                        </div>
+            <div class="main_form_class col-lg-3">
+                <div class="row">
+                    <div class="main_form_title col-lg-3">
+                        <p>Lớp</p>
                     </div>
-                {% endif %} 
-            {% endfor %}
+                    <div class="main_form_select col-lg-6">
+                        {{classFilter.form.classOfSchool}}
+                    </div>
+                </div>
+            </div>
+            <div class="main_form_class col-lg-4">
+                <div class="row">
+                    <div class="main_form_title col-lg-5">
+                        <p>Niên khóa</p>
+                    </div>
+                    <div class="main_form_select col-lg-6">
+                        {{classFilter.form.year}}
+                    </div>
+                </div>
+            </div>
             <div class="main_form_term col-lg-2">
                 <div class="row">
                     <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
@@ -52,5 +58,5 @@
         </table>
     </div>
     <br>
-    <a href="{% url 'lapDSLop' %}" type="button" class="btn btn-outline-primary" >Lập danh sách lớp</a> 
+    <a href="{% url 'chonNienKhoaLop' %}" type="button" class="btn btn-outline-primary" >Lập danh sách lớp</a> 
 {% endblock content %}

@@ -125,6 +125,10 @@ def themGV(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themGV.html', context=context)
 
+
+# def khoiTaoDiem(student, classOfSchool):
+#     student.
+
 def tiepNhanHS(request):
     form = StudentForm(request.POST or None)
     context = {
@@ -152,6 +156,8 @@ def tiepNhanHS(request):
                 student.classOfSchool.add(c)
                 print(classOfSchool)
                 student.save()
+                for subject in Subject.objects.all():
+                    c.year.year
                 messages.success(request, "Thêm thành công")
             except:
                 messages.error(request, "Không thể thêm")
@@ -174,10 +180,34 @@ def dsLop(request):
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
+def chonNienKhoaLop(request):
+    form = YearForm()
+    age = Age.objects.all()
+    context = {
+        'form': form,
+        'age': age
+    }
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        print('year', year)
+        return redirect(reverse('lapDSLop'),year)
+    return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
-def lapDSLop(request):
-    students = Student.objects.filter(classOfSchool__classId=None)
-    form = CreateClassForm()
+
+def lapDSLop(request,age_id):
+    year = Age.objects.get(id =age_id)
+    student_with_year = []
+    for student in Student.objects.all():
+        for c in student.classOfSchool.all():
+            if c.year ==year:
+                student_with_year.append(student)
+                break
+    student_dont_with_year =[]
+    for student in Student.objects.all():
+        if student not in student_with_year:
+            student_dont_with_year.append(student)
+    form = CreateClassForm(request.POST, age_id = age_id)
+
     if request.method == 'POST':
         usernames = request.POST.getlist('username_class')
         print('usernames: ',usernames)
@@ -189,15 +219,14 @@ def lapDSLop(request):
                 if classOfSchool.max_number >= (len(studentsInClass) + len(usernames)):
                     for username in usernames:
                         student = Student.objects.get(user__username=username)
-                        print('classOfSchool: ',classOfSchool)
                         student.classOfSchool.add(classOfSchool)
                         student.save()
                     messages.success(request, "Thêm thành công")
+                    return redirect(reverse('lapDSLop', kwargs={'age_id':age_id}))
                 else:
                     messages.success(request, "Số lượng học sinh vượt quá qui định")
-
     context = {
-        'students': students,
+        'students': student_dont_with_year,
         'form': form,
     }
     return render(request, 'admin_template/lapDS.html', context=context)
@@ -371,12 +400,12 @@ def themTuoi(request):
                 Year.max_age = max_age
                 Year.min_age = min_age
                 Year.save()
-                messages.success(request, "Successfully Added")
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiTuoi'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "Không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themTuoi.html', context)
 
 def quanLiLop(request):
@@ -442,12 +471,12 @@ def themLop(request):
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
-                messages.success(request, "Successfully Added")
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiLop'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "Không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themLop.html', context)
 
 
@@ -506,12 +535,16 @@ def themMon(request):
             SubjectID = form.cleaned_data.get('SubjectID')
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
+            year = form.cleaned_data.get('year')
+            print('year: ',year)
             try:
                 subject = Subject()
                 subject.SubjectID = SubjectID
                 subject.name = name
                 subject.approved_mark = approved_mark
+                subject.year = Age.objects.get(year = year)
                 subject.save()
+                # thêm điểm vào tất cả học sinh có trong hệ thống
                 students = Student.objects.all()
                 for student in students:
                     for semester_mark in range(1, semester + 1):
@@ -519,13 +552,17 @@ def themMon(request):
                         mark.student = student
                         mark.subject = subject
                         mark.semester_mark = semester_mark
+                        mark.markFifteen = 0
+                        mark.markOne = 0
+                        mark.markFinal = 0
                         mark.save()
-                messages.success(request, "Successfully Added")
+                    print('xong',student.user.name)
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themMon.html', context)
 
 

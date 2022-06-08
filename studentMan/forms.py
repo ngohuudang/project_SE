@@ -29,22 +29,32 @@ class transcriptForm(forms.ModelForm):
             {'class': 'form-select'}
         )
 
-class subjectForm(forms.ModelForm):
-    class Meta:
-        model = Subject
-        fields = '__all__'
-
-
 
 class CreateClassForm(forms.ModelForm):
-    class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()])
-    classOfSchool = forms.CharField(label="",widget=forms.Select(
-        choices=class_choices, 
-        attrs={'class': 'form-select'
-    }))
+    def __init__(self, *args,**kwargs):
+        self.age_id = kwargs.pop('age_id', None)
+        super(CreateClassForm,self).__init__(*args,**kwargs)
+        age = Age.objects.get(id =self.age_id)
+        class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.filter(year = age)])
+        self.fields['classId'].label = ''
+        self.fields['classId'].widget=forms.Select(
+            choices=class_choices, 
+            attrs={'class': 'form-select'
+            
+        })
+
+
+    # class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()])#get(year = Age.objects.get(id =age_id))])
+    # classOfSchool = forms.CharField(label="",widget=forms.Select(
+    #     choices=class_choices, 
+    #     attrs={'class': 'form-select'
+    # }))
+    # def get_class(self):
+    #     class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.get(year = Age.objects.get(id =self.age_id))])
+    #     self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
     class Meta:
         model = ClassOfSchool
-        fields = []
+        fields = ['classId']
 
 class classForm(forms.ModelForm):
     class Meta:
@@ -56,6 +66,15 @@ class ageForm(forms.ModelForm):
         model = Age
         fields = '__all__'
 
+class YearForm(forms.ModelForm):
+    year_choices = set([(a, a.year) for a in Age.objects.all()])
+    year = forms.CharField(label="",widget=forms.Select(
+        choices=year_choices, 
+        attrs={'class': 'form-select'
+    }))
+    class Meta:
+        model = Age
+        fields = ['year']
 
 class CustomUserForm(forms.ModelForm):
     username = forms.CharField(label="",widget=forms.TextInput(
@@ -105,11 +124,11 @@ class CustomUserForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'password', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
 
-class HiddenUserForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = '__all__'
-        exclude = ['username', 'password', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
+# class HiddenUserForm(forms.ModelForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = '__all__'
+#         exclude = ['username', 'password', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
 
 class AdminForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
@@ -149,3 +168,21 @@ class StudentForm(CustomUserForm):
         # widgets = {
         #     'classOfSchool': forms.Select()
         # }
+
+class subjectForm(forms.ModelForm):
+    # year_choices = set([(a, a) for a in Age.objects.all()])
+    # year = forms.CharField(label="",widget=forms.Select(
+    #     choices=year_choices, 
+    #     attrs={'class': 'form-select'
+    # }))
+    # print('year1: ', year)
+    def __init__(self, *args, **kwargs):
+        super(subjectForm, self).__init__(*args, **kwargs)
+        self.fields['SubjectID'].widget.attrs.update({'class': 'form-control'})
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['approved_mark'].widget.attrs.update({'class': 'form-control'})
+        self.fields['year'].widget.attrs.update({'class': 'form-select'})
+
+    class Meta:
+        model = Subject
+        fields = YearForm.Meta.fields + ['SubjectID', 'name', 'approved_mark']
