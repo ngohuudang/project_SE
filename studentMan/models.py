@@ -29,7 +29,7 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractUser):
     USER_TYPE = (('1', "Admin"), ('2', "Teacher"), ('3', "Student"))
     SEX_CATELOGY = [("1", "Nam"), ("0", "Nữ")]
-    
+
     username = models.CharField(max_length=200, unique=True)
     role = models.CharField(default='1', choices=USER_TYPE, max_length=1)
     is_active = models.BooleanField(default=True)
@@ -37,7 +37,7 @@ class CustomUser(AbstractUser):
     is_superuser = models.BooleanField(default=False)
     name = models.CharField(default='', max_length=200)
     dateOfBirth = models.DateTimeField(default=now)
-    sex = models.CharField(default='1', choices=SEX_CATELOGY,max_length=1)
+    sex = models.CharField(default='1', choices=SEX_CATELOGY, max_length=1)
     phone = models.CharField(default='', max_length=20)
     email = models.EmailField(default='')
     address = models.TextField(default='')
@@ -51,8 +51,10 @@ class Age(models.Model):
     year = models.CharField(max_length=200, null=False, unique=True)
     max_age = models.IntegerField(null=False)
     min_age = models.IntegerField(null=False)
+
     def __str__(self):
         return self.year
+
 
 class ClassOfSchool(models.Model):
     classId = models.CharField(max_length=200, null=False, unique=False)
@@ -62,13 +64,15 @@ class ClassOfSchool(models.Model):
     def __str__(self):
         return self.classId
 
+
 class Subject(models.Model):
     SubjectID = models.CharField(max_length=200, null=False, unique=True)
     name = models.CharField(max_length=200, null=False, unique=True)
     approved_mark = models.FloatField(null=False)
-    
+
     def __str__(self):
         return self.SubjectID
+
 
 class Admin(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -76,30 +80,34 @@ class Admin(models.Model):
     def __str__(self):
         return self.user.name
 
+
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
+    classOfSchool = models.ManyToManyField(ClassOfSchool, blank=True)
+
     def __str__(self):
         return self.user.name
 
+
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
+    classOfSchool = models.ManyToManyField(ClassOfSchool, blank=True)
+
     def __str__(self):
         return self.user.name
+
 
 class Mark(models.Model):
     SEMESTER_CATEGORY = (
         ('1', '1'),
         ('2', '2')
     )
-    student = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.CASCADE)
     semester_mark = models.CharField(max_length=200, null=False, choices=SEMESTER_CATEGORY)
     markFifteen = models.FloatField(null=True, blank=True)
     markOne = models.FloatField(null=True, blank=True)
     markFinal = models.FloatField(null=True, blank=True)
-    
-    def __str__(self):
-        return self.student.StudentID+ '_'+ self.semester_mark
 
+    def __str__(self):
+        return self.student.StudentID + '_' + self.semester_mark

@@ -5,15 +5,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
-
+from django.contrib.auth.models import AbstractUser
 from .decorators import unauthenticated_user
 
-
-from django.urls import reverse
-
+from django.urls import reverse,reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from studentMan.models import *
 from .filters import *
 from .forms import *
+from .models import *
 
 semester = 2
 
@@ -49,6 +50,27 @@ def loginPage(request):
     context = {}
     return render(request, 'admin_template/login.html', context)
 
+
+@login_required(login_url='login')
+def capNhatTaiKhoan(request):
+    if request.method == 'POST':
+        profile_form = userUpdateForm(request.POST, instance=request.user)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='capNhatTaiKhoan')
+    else:
+        profile_form = userUpdateForm(instance=request.user)
+
+    return render(request, 'admin_template/capNhatTaiKhoan.html', {'profile_form': profile_form})
+
+from django.contrib.messages.views import SuccessMessageMixin
+
+
+class doiMatKhau(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'admin_template/capNhatMatKhau.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = reverse_lazy('capNhatTaiKhoan')
 
 def logoutUser(request):
     logout(request)
@@ -253,6 +275,7 @@ def xoaTuoi(request, age_id):
     messages.success(request, "Age deleted successfully!")
     return redirect(reverse('quanLiTuoi'))
 
+
 def themTuoi(request):
     form = ageForm(request.POST or None)
     context = {
@@ -277,6 +300,7 @@ def themTuoi(request):
         else:
             messages.error(request, "Could Not Add")
     return render(request, 'admin_template/themTuoi.html', context)
+
 
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()
