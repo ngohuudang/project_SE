@@ -49,7 +49,7 @@
             {% for student,avg1,avg2 in marks %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{student.name}}</td>
+                    <td>{{student.user.name}}</td>
                     <td>{{student.classOfSchool}}</td>
                     <td>{{avg1}}</td>
                     <td>{{avg2}}</td>

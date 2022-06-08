@@ -204,9 +204,9 @@ def lapDSLop(request):
 
 
 def traCuu(request):
-    marks = Mark.objects.all()
+    marks = Mark.objects.all().order_by('student__user__name')
     marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
-    marks = marksFilter.qs
+    marks = marksFilter.qs.order_by('student__user__name')
     students = set([mark.student for mark in marks])
     avgMarks1 = []
     avgMarks2 = []
@@ -469,10 +469,12 @@ def capNhatMon(request, subject_id):
     }
     if request.method == 'POST':
         if form.is_valid():
+            subjectId = form.cleaned_data.get('SubjectID')
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
             try:
                 subject = Subject.objects.get(id=subject.id)
+                subject.SubjectID = subjectId
                 subject.name = name
                 subject.approved_mark = approved_mark
                 subject.save()
