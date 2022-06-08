@@ -105,7 +105,6 @@ def themGV(request):
             address = form.cleaned_data.get('address')
             subject = form.cleaned_data.get('subject')
             classOfSchool = form.cleaned_data.get('classOfSchool')
-            print(classOfSchool)
             try:
                 user = CustomUser.objects.create_user(
                     username = username, password= password, name = name, role ='2',
@@ -115,7 +114,6 @@ def themGV(request):
                 if subject:
                     teacher.subject = subject
                 teacher.save()
-                print(classOfSchool)
                 for c  in classOfSchool:
                     teacher.classOfSchool.add(c)
                 teacher.save()
@@ -142,21 +140,19 @@ def tiepNhanHS(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-            subject = form.cleaned_data.get('subject')
             classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
                 user = CustomUser.objects._create_user(
                     username = username, password= password, name = name, role ='3',
                     dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
                     sex = sex, email = email, phone = phone, address = address)
-                
                 student = Student(user = user)
                 student.save()
-                for c  in classOfSchool:
-                    student.classOfSchool.add(c)
+                c = ClassOfSchool.objects.get(classId = classOfSchool)
+                student.classOfSchool.add(c)
+                print(classOfSchool)
                 student.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('dsTaiKhoan'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
