@@ -2,23 +2,18 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Báo cáo tổng kết môn học</h3>
-    <div class="main_form-header row">
-        <div class="main_form_class col-lg-3">
+    <div class="main_form-header row" style="margin-bottom: 20px">
+        <div class="main_form_class col-lg-4">
             <div class="row">
-                <div class="main_form_title col-lg-3">
+                <div class="main_form_title col-lg-4">
                     <p>Lớp</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>10A1</option>
-                            <option>10A2</option>
-                            <option>10A3</option>
-                            <option>10A4</option>
-                            <option>11A1</option>
-                            <option>11A2</option>
-                            <option>11A3</option>
-                            <option>12A1</option>
-                            <option>12A2</option>
+                    <select id="class_select" class="form-select" aria-label="Default select example">
+                        <option>---</option>
+                        {% for class in classes %}
+                            <option>{{ class }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -29,36 +24,49 @@
                     <p>Môn học</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>Toán</option>
-                            <option>Lý</option>
-                            <option>Hóa</option>
-                            <option>Sinh</option>
-                            <option>Sử</option>
-                            <option>Địa</option>
-                            <option>Văn</option>
-                            <option>Đạo Đức</option>
-                            <option>Thể Dục</option>
+                    <select id="subject_select" class="form-select" aria-label="Default select example">
+                        <option>---</option>
+                        {% for subject in subjects %}
+                            <option>{{ subject.name }}</option>
+                        {% endfor %}
                     </select>
-                </div>                                
+                </div>
             </div>
         </div>
-        <div class="main_form_term col-lg-3">
+    </div>
+
+    <div class="main_form-header row">
+        <div class="main_form_term col-lg-4">
             <div class="row">
                 <div class="main_form_title col-lg-4">
                     <p>Học kì</p>
                 </div>
                 <div class="main_form_select col-lg-6">
-                    <select class="form-select" aria-label="Default select example">
-                            <option>1</option>
-                            <option>2</option>
+                    <select id="semester_select" class="form-select" aria-label="Default select example">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
                     </select>
-                </div>                               
+                </div>
             </div>
         </div>
-        <div class="main_form_term col-lg-2">
+        <div class="main_form_term col-lg-4">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>                              
+                <div class="main_form_title col-lg-4" style="width: fit-content">
+                    <p>Niên khóa</p>
+                </div>
+                <div class="main_form_select col-lg-6">
+                    <select id="year_select" class="form-select" aria-label="Default select example">
+                        {% for year in years %}
+                            <option>{{ year.year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="main_form_term col-lg-3">
+            <div class="row">
+                <button id='search' type="button" class="btn btn-outline-primary col-lg-11">Tìm kiếm</button>
             </div>
         </div>
     </div>
@@ -72,25 +80,43 @@
             <th>Số Lượng Đạt</th>
             <th>Tỷ Lệ</th>
         </tr>
-        <tr>
-            <td class="form_input">1</td>
-            <td class="form_input">10A2</td>
-            <td class="form_input">Toán</td>
-            <td class="form_input">30</td>
-            <td class="form_input">20</td>
-            <td class="form_input">66%</td>
-        </tr>
-        <tr>
-            <td class="form_input">2</td>
-            <td class="form_input">11A2</td>
-            <td class="form_input">Toán</td>
-            <td class="form_input">34</td>
-            <td class="form_input">34</td>
-            <td class="form_input">100%</td>
-        </tr>
+        {% for report in reports %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ report.class_id }}</td>
+                <td>{{ report.subject }}</td>
+                <td>{{ report.student_number }}</td>
+                <td>{{ report.passed_number }}</td>
+                <td>{{ report.passed_rate }} %</td>
+            </tr>
+        {% endfor %}
     </table>
-    <div>
-        <a href="#" type="button" class="btn btn-outline-primary">Tạo báo cáo môn học</a>                              
-    </div>
+
+    <script>
+        document.getElementById("class_select").value = "{{current_class}}"
+        document.getElementById("subject_select").value = "{{ subject }}"
+        document.getElementById("semester_select").value = "{{ semester }}"
+        document.getElementById("year_select").value = "{{ year }}"
+    </script>
+
+    <script>
+        function getNewViews() {
+            var e = document.getElementById("class_select");
+            var classSelected = e.options[e.selectedIndex].text;
+            var semesters = document.getElementById("semester_select");
+            var semester = semesters.options[semesters.selectedIndex].text;
+            var years = document.getElementById("year_select");
+            var year = years.options[years.selectedIndex].text;
+            var subjects = document.getElementById("subject_select");
+            var subject = subjects.options[subjects.selectedIndex].text;
+            window.location.href = {% url 'baoCaoMH' %} +classSelected + "/" + subject + "/" + semester + "/" + year;
+        }
+
+        btn = document.getElementById("search");
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            getNewViews();
+        })
+    </script>
 
 {% endblock content %}

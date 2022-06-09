@@ -16,6 +16,8 @@ from .models import *
 from .filters import *
 from .forms import *
 
+from .report_child_classes import *
+
 semester = 2
 
 
@@ -317,48 +319,48 @@ def capNhatDiem(request, mark_id):
         return render(request, "admin_template/capNhatDiem.html", context)
 
 
-def baoCaoMH(request):
-    return render(request, 'admin_template/baoCaoMonHoc.html')
 
+def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
+    all_classes = Subject_Report().remove_duplicate(ClassOfSchool.objects.all())
+    subjects = Subject.objects.all()
+    years = Age.objects.all()
+    id = request.user.username
+    reports = Subject_Report().report_to_show(id, lop, mon, hocKy, nienKhoa)
+    context = {'reports': reports,
+               'classes': all_classes,
+               'current_class': lop,
+               'semester': hocKy,
+               'years': years,
+               'year': nienKhoa,
+               'subjects': subjects,
+               'subject': mon}
+    return render(request, 'admin_template/baoCaoMonHoc.html', context)
+
+
+def baoCaoMH(request):
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoMonHoc(request, '---', '---', 1, current_year['year__max'])
 
 @unauthenticated_user
-# def baoCaoHocKy(request, lop, hocKy, nienKhoa):
-#     all_classes = ClassOfSchool.objects.all()
-#     id = request.user.username
-#     report = Report()
-#     report1 = [report.show(id, lop, hocKy, nienKhoa)]
-#     all_nienKhoa = Age.objects.all()
-#     context = {'reports': report1,
-#                'classes': all_classes,
-#                'lop': lop,
-#                'hocky': hocKy,
-#                'nienKhoa': nienKhoa,
-#                'all_nienKhoa': all_nienKhoa}
-
-#     return render(request, 'admin_template/baoCaoHocKi.html', context)
-
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
-    all_classes = ClassOfSchool.objects.all()
-    # print('all_classes',all_classes)
-    id = request.user.id
-    report = Report()
-    report1 = [report.show(id, lop, hocKy, nienKhoa)]
+    all_classes = Semester_Report().remove_duplicate(ClassOfSchool.objects.all())
+    reports = Semester_Report().report_to_show(request.user.username, lop, hocKy, nienKhoa)
     all_nienKhoa = Age.objects.all()
-    context = {
-        'reports': report1,
-        'classes': all_classes,
-        'lop': lop,
-        'hocky': hocKy,
-        'nienKhoa': nienKhoa,
-        'all_nienKhoa': all_nienKhoa
-    }
+    context = {'reports': reports,
+               'classes': all_classes,
+               'lop': lop,
+               'hocky': hocKy,
+               'nienKhoa': nienKhoa,
+               'all_nienKhoa': all_nienKhoa}
 
     return render(request, 'admin_template/baoCaoHocKi.html', context)
 
 
 def baoCaoHK(request):
-    return baoCaoHocKy(request, '---', '1', '2021-2022')
-
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoHocKy(request, "---", 1, current_year['year__max'])
 
 def quanLiTuoi(request):
     age = Age.objects.all()
