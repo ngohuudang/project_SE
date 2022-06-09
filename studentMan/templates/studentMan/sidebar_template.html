@@ -69,8 +69,8 @@
             </li>
             
             <li>
-                {% url 'traCuu' as tra_cuu_hoc_sinh %}
-                <a href="{{tra_cuu_hoc_sinh}}" class="{% if tra_cuu_hoc_sinh == request.path %} active {% endif %}">
+                {% url 'chonNienKhoaTraCuu' as chonNienKhoaTraCuu %}
+                <a href="{{chonNienKhoaTraCuu}}" class="{% if chonNienKhoaTraCuu == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Tra cứu học sinh

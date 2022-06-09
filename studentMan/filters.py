@@ -10,9 +10,18 @@ from django import forms
 
 
 class MarkFilter(django_filters.FilterSet):
+    years = set([mark.subject.year for mark in Mark.objects.all()])
+    year_choices = [(y, y) for y in years]
+
+    year = ChoiceFilter(
+        label='Niên khóa',
+        choices=year_choices,
+        method='filter_by_year',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
     class_list=[]
     for mark in Mark.objects.all():
-        for c in mark.student.classOfSchool.all():
+        for c in mark.student.classOfSchool.filter(year = mark.subject.year):
             class_list.append(c)
     class_choices = [(c, c) for c in set(class_list)]
     classOfSchool = ChoiceFilter(
@@ -41,15 +50,6 @@ class MarkFilter(django_filters.FilterSet):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
-    years = set([mark.subject.year for mark in Mark.objects.all()])
-    year_choices = [(y, y) for y in years]
-
-    year = ChoiceFilter(
-        label='Niên khóa',
-        choices=year_choices,
-        method='filter_by_year',
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
     class Meta:
         model = Mark
         fields = ['subject', 'semester_mark']
@@ -68,21 +68,23 @@ class MarkFilter(django_filters.FilterSet):
 
 class StudentInMarkFilter(django_filters.FilterSet):
     name = CharFilter(
-        field_name='student__name',
+        field_name='student__user__name',
         label='',
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         lookup_expr='icontains'
     )
-    class_list = set(
-        [mark.student.classOfSchool for mark in Mark.objects.all() if mark.student.classOfSchool is not None])
-    class_choices = [(c, c) for c in class_list]
+    class_list=[]
+    for mark in Mark.objects.all():
+        for c in mark.student.classOfSchool.filter(year = mark.subject.year):
+            class_list.append(c)
+    class_choices = [(c, c) for c in set(class_list)]
     classOfSchool = ChoiceFilter(
         label='',
         choices=class_choices,
         method='filter_by_class',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
-
+    
     class Meta:
         model = Mark
         fields = []

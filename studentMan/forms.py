@@ -43,18 +43,10 @@ class CreateClassForm(forms.ModelForm):
             
         })
 
-
-    # class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()])#get(year = Age.objects.get(id =age_id))])
-    # classOfSchool = forms.CharField(label="",widget=forms.Select(
-    #     choices=class_choices, 
-    #     attrs={'class': 'form-select'
-    # }))
-    # def get_class(self):
-    #     class_choices = set([(c.classId, c.classId) for c in ClassOfSchool.objects.get(year = Age.objects.get(id =self.age_id))])
-    #     self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
     class Meta:
         model = ClassOfSchool
         fields = ['classId']
+
 
 class classForm(forms.ModelForm):
     class Meta:

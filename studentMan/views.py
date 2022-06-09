@@ -1,5 +1,5 @@
+from random import randrange
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,7 @@ from datetime import datetime
 
 from .decorators import unauthenticated_user
 
-
+import numpy as np
 from django.urls import reverse
 
 from .models import *
@@ -186,10 +186,6 @@ def chonNienKhoaLop(request):
         'form': form,
         'age': age
     }
-    if request.method == 'POST':
-        year = request.POST.get('year')
-        print('year', year)
-        return redirect(reverse('lapDSLop'),year)
     return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
 
@@ -230,26 +226,49 @@ def lapDSLop(request,age_id):
     }
     return render(request, 'admin_template/lapDS.html', context=context)
 
+def trungBinhMon(subject):
+    for mark in Mark.objects.filter(subject = subject):
+        if mark.semester_mark == '1':
+            avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
+        else:
+            avgMarks2 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
+    return avgMarks1, avgMarks2
 
-def traCuu(request):
-    marks = Mark.objects.all().order_by('student__user__name')
+
+def chonNienKhoaTraCuu(request):
+    form = YearForm()
+    age = Age.objects.all()
+    context = {
+        'form': form,
+        'age': age
+    }
+    return render(request, 'admin_template/chonNienKhoaTraCuu.html', context=context)
+
+def traCuu(request,age_id):
+    year = Age.objects.get(id =age_id)
+    marks = Mark.objects.filter(subject__year= year)
+    print(len(marks))
     marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
     marks = marksFilter.qs.order_by('student__user__name')
-    students = set([mark.student for mark in marks])
+    students = []
     avgMarks1 = []
     avgMarks2 = []
-    for mark in marks:
-        if mark.semester_mark == '1':
-            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks1.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
-            else:
-                avgMarks1.append(None)
-        elif mark.semester_mark == '2':
-            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks2.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
-            else:
-                avgMarks2.append(None)
-    marks = zip(students, avgMarks1, avgMarks2)
+    classOfSchool = []
+    marks_in_year = marks
+    students_in_year = set([mark.student for mark in marks_in_year])
+    for student in students_in_year:
+        students.append(student)
+        subjects_in_year = set([mark.subject for mark in marks_in_year])
+        m = [trungBinhMon(subject) for subject in subjects_in_year]
+        avg = np.mean(np.array(m), axis=0)
+        avgMarks1.append(avg[0])
+        avgMarks2.append(avg[1])
+        for c in student.classOfSchool.all():
+            if c.year == year:
+                classOfSchool.append(c)
+                break
+    
+    marks = zip(students, classOfSchool, avgMarks1, avgMarks2)
     context = {
         'marks': marks,
         'marksFilter': marksFilter

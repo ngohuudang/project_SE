@@ -31,7 +31,8 @@ urlpatterns = [
     path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
     path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
 
-    path("tracuu/", views.traCuu, name='traCuu'),
+    path("tracuu/nienkhoa", views.chonNienKhoaTraCuu, name='chonNienKhoaTraCuu'),
+    path("tracuu/nienkhoa/nienkhoa_<int:age_id>", views.traCuu, name='traCuu'),
 
     path("bangdiem/", views.bangDiem, name='bangDiem'),
     path("bangdiem/capnhat/<int:mark_id>", views.capNhatDiem, name='capNhatDiem'),
