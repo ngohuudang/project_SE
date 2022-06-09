@@ -19,16 +19,26 @@ urlpatterns = [
             auth_views.PasswordResetCompleteView.as_view(),
             name='password_reset_complete'),
 
-
+    path('capnhattaikhoan/', views.capNhatTaiKhoan, name='capNhatTaiKhoan'),
+    path('doimatkhau/', views.doiMatKhau.as_view(), name='doiMatKhau'),
     path("home/", views.admin_home, name='admin_home'),
 
     path("themAdmin/", views.themAdmin, name='themAdmin'),
     path("themGV/", views.themGV, name='themGV'),
     path("themHS/", views.tiepNhanHS, name='tiepNhanHS'),
 
-    path("danhsachtaikhoanHS", views.dsTaiKhoanHS, name = 'dsTaiKhoanHS'),
-    path("danhsachtaikhoanGV", views.dsTaiKhoanGV, name = 'dsTaiKhoanGV'),
-    path("danhsachtaikhoanAdmin", views.dsTaiKhoanAdmin, name = 'dsTaiKhoanAdmin'),
+    path("danhsachtaikhoanHS/", views.dsTaiKhoanHS, name = 'dsTaiKhoanHS'),
+    path("danhsachtaikhoanHS/capnhat/<int:account_id>", views.capNhatTKHS, name='capNhatTKHS'),
+    path("danhsachtaikhoanHS/delete/<int:account_id>", views.xoaTKHS, name='xoaTKHS'),
+
+    path("danhsachtaikhoanGV/", views.dsTaiKhoanGV, name = 'dsTaiKhoanGV'),
+    path("danhsachtaikhoanGV/capnhat/<int:account_id>", views.capNhatTKGV, name='capNhatTKGV'),
+    path("danhsachtaikhoanGV/delete/<int:account_id>", views.xoaTKGV, name='xoaTKGV'),
+
+    path("danhsachtaikhoanAdmin/", views.dsTaiKhoanAdmin, name = 'dsTaiKhoanAdmin'),
+    path("danhsachtaikhoanAdmin/capnhat/<int:account_id>", views.capNhatTKAdmin, name='capNhatTKAdmin'),
+    path("danhsachtaikhoanAdmin/delete/<int:account_id>", views.xoaTKAdmin, name='xoaTKAdmin'),
+
     path("danhsachlop/", views.dsLop, name='dsLop'),
     path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
     path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
@@ -55,7 +65,6 @@ urlpatterns = [
 
     path("quanlimon/", views.quanLiMon, name='quanLiMon'),
     path("quanlimon/capnhat/<int:subject_id>", views.capNhatMon, name='capNhatMon'),
-    path("subject/delete/<int:subject_id>",views.xoaMon, name='xoaMon'),
+    path("subject/delete/<int:subject_id>", views.xoaMon, name='xoaMon'),
     path("subject/add", views.themMon, name='themMon'),
 ]
-

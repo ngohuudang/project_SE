@@ -143,6 +143,21 @@ class YearFilter(django_filters.FilterSet):
     def filter_by_year(self, queryset, name, value):
         return queryset.filter(year__year=value)
 
+class SubjectWithYearFilter(django_filters.FilterSet):
+    years = set([s.year.year for s in Subject.objects.all()])
+    year = ChoiceFilter(
+        label='',
+        choices=[(s, s) for s in years],
+        method='filter_by_year',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    class Meta:
+        model = Subject
+        fields = []
+
+    def filter_by_year(self, queryset, name, value):
+        return queryset.filter(year__year=value)
 
 
 

@@ -7,26 +7,31 @@
         <table class="table table-sm">
             <tr>
                 <th>STT</th>
-                <th>Username</th>
-                <th>Password</th>
                 <th>Họ và tên</th>
                 <th>Ngày sinh</th>
                 <th>Giới tính</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Địa chỉ</th>
+                <th>Điều chỉnh</th>
             </tr>
-            {% for account in accountsStudent %}
+            {% for account,date in accounts %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{account.username}}</td>
-                    <td>{{account.password}}</td>
-                    <td>{{account.name}}</td>
-                    <td>{{account.dateOfBirth}}</td>
-                    <td>{{ account.sex }}</td>
-                    <td>{{account.email}}</td>
-                    <td>{{account.phone}}</td>
-                    <td>{{account.address}}</td>
+                    <td>{{ forloop.counter }}</td> 
+                    <td>{{account.user.name}}</td>
+                    <td>{{date}}</td>
+                    {%if account.user.sex == '1'%}
+                        <td>Nam</td>
+                    {%else%}
+                        <td>Nữ</td>
+                    {%endif%}
+                    <td>{{account.user.email}}</td>
+                    <td>{{account.user.phone}}</td>
+                    <td>{{account.user.address}}</td>
+                    <td>
+                        <a href="{% url 'capNhatTKAdmin' account.id %}" class="btn btn-primary">Cập nhật</a> -
+                        <a href="{% url 'xoaTKAdmin' account.id %}" onclick="return confirm('Xác nhận xóa tài khoản này ?')" class="btn btn-danger">Xóa</a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

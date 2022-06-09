@@ -1,4 +1,3 @@
-from random import randrange
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -6,16 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
 from datetime import datetime
-
 from .decorators import unauthenticated_user
-
 import numpy as np
-from django.urls import reverse
-
-from .models import *
+from django.urls import reverse,reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from .filters import *
 from .forms import *
-
+from .models import *
 semester = 2
 
 
@@ -23,13 +20,17 @@ semester = 2
 
 @login_required(login_url='login')
 def admin_home(request):
+    total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
     total_students = Student.objects.all().count()
     total_subjects = Subject.objects.all().count()
     total_classes = ClassOfSchool.objects.all().count()
+    total_classes = ClassOfSchool.objects.all().count()
+
     context = {
         'total_students': total_students,
         'total_teachers': total_teachers,
+        'total_admins': total_admins,
         'total_subjects': total_subjects,
         'total_classes': total_classes,
     }
@@ -50,6 +51,26 @@ def loginPage(request):
     context = {}
     return render(request, 'admin_template/login.html', context)
 
+
+@login_required(login_url='login')
+def capNhatTaiKhoan(request):
+    if request.method == 'POST':
+        profile_form = userUpdateForm(request.POST, instance=request.user)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Cập nhật thành công')
+            return redirect(to='capNhatTaiKhoan')
+    else:
+        profile_form = userUpdateForm(instance=request.user)
+
+    return render(request, 'admin_template/capNhatTaiKhoan.html', {'profile_form': profile_form})
+
+
+
+class doiMatKhau(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'admin_template/capNhatMatKhau.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = reverse_lazy('capNhatTaiKhoan')
 
 def logoutUser(request):
     logout(request)
@@ -81,7 +102,7 @@ def themAdmin(request):
                 admin.user = user
                 admin.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('dsTaiKhoanAdmin'))
+                return redirect(reverse('dsTaiKhoan'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -118,7 +139,7 @@ def themGV(request):
                     teacher.classOfSchool.add(c)
                 teacher.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('dsTaiKhoanGV'))
+                return redirect(reverse('dsTaiKhoan'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -205,7 +226,6 @@ def lapDSLop(request,age_id):
 
     if request.method == 'POST':
         usernames = request.POST.getlist('username_class')
-        print('usernames: ',usernames)
         cl = request.POST.get('classOfSchool')
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
@@ -226,8 +246,8 @@ def lapDSLop(request,age_id):
     }
     return render(request, 'admin_template/lapDS.html', context=context)
 
-def trungBinhMon(subject):
-    for mark in Mark.objects.filter(subject = subject):
+def trungBinhMon(subject, student):
+    for mark in Mark.objects.filter(student = student).filter(subject = subject):
         if mark.semester_mark == '1':
             avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
         else:
@@ -247,7 +267,6 @@ def chonNienKhoaTraCuu(request):
 def traCuu(request,age_id):
     year = Age.objects.get(id =age_id)
     marks = Mark.objects.filter(subject__year= year)
-    print(len(marks))
     marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
     marks = marksFilter.qs.order_by('student__user__name')
     students = []
@@ -259,7 +278,7 @@ def traCuu(request,age_id):
     for student in students_in_year:
         students.append(student)
         subjects_in_year = set([mark.subject for mark in marks_in_year])
-        m = [trungBinhMon(subject) for subject in subjects_in_year]
+        m = [trungBinhMon(subject, student) for subject in subjects_in_year]
         avg = np.mean(np.array(m), axis=0)
         avgMarks1.append(avg[0])
         avgMarks2.append(avg[1])
@@ -401,6 +420,7 @@ def xoaTuoi(request, age_id):
     messages.success(request, "Age deleted successfully!")
     return redirect(reverse('quanLiTuoi'))
 
+
 def themTuoi(request):
     form = ageForm(request.POST or None)
     context = {
@@ -426,6 +446,7 @@ def themTuoi(request):
             messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themTuoi.html', context)
 
+
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()
     yearFilter = YearFilter(request.GET, queryset=classes)
@@ -446,12 +467,12 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            classId = form.cleaned_data.get('classId')
+            ClassId = form.cleaned_data.get('ClassId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.classId = classId
+                Class.ClassId = ClassId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
@@ -500,8 +521,11 @@ def themLop(request):
 
 def quanLiMon(request):
     subjects = Subject.objects.all()
+    subjectWithYearFilter = SubjectWithYearFilter(request.GET, queryset=subjects)
+    subjects = subjectWithYearFilter.qs
     context = {
         'subjects': subjects,
+        'subjectWithYearFilter': subjectWithYearFilter,
     }
     return render(request, 'admin_template/quanLiMon.html', context)
 
@@ -554,7 +578,6 @@ def themMon(request):
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
             year = form.cleaned_data.get('year')
-            print('year: ',year)
             try:
                 subject = Subject()
                 subject.SubjectID = SubjectID
@@ -574,7 +597,6 @@ def themMon(request):
                         mark.markOne = 0
                         mark.markFinal = 0
                         mark.save()
-                    print('xong',student.user.name)
                 messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:
@@ -601,13 +623,104 @@ def student_bangDiem(request):
         return render(request, 'admin_template/bangDiem.html', context)
 
 def dsTaiKhoanHS(request):
-    accountsStudent = CustomUser.objects.filter(role=3)
-    return render(request, 'admin_template/dsTaiKhoanHS.html', context={"accountsStudent":accountsStudent})
+    accountsStudent = Student.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsStudent]
+    accounts = zip(accountsStudent,formatDate)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanHS.html', context=context)
+
+def capNhatTKHS(request,account_id):
+    return render(request, 'admin_template/dsTaiKhoanHS.html')
+
+def xoaTKHS(request,account_id):
+    account = get_object_or_404(Student, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanHS'))
 
 def dsTaiKhoanGV(request):
-    accountsTeacher = CustomUser.objects.filter(role=2)
-    return render(request, 'admin_template/dsTaiKhoanGV.html', context={"accountsTeacher":accountsTeacher})
+    accountsTeacher = Teacher.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsTeacher]
+    classes = []
+    for a in accountsTeacher:
+        classes.append([c.classId for c in a.classOfSchool.all()])
+
+    accounts = zip(accountsTeacher,formatDate, classes)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanGV.html', context=context)
+
+
+def capNhatTKGV(request,account_id):
+    return render(request, 'admin_template/dsTaiKhoanGV.html')
+
+def xoaTKGV(request,account_id):
+    account = get_object_or_404(Teacher, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanGV'))
 
 def dsTaiKhoanAdmin(request):
-    accountsAdmin = CustomUser.objects.filter(role=1)
-    return render(request, 'admin_template/dsTaiKhoanAdmin.html', context={"accountsAdmin": accountsAdmin})
+    accountsAdmin = Admin.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsAdmin]
+    accounts = zip(accountsAdmin,formatDate)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanAdmin.html', context=context)
+
+def capNhatTKAdmin(request,account_id):
+    account = get_object_or_404(Admin, id=account_id)
+    user = get_object_or_404(CustomUser, id=account.user.id)
+    print(account)
+    form = updateAdminForm(request.POST or None, instance=user)
+    context = {
+        'form': form,
+        'account_id': account_id,
+    }
+    if request.method == 'POST':
+        print('---------------post-----------------')
+        print(form.is_valid())
+        if form.is_valid():
+            print('---------------valid-----------------')
+            username = form.cleaned_data.get('username')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            print('---------------valid-----------------')
+
+            try:
+                account = Admin.objects.get(id=account.id)
+                user = CustomUser.objects.get(id = account.user.id)
+                user.username = username
+                user.name = name
+                user.dateOfBirth = dateOfBirth
+                user.sex = sex
+                user.email = email
+                user.phone = phone
+                user.address = address
+                user.save()
+                messages.success(request, "Cập nhật thành công")
+                print("----------------a----------------------")
+                return redirect(to='dsTaiKhoanAdmin')
+            except:
+                messages.error(request, "Không thể Không thể cập nhật")
+            # form.save()
+            # messages.success(request, 'Cập nhật thành công')
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    else:
+        return render(request, "admin_template/capNhatAdmin.html", context)
+
+
+def xoaTKAdmin(request,account_id):
+    account = get_object_or_404(Admin, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanAdmin'))
