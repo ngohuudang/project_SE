@@ -158,3 +158,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'studentMan.CustomUser'
 
+#turn off error datetime
+USE_TZ = False

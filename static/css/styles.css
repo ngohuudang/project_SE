@@ -9,6 +9,10 @@
     justify-content: space-around;
 }
 
+.jus_between{
+    justify-content: space-between;
+}
+
 .disable{
     display: none;
 }

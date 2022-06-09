@@ -1,17 +1,18 @@
+from random import randrange
 from django.shortcuts import render, redirect, get_object_or_404
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
+from datetime import datetime
 
 from .decorators import unauthenticated_user
 
-
+import numpy as np
 from django.urls import reverse
 
-from studentMan.models import *
+from .models import *
 from .filters import *
 from .forms import *
 
@@ -55,8 +56,113 @@ def logoutUser(request):
     return redirect('login')
 
 
+def themAdmin(request):
+    form = AdminForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            try:
+                admin = Admin()
+                user = CustomUser.objects.create_superuser(
+                    username = username, password= password, name = name,
+                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
+                    sex = sex, email = email, phone = phone, address = address)
+                user.save()
+                admin.user = user
+                admin.save()
+                messages.success(request, "Thêm thành công")
+                return redirect(reverse('dsTaiKhoan'))
+            except:
+                messages.error(request, "Không thể thêm")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    return render(request, 'admin_template/themAdmin.html', context=context)
+
+def themGV(request):
+    form = TeacherForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            subject = form.cleaned_data.get('subject')
+            classOfSchool = form.cleaned_data.get('classOfSchool')
+            try:
+                user = CustomUser.objects.create_user(
+                    username = username, password= password, name = name, role ='2',
+                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
+                    sex = sex, email = email, phone = phone, address = address)
+                teacher = Teacher(user = user)
+                if subject:
+                    teacher.subject = subject
+                teacher.save()
+                for c  in classOfSchool:
+                    teacher.classOfSchool.add(c)
+                teacher.save()
+                messages.success(request, "Thêm thành công")
+                return redirect(reverse('dsTaiKhoan'))
+            except:
+                messages.error(request, "Không thể thêm")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    return render(request, 'admin_template/themGV.html', context=context)
+
+
+# def khoiTaoDiem(student, classOfSchool):
+#     student.
+
 def tiepNhanHS(request):
-    return render(request, 'admin_template/tiepNhanHS.html')
+    form = StudentForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            # classOfSchool = form.cleaned_data.get('classOfSchool')
+            try:
+                user = CustomUser.objects._create_user(
+                    username = username, password= password, name = name, role ='3',
+                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
+                    sex = sex, email = email, phone = phone, address = address)
+                student = Student(user = user)
+                student.save()
+                # c = ClassOfSchool.objects.get(classId = classOfSchool)
+                # student.classOfSchool.add(c)
+                # student.save()
+                # for subject in Subject.objects.all():
+                #     c.year.year
+                messages.success(request, "Thêm thành công")
+            except:
+                messages.error(request, "Không thể thêm")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    return render(request, 'admin_template/tiepNhanHS.html',context=context)
 
 
 def dsTaiKhoan(request):
@@ -64,61 +170,105 @@ def dsTaiKhoan(request):
 
 
 def dsLop(request):
-    students = Student.objects.all()
+    students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
-    students = classFilter.qs
+    students = classFilter.qs.order_by('user__name')
     context = {
         'students': students,
         'classFilter': classFilter,
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
+def chonNienKhoaLop(request):
+    form = YearForm()
+    age = Age.objects.all()
+    context = {
+        'form': form,
+        'age': age
+    }
+    return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
-def lapDSLop(request):
-    students = Student.objects.filter(classOfSchool__classId=None)
-    form = CreateClassForm()
+
+def lapDSLop(request,age_id):
+    year = Age.objects.get(id =age_id)
+    student_with_year = []
+    for student in Student.objects.all():
+        for c in student.classOfSchool.all():
+            if c.year ==year:
+                student_with_year.append(student)
+                break
+    student_dont_with_year =[]
+    for student in Student.objects.all():
+        if student not in student_with_year:
+            student_dont_with_year.append(student)
+    form = CreateClassForm(request.POST, age_id = age_id)
+
     if request.method == 'POST':
-        id_list = request.POST.getlist('docid')
+        usernames = request.POST.getlist('username_class')
+        print('usernames: ',usernames)
         cl = request.POST.get('classOfSchool')
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
             if classOfSchool.classId == cl:
                 studentsInClass = Student.objects.filter(classOfSchool__classId=cl)
-                if classOfSchool.max_number >= (len(studentsInClass) + len(id_list)):
-                    for id in id_list:
-                        student = Student.objects.get(StudentID=id)
-                        student.classOfSchool = classOfSchool
+                if classOfSchool.max_number >= (len(studentsInClass) + len(usernames)):
+                    for username in usernames:
+                        student = Student.objects.get(user__username=username)
+                        student.classOfSchool.add(classOfSchool)
                         student.save()
                     messages.success(request, "Thêm thành công")
+                    return redirect(reverse('lapDSLop', kwargs={'age_id':age_id}))
                 else:
                     messages.success(request, "Số lượng học sinh vượt quá qui định")
-
     context = {
-        'students': students,
+        'students': student_dont_with_year,
         'form': form,
     }
     return render(request, 'admin_template/lapDS.html', context=context)
 
+def trungBinhMon(subject):
+    for mark in Mark.objects.filter(subject = subject):
+        if mark.semester_mark == '1':
+            avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
+        else:
+            avgMarks2 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
+    return avgMarks1, avgMarks2
 
-def traCuu(request):
-    marks = Mark.objects.all()
+
+def chonNienKhoaTraCuu(request):
+    form = YearForm()
+    age = Age.objects.all()
+    context = {
+        'form': form,
+        'age': age
+    }
+    return render(request, 'admin_template/chonNienKhoaTraCuu.html', context=context)
+
+def traCuu(request,age_id):
+    year = Age.objects.get(id =age_id)
+    marks = Mark.objects.filter(subject__year= year)
+    print(len(marks))
     marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
-    marks = marksFilter.qs
-    students = set([mark.student for mark in marks])
+    marks = marksFilter.qs.order_by('student__user__name')
+    students = []
     avgMarks1 = []
     avgMarks2 = []
-    for mark in marks:
-        if mark.semester_mark == '1':
-            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks1.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
-            else:
-                avgMarks1.append(None)
-        elif mark.semester_mark == '2':
-            if (mark.markFifteen != None) and (mark.markOne != None) and (mark.markFinal != None):
-                avgMarks2.append(round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2))
-            else:
-                avgMarks2.append(None)
-    marks = zip(students, avgMarks1, avgMarks2)
+    classOfSchool = []
+    marks_in_year = marks
+    students_in_year = set([mark.student for mark in marks_in_year])
+    for student in students_in_year:
+        students.append(student)
+        subjects_in_year = set([mark.subject for mark in marks_in_year])
+        m = [trungBinhMon(subject) for subject in subjects_in_year]
+        avg = np.mean(np.array(m), axis=0)
+        avgMarks1.append(avg[0])
+        avgMarks2.append(avg[1])
+        for c in student.classOfSchool.all():
+            if c.year == year:
+                classOfSchool.append(c)
+                break
+    
+    marks = zip(students, classOfSchool, avgMarks1, avgMarks2)
     context = {
         'marks': marks,
         'marksFilter': marksFilter
@@ -212,9 +362,7 @@ def baoCaoHK(request):
 
 def quanLiTuoi(request):
     age = Age.objects.all()
-    myFilter = AgeFilter(request.GET, queryset=age)
-    age = myFilter.qs
-    context = {'age': age, 'myFilter': myFilter}
+    context = {'age': age}
     return render(request, 'admin_template/quanLiTuoi.html', context=context)
 
 
@@ -270,12 +418,12 @@ def themTuoi(request):
                 Year.max_age = max_age
                 Year.min_age = min_age
                 Year.save()
-                messages.success(request, "Successfully Added")
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiTuoi'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "Không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themTuoi.html', context)
 
 def quanLiLop(request):
@@ -298,12 +446,12 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            classId = form.cleaned_data.get('classId')
+            ClassId = form.cleaned_data.get('ClassId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.classId = classId
+                Class.ClassId = ClassId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
@@ -341,12 +489,12 @@ def themLop(request):
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
-                messages.success(request, "Successfully Added")
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiLop'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "Không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themLop.html', context)
 
 
@@ -368,10 +516,12 @@ def capNhatMon(request, subject_id):
     }
     if request.method == 'POST':
         if form.is_valid():
+            subjectId = form.cleaned_data.get('SubjectID')
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
             try:
                 subject = Subject.objects.get(id=subject.id)
+                subject.SubjectID = subjectId
                 subject.name = name
                 subject.approved_mark = approved_mark
                 subject.save()
@@ -403,12 +553,16 @@ def themMon(request):
             SubjectID = form.cleaned_data.get('SubjectID')
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
+            year = form.cleaned_data.get('year')
+            print('year: ',year)
             try:
                 subject = Subject()
                 subject.SubjectID = SubjectID
                 subject.name = name
                 subject.approved_mark = approved_mark
+                subject.year = Age.objects.get(year = year)
                 subject.save()
+                # thêm điểm vào tất cả học sinh có trong hệ thống
                 students = Student.objects.all()
                 for student in students:
                     for semester_mark in range(1, semester + 1):
@@ -416,13 +570,17 @@ def themMon(request):
                         mark.student = student
                         mark.subject = subject
                         mark.semester_mark = semester_mark
+                        mark.markFifteen = 0
+                        mark.markOne = 0
+                        mark.markFinal = 0
                         mark.save()
-                messages.success(request, "Successfully Added")
+                    print('xong',student.user.name)
+                messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:
-                messages.error(request, "Could Not Add")
+                messages.error(request, "không thể thêm")
         else:
-            messages.error(request, "Could Not Add")
+            messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themMon.html', context)
 
 

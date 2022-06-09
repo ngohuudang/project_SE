@@ -1,7 +1,7 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Tiếp nhận học sinh</h3>
+    <h3 class="label">Thêm tài khoản Giáo viên</h3>
     <div class="card card-body">
         <div class="jus_center row">
             <form role="form" method="POST" enctype="multipart/form-data" class="col-lg-10">
@@ -72,24 +72,29 @@
                     </div>
                     <br>
                     <div class="form-group row jus_center">
-                        <div for='email_user' class="col-lg-2">
-                            Số điện thoại:
+                        <div class='col-lg-6'>
+                            <div class='row'>
+                                <div for='phone_user' class="col-lg-4">
+                                    Số điện thoại:
+                                </div>
+                                <div class="col-lg-8">
+                                    {{form.phone}}
+                                </div>
+                            </div>     
                         </div>
-                        <div class="col-lg-10">
-                            {{form.phone}}
+                        <div class='col-lg-6'>
+                            <div class='row'>
+                                <div class="col-lg-4">
+                                    Môn học:
+                                </div>
+                                <div class="col-lg-8">
+                                    {{form.subject}}
+                                </div>
+                            </div>     
                         </div>
                     </div>
                     <br>
                     <div class="form-group row jus_center">
-                        <div for='address_user' class="col-lg-2">
-                            Địa chỉ:
-                        </div>
-                        <div class="col-lg-10">
-                            {{form.address}}
-                        </div>
-                    </div>
-                    <br>
-                    {% comment %} <div class="form-group row jus_center">
                         <div class='col-lg-8'>
                             <div class='row'>
                                 <div for='address_user' class="col-lg-3">
@@ -111,11 +116,11 @@
                             </div>     
                         </div>
                     </div>
-                    <br> {% endcomment %}
+                    <br>
                     <div class="form-group row jus_space-around ">
                         <div class="col-lg-3">
                             <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">
-                                Thêm học sinh
+                                Thêm giáo viên
                             </button>
                         </div>
                     </div>

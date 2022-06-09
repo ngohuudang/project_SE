@@ -21,13 +21,18 @@ urlpatterns = [
 
 
     path("home/", views.admin_home, name='admin_home'),
-    path("tiepnhanhocsinh/", views.tiepNhanHS, name='tiepNhanHS'),
+
+    path("themAdmin/", views.themAdmin, name='themAdmin'),
+    path("themGV/", views.themGV, name='themGV'),
+    path("themHS/", views.tiepNhanHS, name='tiepNhanHS'),
 
     path("danhsachtaikhoan/", views.dsTaiKhoan, name = 'dsTaiKhoan'),
     path("danhsachlop/", views.dsLop, name='dsLop'),
-    path("lapdanhsachlop/", views.lapDSLop, name='lapDSLop'),
+    path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
+    path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
 
-    path("tracuu/", views.traCuu, name='traCuu'),
+    path("tracuu/nienkhoa", views.chonNienKhoaTraCuu, name='chonNienKhoaTraCuu'),
+    path("tracuu/nienkhoa/nienkhoa_<int:age_id>", views.traCuu, name='traCuu'),
 
     path("bangdiem/", views.bangDiem, name='bangDiem'),
     path("bangdiem/capnhat/<int:mark_id>", views.capNhatDiem, name='capNhatDiem'),
@@ -39,7 +44,7 @@ urlpatterns = [
     path("quanlituoi/", views.quanLiTuoi, name='quanLiTuoi'),
     path("quanlituoi/capnhat/<int:age_id>", views.capNhatTuoi, name='capNhatTuoi'),
     path("quanlituoi/delete/<int:age_id>", views.xoaTuoi, name='xoaTuoi'),
-    path("class/add", views.themTuoi, name='themTuoi'),
+    path("age/add", views.themTuoi, name='themTuoi'),
 
     path("quanlilop/", views.quanLiLop, name='quanLiLop'),
     path("quanlilop/capnhat/<int:class_id>", views.capNhatLop, name='capNhatLop'),

@@ -7,41 +7,37 @@
             <form role="form" method="POST" enctype="multipart/form-data" class="col-lg-6">
                 {% csrf_token %}
                 <div class="card-body">
-                    {% for field in form  %}
-                        {% if field == form.name %}
-                            <div class="form-group row jus_center">
-                                <div class="col-lg-5">
-                                    Tên môn học:
-                                </div>
-                                <div class="col-lg-6">
-                                {{form.name}}
-                                </div>
-                            </div>
-                            <br>
-                        {% elif field == form.approved_mark %}
-                            <div class="form-group row jus_center">
-                                <div class="col-lg-5">
-                                    Điểm chuẩn đạt môn:
-                                </div>
-                                <div class="col-lg-6">
-                                {{form.approved_mark}}
-                                </div>
-                            </div>
-                            <br>
-                        {% else %}
-                            <div class="disable">
-                                {{field}}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    <div class="form-group row jus_center">
+                        <div class="col-lg-5">
+                            Mã môn:
+                        </div>
+                        <div class="col-lg-6">
+                        {{form.SubjectID}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row jus_center">
+                        <div class="col-lg-5">
+                            Tên môn học:
+                        </div>
+                        <div class="col-lg-6">
+                        {{form.name}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group row jus_center">
+                        <div class="col-lg-5">
+                            Điểm chuẩn đạt môn:
+                        </div>
+                        <div class="col-lg-6">
+                        {{form.approved_mark}}
+                        </div>
+                    </div>
+                    <br>
                     <div class="form-group row jus_space-around ">
                         <div class="col-lg-5">
                             <button type="submit" onclick="return confirm('Xác nhận cập nhật môn học ?')" class="btn btn-primary btn-block" style="width: 100%;">
-                                {% if button_text %}
-                                    {{button_text}}
-                                {% else %}
-                                    Câp nhật
-                                {% endif %}
+                                Câp nhật
                             </button>
                         </div>
                         <div class="col-lg-5">
