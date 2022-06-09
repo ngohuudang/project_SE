@@ -1,16 +1,29 @@
 {% load static %}
 
 <aside>
-    <!-- Brand Logo -->
     <div class="sidebar-header">
         <a href="{% url 'admin_home' %}" class="brand-link">
             <h4 class="">Quản lí học sinh</h4>
         </a>
     </div>
-
     <!-- Sidebar Menu -->
     <nav>
         <ul class="list-unstyled components">
+            <li class="info">
+                <a href="#profileMunu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle mb-2">
+                    <i class="nav-icon fas fa-user"></i>
+                    Tài khoản: {{user}}
+                </a>
+                <ul class="collapse list-unstyled" id="profileMunu">
+                    <li>
+                        {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
+                        <a href="{{tiep_nhan_hoc_sinh}}">Chỉnh sửa thông tin</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 {% url 'admin_home' as admin_home %}
                 <a href="{{admin_home}}" class="{% if admin_home == request.path %} active {% endif %}">
@@ -154,9 +167,6 @@
                     </span>
                 </a>
             </li>
-        <li>
-            <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
-        </li>
         </ul>
     </nav>
 </aside>

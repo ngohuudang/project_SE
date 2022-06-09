@@ -23,13 +23,17 @@ semester = 2
 
 @login_required(login_url='login')
 def admin_home(request):
+    total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
     total_students = Student.objects.all().count()
     total_subjects = Subject.objects.all().count()
     total_classes = ClassOfSchool.objects.all().count()
+    total_classes = ClassOfSchool.objects.all().count()
+
     context = {
         'total_students': total_students,
         'total_teachers': total_teachers,
+        'total_admins': total_admins,
         'total_subjects': total_subjects,
         'total_classes': total_classes,
     }
@@ -205,7 +209,6 @@ def lapDSLop(request,age_id):
 
     if request.method == 'POST':
         usernames = request.POST.getlist('username_class')
-        print('usernames: ',usernames)
         cl = request.POST.get('classOfSchool')
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
@@ -228,7 +231,6 @@ def lapDSLop(request,age_id):
 
 def trungBinhMon(subject, student):
     for mark in Mark.objects.filter(student = student).filter(subject = subject):
-        print(mark)
         if mark.semester_mark == '1':
             avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
         else:
@@ -500,8 +502,11 @@ def themLop(request):
 
 def quanLiMon(request):
     subjects = Subject.objects.all()
+    subjectWithYearFilter = SubjectWithYearFilter(request.GET, queryset=subjects)
+    subjects = subjectWithYearFilter.qs
     context = {
         'subjects': subjects,
+        'subjectWithYearFilter': subjectWithYearFilter,
     }
     return render(request, 'admin_template/quanLiMon.html', context)
 
@@ -554,7 +559,6 @@ def themMon(request):
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
             year = form.cleaned_data.get('year')
-            print('year: ',year)
             try:
                 subject = Subject()
                 subject.SubjectID = SubjectID
@@ -574,7 +578,6 @@ def themMon(request):
                         mark.markOne = 0
                         mark.markFinal = 0
                         mark.save()
-                    print('xong',student.user.name)
                 messages.success(request, "Thêm thành công")
                 return redirect(reverse('quanLiMon'))
             except:

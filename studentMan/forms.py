@@ -1,4 +1,3 @@
-from matplotlib import widgets
 from .models import *
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
