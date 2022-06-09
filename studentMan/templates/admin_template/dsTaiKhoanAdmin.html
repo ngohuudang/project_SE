@@ -1,6 +1,35 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Tài khoản học sinh</h3>
+    <h3 class="label">Tài khoản admin</h3>
+    <div class="card card-body">
 
+        <table class="table table-sm">
+            <tr>
+                <th>STT</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Họ và tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+            </tr>
+            {% for account in accountsAdmin %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{account.username}}</td>
+                    <td>{{account.password}}</td>
+                    <td>{{account.name}}</td>
+                    <td>{{account.dateOfBirth}}</td>
+                    <td>{{ account.sex }}</td>
+                    <td>{{account.email}}</td>
+                    <td>{{account.phone}}</td>
+                    <td>{{account.address}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
 {% endblock content %}
