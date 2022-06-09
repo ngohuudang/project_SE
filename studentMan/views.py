@@ -226,8 +226,9 @@ def lapDSLop(request,age_id):
     }
     return render(request, 'admin_template/lapDS.html', context=context)
 
-def trungBinhMon(subject):
-    for mark in Mark.objects.filter(subject = subject):
+def trungBinhMon(subject, student):
+    for mark in Mark.objects.filter(student = student).filter(subject = subject):
+        print(mark)
         if mark.semester_mark == '1':
             avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
         else:
@@ -247,7 +248,6 @@ def chonNienKhoaTraCuu(request):
 def traCuu(request,age_id):
     year = Age.objects.get(id =age_id)
     marks = Mark.objects.filter(subject__year= year)
-    print(len(marks))
     marksFilter = StudentInMarkFilter(request.GET, queryset=marks)
     marks = marksFilter.qs.order_by('student__user__name')
     students = []
@@ -259,7 +259,7 @@ def traCuu(request,age_id):
     for student in students_in_year:
         students.append(student)
         subjects_in_year = set([mark.subject for mark in marks_in_year])
-        m = [trungBinhMon(subject) for subject in subjects_in_year]
+        m = [trungBinhMon(subject, student) for subject in subjects_in_year]
         avg = np.mean(np.array(m), axis=0)
         avgMarks1.append(avg[0])
         avgMarks2.append(avg[1])
