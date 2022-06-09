@@ -4,15 +4,14 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from django.contrib.auth.models import User
 from django import forms
 
-class CustomUserCreationForm(UserCreationForm):
 
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = '__all__'
 
 
 class CustomUserChangeForm(UserChangeForm):
-
     class Meta:
         model = CustomUser
         fields = '__all__'
@@ -115,11 +114,6 @@ class CustomUserForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'password', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
 
-# class HiddenUserForm(forms.ModelForm):
-#     class Meta:
-#         model = CustomUser
-#         fields = '__all__'
-#         exclude = ['username', 'password', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
 
 class AdminForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
@@ -135,10 +129,10 @@ class TeacherForm(CustomUserForm):
         self.fields['classOfSchool'].required = False
         self.fields['subject'].widget.attrs.update({'class': 'form-select'})
         self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
-
     class Meta:
         model = Teacher
         fields = CustomUserForm.Meta.fields +  ['subject', 'classOfSchool']
+
 
 class StudentForm(CustomUserForm):
     class_choices = {(None, '-----')}
@@ -161,12 +155,6 @@ class StudentForm(CustomUserForm):
         # }
 
 class subjectForm(forms.ModelForm):
-    # year_choices = set([(a, a) for a in Age.objects.all()])
-    # year = forms.CharField(label="",widget=forms.Select(
-    #     choices=year_choices, 
-    #     attrs={'class': 'form-select'
-    # }))
-    # print('year1: ', year)
     def __init__(self, *args, **kwargs):
         super(subjectForm, self).__init__(*args, **kwargs)
         self.fields['SubjectID'].widget.attrs.update({'class': 'form-control'})
@@ -177,3 +165,34 @@ class subjectForm(forms.ModelForm):
     class Meta:
         model = Subject
         fields = YearForm.Meta.fields + ['SubjectID', 'name', 'approved_mark']
+
+class userUpdateForm(forms.ModelForm):
+    name = forms.CharField(label='', widget=forms.TextInput(
+        attrs={'id':"name_user", 'class':"form-control"
+    }))
+    dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
+        attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
+    }))
+
+    sex = forms.CharField(label="",widget=forms.Select(
+        choices=CustomUser().SEX_CATELOGY, 
+        attrs={'class': 'form-select', 'id': 'sex_user'
+    }))
+
+    email = forms.CharField(label="",widget=forms.TextInput(
+        attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
+    }))
+
+    address = forms.CharField(label="",widget=forms.Textarea(
+        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
+            'placeholder':"12, đường 01, quận 1, tp HCM"
+    }))
+
+
+    phone = forms.CharField(label="",widget=forms.TextInput(
+        attrs={'id':'phone_user', 'class': 'form-control',
+    }))
+
+    class Meta:
+        model = CustomUser
+        fields = ('name', 'dateOfBirth', 'sex', 'phone', 'email', 'address')

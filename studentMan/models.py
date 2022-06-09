@@ -1,4 +1,3 @@
-from tkinter import TRUE
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, AbstractUser
 # Create your models here.
@@ -56,8 +55,10 @@ class Age(models.Model):
     year = models.CharField(max_length=200, unique=True)
     max_age = models.IntegerField(null=False)
     min_age = models.IntegerField(null=False)
+
     def __str__(self):
         return self.year
+
 
 class ClassOfSchool(models.Model):
     classId = models.CharField(max_length=200, null=False, unique=False)
@@ -67,13 +68,16 @@ class ClassOfSchool(models.Model):
     def __str__(self):
         return self.classId
 
+
 class Subject(models.Model):
     SubjectID = models.CharField(max_length=200, null=False, unique=True)
     name = models.CharField(max_length=200, null=False, unique=True)
     approved_mark = models.FloatField(null=False)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
+
 
 class Admin(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -81,18 +85,23 @@ class Admin(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
+    classOfSchool = models.ManyToManyField(ClassOfSchool, blank=True)
+
     def __str__(self):
         return self.user.username
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     classOfSchool = models.ManyToManyField(ClassOfSchool,blank =True)
     subject = models.ForeignKey(Subject,blank =True, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.user.username
+
 
 class Mark(models.Model):
     SEMESTER_CATEGORY = (
@@ -108,4 +117,3 @@ class Mark(models.Model):
     
     def __str__(self):
         return self.student.user.username+ '_'+ self.semester_mark
-
