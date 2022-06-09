@@ -1,4 +1,3 @@
-from random import randrange
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -622,3 +621,106 @@ def student_bangDiem(request):
             # 'page_title': 'View Attendance'
         }
         return render(request, 'admin_template/bangDiem.html', context)
+
+def dsTaiKhoanHS(request):
+    accountsStudent = Student.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsStudent]
+    accounts = zip(accountsStudent,formatDate)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanHS.html', context=context)
+
+def capNhatTKHS(request,account_id):
+    return render(request, 'admin_template/dsTaiKhoanHS.html')
+
+def xoaTKHS(request,account_id):
+    account = get_object_or_404(Student, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanHS'))
+
+def dsTaiKhoanGV(request):
+    accountsTeacher = Teacher.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsTeacher]
+    classes = []
+    for a in accountsTeacher:
+        classes.append([c.classId for c in a.classOfSchool.all()])
+
+    accounts = zip(accountsTeacher,formatDate, classes)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanGV.html', context=context)
+
+
+def capNhatTKGV(request,account_id):
+    return render(request, 'admin_template/dsTaiKhoanGV.html')
+
+def xoaTKGV(request,account_id):
+    account = get_object_or_404(Teacher, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanGV'))
+
+def dsTaiKhoanAdmin(request):
+    accountsAdmin = Admin.objects.all()
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsAdmin]
+    accounts = zip(accountsAdmin,formatDate)
+    context = {
+            'accounts': accounts,
+        }
+    return render(request, 'admin_template/dsTaiKhoanAdmin.html', context=context)
+
+def capNhatTKAdmin(request,account_id):
+    account = get_object_or_404(Admin, id=account_id)
+    user = get_object_or_404(CustomUser, id=account.user.id)
+    print(account)
+    form = updateAdminForm(request.POST or None, instance=user)
+    context = {
+        'form': form,
+        'account_id': account_id,
+    }
+    if request.method == 'POST':
+        print('---------------post-----------------')
+        print(form.is_valid())
+        if form.is_valid():
+            print('---------------valid-----------------')
+            username = form.cleaned_data.get('username')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            print('---------------valid-----------------')
+
+            try:
+                account = Admin.objects.get(id=account.id)
+                user = CustomUser.objects.get(id = account.user.id)
+                user.username = username
+                user.name = name
+                user.dateOfBirth = dateOfBirth
+                user.sex = sex
+                user.email = email
+                user.phone = phone
+                user.address = address
+                user.save()
+                messages.success(request, "Cập nhật thành công")
+                print("----------------a----------------------")
+                return redirect(to='dsTaiKhoanAdmin')
+            except:
+                messages.error(request, "Không thể Không thể cập nhật")
+            # form.save()
+            # messages.success(request, 'Cập nhật thành công')
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    else:
+        return render(request, "admin_template/capNhatAdmin.html", context)
+
+
+def xoaTKAdmin(request,account_id):
+    account = get_object_or_404(Admin, id=account_id)
+    account.delete()
+    messages.success(request, "Xóa thành công !")
+    return redirect(reverse('dsTaiKhoanAdmin'))

@@ -66,6 +66,7 @@ class YearForm(forms.ModelForm):
         model = Age
         fields = ['year']
 
+
 class CustomUserForm(forms.ModelForm):
     username = forms.CharField(label="",widget=forms.TextInput(
         attrs={'id':"username_user", 'class':"form-control"
@@ -101,14 +102,13 @@ class CustomUserForm(forms.ModelForm):
         attrs={'id':'phone_user', 'class': 'form-control',
     }))
 
-    def __init__(self, *args, **kwargs):
-        super(CustomUserForm, self).__init__(*args, **kwargs)
-
-        if kwargs.get('instance'):
-            instance = kwargs.get('instance').admin.__dict__
-            self.fields['password'].required = False
-            for field in CustomUserForm.Meta.fields:
-                self.fields[field].initial = instance.get(field)
+    # def __init__(self, *args, **kwargs):
+    #     super(CustomUserForm, self).__init__(*args, **kwargs)
+    #     if kwargs.get('instance'):
+    #         instance = kwargs.get('instance').admin.__dict__
+    #         self.fields['password'].required = False
+    #         for field in CustomUserForm.Meta.fields:
+    #             self.fields[field].initial = instance.get(field)
 
     class Meta:
         model = CustomUser
@@ -121,6 +121,8 @@ class AdminForm(CustomUserForm):
     class Meta:
         model = Admin
         fields = CustomUserForm.Meta.fields
+
+
 
 class TeacherForm(CustomUserForm):
     def __init__(self, *args, **kwargs):
@@ -196,3 +198,39 @@ class userUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('name', 'dateOfBirth', 'sex', 'phone', 'email', 'address')
+
+
+class updateAdminForm(forms.ModelForm):
+    username = forms.CharField(label="",widget=forms.TextInput(
+        attrs={'id':"username_user", 'class':"form-control"
+    }))
+
+    name = forms.CharField(label='', widget=forms.TextInput(
+        attrs={'id':"name_user", 'class':"form-control"
+    }))
+    dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
+        attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
+    }))
+
+    sex = forms.CharField(label="",widget=forms.Select(
+        choices=CustomUser().SEX_CATELOGY, 
+        attrs={'class': 'form-select', 'id': 'sex_user'
+    }))
+
+    email = forms.CharField(label="",widget=forms.TextInput(
+        attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
+    }))
+
+    address = forms.CharField(label="",widget=forms.Textarea(
+        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
+            'placeholder':"12, đường 01, quận 1, tp HCM"
+    }))
+
+
+    phone = forms.CharField(label="",widget=forms.TextInput(
+        attrs={'id':'phone_user', 'class': 'form-control',
+    }))
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
