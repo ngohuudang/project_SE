@@ -144,7 +144,7 @@ def tiepNhanHS(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-            classOfSchool = form.cleaned_data.get('classOfSchool')
+            # classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
                 user = CustomUser.objects._create_user(
                     username = username, password= password, name = name, role ='3',
@@ -152,12 +152,11 @@ def tiepNhanHS(request):
                     sex = sex, email = email, phone = phone, address = address)
                 student = Student(user = user)
                 student.save()
-                c = ClassOfSchool.objects.get(classId = classOfSchool)
-                student.classOfSchool.add(c)
-                print(classOfSchool)
-                student.save()
-                for subject in Subject.objects.all():
-                    c.year.year
+                # c = ClassOfSchool.objects.get(classId = classOfSchool)
+                # student.classOfSchool.add(c)
+                # student.save()
+                # for subject in Subject.objects.all():
+                #     c.year.year
                 messages.success(request, "Thêm thành công")
             except:
                 messages.error(request, "Không thể thêm")
