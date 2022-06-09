@@ -298,12 +298,12 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            ClassId = form.cleaned_data.get('ClassId')
+            classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.ClassId = ClassId
+                Class.classId = classId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
