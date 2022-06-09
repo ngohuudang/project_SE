@@ -81,7 +81,7 @@ def themAdmin(request):
                 admin.user = user
                 admin.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('dsTaiKhoan'))
+                return redirect(reverse('dsTaiKhoanAdmin'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -118,7 +118,7 @@ def themGV(request):
                     teacher.classOfSchool.add(c)
                 teacher.save()
                 messages.success(request, "Thêm thành công")
-                return redirect(reverse('dsTaiKhoan'))
+                return redirect(reverse('dsTaiKhoanGV'))
             except:
                 messages.error(request, "Không thể thêm")
         else:
@@ -446,12 +446,12 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            ClassId = form.cleaned_data.get('ClassId')
+            classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.ClassId = ClassId
+                Class.classId = classId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
@@ -599,3 +599,15 @@ def student_bangDiem(request):
             # 'page_title': 'View Attendance'
         }
         return render(request, 'admin_template/bangDiem.html', context)
+
+def dsTaiKhoanHS(request):
+    accountsStudent = CustomUser.objects.filter(role=3)
+    return render(request, 'admin_template/dsTaiKhoanHS.html', context={"accountsStudent":accountsStudent})
+
+def dsTaiKhoanGV(request):
+    accountsTeacher = CustomUser.objects.filter(role=2)
+    return render(request, 'admin_template/dsTaiKhoanGV.html', context={"accountsTeacher":accountsTeacher})
+
+def dsTaiKhoanAdmin(request):
+    accountsAdmin = CustomUser.objects.filter(role=1)
+    return render(request, 'admin_template/dsTaiKhoanAdmin.html', context={"accountsAdmin": accountsAdmin})

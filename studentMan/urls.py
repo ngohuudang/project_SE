@@ -26,7 +26,9 @@ urlpatterns = [
     path("themGV/", views.themGV, name='themGV'),
     path("themHS/", views.tiepNhanHS, name='tiepNhanHS'),
 
-    path("danhsachtaikhoan/", views.dsTaiKhoan, name = 'dsTaiKhoan'),
+    path("danhsachtaikhoanHS", views.dsTaiKhoanHS, name = 'dsTaiKhoanHS'),
+    path("danhsachtaikhoanGV", views.dsTaiKhoanGV, name = 'dsTaiKhoanGV'),
+    path("danhsachtaikhoanAdmin", views.dsTaiKhoanAdmin, name = 'dsTaiKhoanAdmin'),
     path("danhsachlop/", views.dsLop, name='dsLop'),
     path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
     path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
