@@ -6,7 +6,6 @@ from django.forms import *
 from .report import *
 from datetime import datetime
 from .decorators import unauthenticated_user, allowed_users
-import numpy as np
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -284,9 +283,13 @@ def traCuu(request,age_id):
         students.append(student)
         subjects_in_year = set([mark.subject for mark in marks_in_year])
         m = [trungBinhMon(subject, student) for subject in subjects_in_year]
-        avg = np.mean(np.array(m), axis=0)
-        avgMarks1.append(avg[0])
-        avgMarks2.append(avg[1])
+        s1 =0
+        s2 = 0
+        for i in m:
+            s1+= i[0]
+            s2 += i[1]
+        avgMarks1.append(s1/len(m))
+        avgMarks2.append(s2/len(m))
         for c in student.classOfSchool.all():
             if c.year == year:
                 classOfSchool.append(c)
