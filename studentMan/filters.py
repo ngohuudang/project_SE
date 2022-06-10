@@ -23,7 +23,7 @@ class MarkFilter(django_filters.FilterSet):
     for mark in Mark.objects.all():
         for c in mark.student.classOfSchool.filter(year = mark.subject.year):
             class_list.append(c)
-    class_choices = [(c, c) for c in set(class_list)]
+    class_choices = [(c, c.classId) for c in set(class_list)]
     classOfSchool = ChoiceFilter(
         label='',
         choices=class_choices,
@@ -100,7 +100,7 @@ class ClassFilter(django_filters.FilterSet):
         for c in student.classOfSchool.all():
             class_list.append(c)
             year_list.append(c.year.year)
-    class_choices = [(c, c) for c in set(class_list)]
+    class_choices = [(c, c.classId) for c in set(class_list)]
     classOfSchool = ChoiceFilter(
         label='',
         choices=class_choices,

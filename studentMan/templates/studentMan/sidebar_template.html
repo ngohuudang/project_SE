@@ -26,7 +26,7 @@
             </li>
             <li>
                 {% url 'admin_home' as admin_home %}
-                <a href="{{admin_home}}" class="{% if admin_home == request.path %} active {% endif %}">
+                <a href="{{ admin_home }}" class="{% if admin_home == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Trang chủ
@@ -46,15 +46,17 @@
                 <ul class="collapse list-unstyled" id="accountSubmenu">
                     <li>
                         {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
-                        <a href="{{tiep_nhan_hoc_sinh}}" class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
+                        <a href="{{ tiep_nhan_hoc_sinh }}"
+                           class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
                     </li>
                     <li>
                         {% url 'themGV' as them_tk_GV %}
-                        <a href="{{them_tk_GV}}" class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo viên</a>
+                        <a href="{{ them_tk_GV }}" class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo
+                            viên</a>
                     </li>
                     <li>
                         {% url 'themAdmin' as them_tk_Admin %}
-                        <a href="{{them_tk_Admin}}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
+                        <a href="{{ them_tk_Admin }}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
                     </li>
                 </ul>
             </li>
@@ -69,15 +71,19 @@
                 <ul class="collapse list-unstyled" id="listAccountSubmenu">
                     <li>
                         {% url 'dsTaiKhoanHS' as danh_sach_tai_khoan_hoc_sinh %}
-                        <a href="{{danh_sach_tai_khoan_hoc_sinh}}" class="{% if danh_sach_tai_khoan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
+                        <a href="{{ danh_sach_tai_khoan_hoc_sinh }}"
+                           class="{% if danh_sach_tai_khoan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
                     </li>
                     <li>
                         {% url 'dsTaiKhoanGV' as danh_sach_tai_khoan_giao_vien %}
-                        <a href="{{danh_sach_tai_khoan_giao_vien}}" class="{% if danh_sach_tai_khoan_giao_vien == request.path %} active {% endif %}">Giáo viên</a>
+                        <a href="{{ danh_sach_tai_khoan_giao_vien }}"
+                           class="{% if danh_sach_tai_khoan_giao_vien == request.path %} active {% endif %}">Giáo
+                            viên</a>
                     </li>
                     <li>
                         {% url 'dsTaiKhoanAdmin' as danh_sach_tai_khoan_admin %}
-                        <a href="{{danh_sach_tai_khoan_admin}}" class="{% if danh_sach_tai_khoan_admin == request.path %} active {% endif %}">Admin</a>
+                        <a href="{{ danh_sach_tai_khoan_admin }}"
+                           class="{% if danh_sach_tai_khoan_admin == request.path %} active {% endif %}">Admin</a>
                     </li>
                 </ul>
             </li>
@@ -86,17 +92,18 @@
 
             <li>
                 {% url 'dsLop' as dsLop %}
-                <a href="{{dsLop}}" class="{% if dsLop == request.path %} active {% endif %}">
+                <a href="{{ dsLop }}" class="{% if dsLop == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Danh sách lớp
                     </span>
                 </a>
             </li>
-            
+
             <li>
                 {% url 'chonNienKhoaTraCuu' as chonNienKhoaTraCuu %}
-                <a href="{{chonNienKhoaTraCuu}}" class="{% if chonNienKhoaTraCuu == request.path %} active {% endif %}">
+                <a href="{{ chonNienKhoaTraCuu }}"
+                   class="{% if chonNienKhoaTraCuu == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Tra cứu học sinh
@@ -106,8 +113,8 @@
 
             <li>
                 {% url 'bangDiem' as bangDiem %}
-                <a href="{{bangDiem}}"
-                    class="{% if bangDiem == request.path %} active {% endif %}">
+                <a href="{{ bangDiem }}"
+                   class="{% if bangDiem == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Bảng điểm
@@ -124,32 +131,32 @@
                 </a>
                 <ul class="collapse list-unstyled" id="summarySubmenu">
                     <li>
-                        {% url 'baoCaoMonHoc' as mon_hoc %}
-                        <a href="{{mon_hoc}}" class="{% if mon_hoc == request.path %} active {% endif %}">Môn học</a>
+                        {% url 'baoCaoMH' as mon_hoc %}
+                        <a href="{{ mon_hoc }}" class="{% if mon_hoc == request.path %} active {% endif %}">Môn học</a>
                     </li>
                     <li>
                         {% url 'baoCaoHocKi' as hoc_ki %}
-                        <a href="{{hoc_ki}}" class="{% if hoc_ki == request.path %} active {% endif %}">Học kì</a>
+                        <a href="{{ hoc_ki }}" class="{% if hoc_ki == request.path %} active {% endif %}">Học kì</a>
                     </li>
                 </ul>
             </li>
-            
+
             <div class="sidebar-content"><p>Qui định</p></div>
 
             <li class="nav-item">
                 {% url 'quanLiTuoi' as quan_li_do_tuoi %}
-                <a href="{{quan_li_do_tuoi}}"
-                    class="{% if quan_li_do_tuoi == request.path%} active {% endif %}">
+                <a href="{{ quan_li_do_tuoi }}"
+                   class="{% if quan_li_do_tuoi == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Độ tuổi
                     </span>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 {% url 'quanLiLop' as quan_li_lop_hoc %}
-                <a href="{{quan_li_lop_hoc}}" class="{% if quan_li_lop_hoc == request.path %} active {% endif %}">
+                <a href="{{ quan_li_lop_hoc }}" class="{% if quan_li_lop_hoc == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Lớp học
@@ -159,8 +166,8 @@
 
             <li class="nav-item">
                 {% url 'quanLiMon' as quan_li_mon_hoc %}
-                <a href="{{quan_li_mon_hoc}}"
-                    class="{% if quan_li_mon_hoc == request.path %} active {% endif %}">
+                <a href="{{ quan_li_mon_hoc }}"
+                   class="{% if quan_li_mon_hoc == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Môn học

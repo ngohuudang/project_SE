@@ -66,7 +66,7 @@ class ClassOfSchool(models.Model):
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.classId
+        return self.classId+ '_'+ self.year.year
 
 
 class Subject(models.Model):

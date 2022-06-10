@@ -200,7 +200,7 @@ class userUpdateForm(forms.ModelForm):
         fields = ('name', 'dateOfBirth', 'sex', 'phone', 'email', 'address')
 
 
-class updateAdminForm(forms.ModelForm):
+class updateCustomUserForm(forms.ModelForm):
     username = forms.CharField(label="",widget=forms.TextInput(
         attrs={'id':"username_user", 'class':"form-control"
     }))
@@ -234,3 +234,15 @@ class updateAdminForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
+
+
+class ClassTeacherForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ClassTeacherForm, self).__init__(*args, **kwargs)
+        self.fields['subject'].required = False
+        self.fields['classOfSchool'].required = False
+        self.fields['subject'].widget.attrs.update({'class': 'form-select'})
+        self.fields['classOfSchool'].widget.attrs.update({'class': 'form-select'})
+    class Meta:
+        model = Teacher
+        fields = ['subject', 'classOfSchool']
