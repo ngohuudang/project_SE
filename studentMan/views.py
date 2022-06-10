@@ -185,10 +185,9 @@ def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html',context=context)
 
 
-def dsTaiKhoan(request):
-    return render(request, 'admin_template/dsTaiKhoan.html')
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def dsLop(request):
     students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
@@ -199,6 +198,8 @@ def dsLop(request):
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def chonNienKhoaLop(request):
     form = YearForm()
     age = Age.objects.all()
@@ -208,7 +209,8 @@ def chonNienKhoaLop(request):
     }
     return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def lapDSLop(request,age_id):
     year = Age.objects.get(id =age_id)
     student_with_year = []
@@ -254,6 +256,8 @@ def trungBinhMon(subject, student):
     return avgMarks1, avgMarks2
 
 
+@login_required(login_url='login')
+@allowed_users(roles=['1','2'])
 def chonNienKhoaTraCuu(request):
     form = YearForm()
     age = Age.objects.all()
@@ -263,6 +267,8 @@ def chonNienKhoaTraCuu(request):
     }
     return render(request, 'admin_template/chonNienKhoaTraCuu.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(roles=['1','2'])
 def traCuu(request,age_id):
     year = Age.objects.get(id =age_id)
     marks = Mark.objects.filter(subject__year= year)
@@ -305,7 +311,7 @@ def bangDiem(request):
     }
     return render(request, 'admin_template/bangDiem.html', context=context)
 
-
+@login_required(login_url='login')
 def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
     all_classes = Subject_Report().remove_duplicate(ClassOfSchool.objects.all())
     subjects = Subject.objects.all()
@@ -322,13 +328,14 @@ def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
                'subject': mon}
     return render(request, 'admin_template/baoCaoMonHoc.html', context)
 
-
+@login_required(login_url='login')
 def baoCaoMH(request):
     years = Age.objects.all()
     current_year = years.aggregate(Max('year'))
     return baoCaoMonHoc(request, '---', '---', 1, current_year['year__max'])
 
 @unauthenticated_user
+@login_required(login_url='login')
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
     all_classes = Semester_Report().remove_duplicate(ClassOfSchool.objects.all())
     reports = Semester_Report().report_to_show(request.user.username, lop, hocKy, nienKhoa)
