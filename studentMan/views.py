@@ -398,16 +398,20 @@ def capNhatTuoi(request, age_id):
             year = form.cleaned_data.get('year')
             max_age = form.cleaned_data.get('max_age')
             min_age = form.cleaned_data.get('min_age')
-            try:
-                Year = Age.objects.get(id=age.id)
-                Year.year = year
-                Year.max_age = max_age
-                Year.min_age = min_age
-                Year.save()
-                messages.success(request, "Cập nhật thành công")
-                return redirect(reverse('quanLiTuoi'))
-            except Exception as e:
-                messages.error(request, "Could Not Update " + str(e))
+            if max_age < min_age:
+                messages.error(request, "Could Not Update")
+                return render(request, "admin_template/capNhatTuoi.html", context)
+            else:
+                try:
+                    Year = Age.objects.get(id=age.id)
+                    Year.year = year
+                    Year.max_age = max_age
+                    Year.min_age = min_age
+                    Year.save()
+                    messages.success(request, "Cập nhật thành công")
+                    return redirect(reverse('quanLiTuoi'))
+                except Exception as e:
+                    messages.error(request, "Could Not Update " + str(e))
         else:
             messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
     else:
@@ -432,16 +436,20 @@ def themTuoi(request):
             year = form.cleaned_data.get('year')
             max_age = form.cleaned_data.get('max_age')
             min_age = form.cleaned_data.get('min_age')
-            try:
-                Year = Age()
-                Year.year = year
-                Year.max_age = max_age
-                Year.min_age = min_age
-                Year.save()
-                messages.success(request, "Thêm thành công")
-                return redirect(reverse('quanLiTuoi'))
-            except:
-                messages.error(request, "Không thể thêm")
+            if max_age < min_age:
+                messages.error(request, "Could Not Add")
+                render(request, 'admin_template/themTuoi.html', context)
+            else:
+                try:
+                    Year = Age()
+                    Year.year = year
+                    Year.max_age = max_age
+                    Year.min_age = min_age
+                    Year.save()
+                    messages.success(request, "Successfully Added")
+                    return redirect(reverse('quanLiTuoi'))
+                except:
+                    messages.error(request, "Could Not Add")
         else:
             messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themTuoi.html', context)
