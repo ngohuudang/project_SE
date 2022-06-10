@@ -45,7 +45,6 @@
                 <th>Điểm 15'</th>
                 <th>Điểm 1 tiết</th>
                 <th>Điểm cuối học kì</th>
-                <th>Điều chỉnh</th>
             </tr>
             {% for mark in marks %}
                 <tr>
@@ -54,9 +53,6 @@
                     <td>{{mark.markFifteen}}</td>
                     <td>{{mark.markOne}}</td>
                     <td>{{mark.markFinal}}</td>
-                    <td>
-                        <a href="{% url 'capNhatDiem' mark.id %}" class="btn btn-primary">Cập nhật</a>
-                    </td>
                 </tr>
             {% endfor %}
         </table>

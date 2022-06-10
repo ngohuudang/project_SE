@@ -71,7 +71,9 @@ urlpatterns = [
     path("subject/add", views.themMon, name='themMon'),
 
     #teacher
-
+    path("bangdiemGV/", views.bangDiemGV, name='bangDiemGV'),
+    path("bangdiemGV/<str:lop>/<int:hocKy>/<str:nienKhoa>", views.bangDiemGVFilter, name='bangDiemGVFilter'),
     #student
-    path("bangdiemHS/", views.bangDiemHS, name='bangdiemHS'),
+    path("bangdiemHS/", views.bangDiemHS, name='bangDiemHS'),
+    path("bangdiemHS/<str:lop>/<str:mon>/<int:hocKy>/<str:nienKhoa>", views.bangDiemHSFilter, name='bangDiemHSFilter'),
 ]

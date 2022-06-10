@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
 from datetime import datetime
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 import numpy as np
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
@@ -21,6 +21,7 @@ semester = 2
 # Create your views here.
 
 @login_required(login_url='login')
+@allowed_users(roles=['1'])
 def admin_home(request):
     total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
@@ -68,17 +69,18 @@ def capNhatTaiKhoan(request):
     return render(request, 'admin_template/capNhatTaiKhoan.html', {'profile_form': profile_form})
 
 
-
 class doiMatKhau(SuccessMessageMixin, PasswordChangeView):
     template_name = 'admin_template/capNhatMatKhau.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('capNhatTaiKhoan')
 
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def themAdmin(request):
     form = AdminForm(request.POST or None)
     context = {
@@ -111,6 +113,9 @@ def themAdmin(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themAdmin.html', context=context)
 
+
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def themGV(request):
     form = TeacherForm(request.POST or None)
     context = {
@@ -148,7 +153,8 @@ def themGV(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themGV.html', context=context)
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def tiepNhanHS(request):
     form = StudentForm(request.POST or None)
     context = {
@@ -164,7 +170,6 @@ def tiepNhanHS(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-            # classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
                 user = CustomUser.objects._create_user(
                     username = username, password= password, name = name, role ='3',
@@ -172,11 +177,6 @@ def tiepNhanHS(request):
                     sex = sex, email = email, phone = phone, address = address)
                 student = Student(user = user)
                 student.save()
-                # c = ClassOfSchool.objects.get(classId = classOfSchool)
-                # student.classOfSchool.add(c)
-                # student.save()
-                # for subject in Subject.objects.all():
-                #     c.year.year
                 messages.success(request, "Thêm thành công")
             except:
                 messages.error(request, "Không thể thêm")
@@ -293,7 +293,8 @@ def traCuu(request,age_id):
     }
     return render(request, 'admin_template/traCuu.html', context=context)
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def bangDiem(request):
     marks = Mark.objects.all()
     myFilter = MarkFilter(request.GET, queryset=marks)
@@ -303,37 +304,6 @@ def bangDiem(request):
         'myFilter': myFilter,
     }
     return render(request, 'admin_template/bangDiem.html', context=context)
-
-
-def capNhatDiem(request, mark_id):
-    mark = get_object_or_404(Mark, id=mark_id)
-    form = transcriptForm(request.POST or None, instance=mark)
-    context = {
-        'form': form,
-        'mark_id': mark_id,
-        'page_title': 'capNhatDiem'
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            markFifteen = form.cleaned_data.get('markFifteen')
-            markOne = form.cleaned_data.get('markOne')
-            markFinal = form.cleaned_data.get('markFinal')
-
-            try:
-                mark = Mark.objects.get(id=mark.id)
-                mark.markFifteen = markFifteen
-                mark.markOne = markOne
-                mark.markFinal = markFinal
-                mark.save()
-                messages.success(request, "Cập nhật thành công")
-                return redirect(reverse('bangDiem'))
-            except Exception as e:
-                messages.error(request, "Could Not Update " + str(e))
-        else:
-            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
-    else:
-        return render(request, "admin_template/capNhatDiem.html", context)
-
 
 
 def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
@@ -474,12 +444,17 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            ClassId = form.cleaned_data.get('ClassId')
+            classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
+            print(classId)
+            if len(classId) > 10:
+                messages.error(request, "Tên lớp quá dài")
+            elif len(classId) ==0:
+                messages.error(request, "Tên lớp quá ngắn")
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.ClassId = ClassId
+                Class.ClassId = classId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
@@ -521,45 +496,6 @@ def themLop(request):
                 return redirect(reverse('quanLiLop'))
             except:
                 messages.error(request, "Không thể thêm")
-        else:
-            messages.error(request, "Lỗi định dạng")
-    return render(request, 'admin_template/themLop.html', context)
-
-def themLop(request):
-    classList = {'10A1', '10A2', '10A3', '10A4', '11A1', '11A2', '11A3', '12A1', '12A2'}
-    classes = ClassOfSchool.objects.all()
-    yearFilter = YearFilter(request.GET, queryset=classes)
-    classes = yearFilter.qs
-    check = False
-    form = classForm(request.POST or None)
-    context = {
-        'form': form,
-        'page_title': 'themLop'
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            classId = form.cleaned_data.get('classId')
-            year = form.cleaned_data.get('year')
-            max_number = form.cleaned_data.get('max_number')
-            if classId not in classList:
-                messages.error(request, "Không thể mở lớp này")
-            else:
-                for Class in classes:
-                    if classId == Class.classId and year == Class.year:
-                        messages.error(request, "Lớp đã tồn tại")
-                        check = True
-                        break
-                if check == False:
-                    try:
-                        Class = ClassOfSchool()
-                        Class.classId = classId
-                        Class.year = year
-                        Class.max_number = max_number
-                        Class.save()
-                        messages.success(request, "Thêm thành công")
-                        return redirect(reverse('quanLiLop'))
-                    except:
-                        messages.error(request, "Không thể thêm")
         else:
             messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themLop.html', context)
@@ -828,35 +764,103 @@ def xoaTKAdmin(request,account_id):
     return redirect(reverse('dsTaiKhoanAdmin'))
 
 
-
 # Teacher
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
+    mark_query = []
+    classes = []
+    years = []
+    teacher = Teacher.objects.get(user = request.user)
+    for c in teacher.classOfSchool.all():
+        classes.append(c.classId) 
+        years.append(c.year)
+        mark_query.append(Mark.objects.filter(subject=teacher.subject).filter(student__classOfSchool__classId=c.classId))
+    marks = mark_query[0]
+    for i in range(1,len(mark_query)):
+        marks = marks | mark_query[i]
 
+    if lop != '---':
+        marks = marks.filter(student__classOfSchool__classId = lop)
+    if hocKy != '---':
+        marks = marks.filter(semester_mark = hocKy)
+    if nienKhoa != '---':
+        marks = marks.filter(subject__year__year = nienKhoa)
+
+    context = {
+        'marks': marks,
+        'classes': classes,
+        'years': years,
+        'current_class': lop,
+        'semester': hocKy,
+        'year': nienKhoa,
+    }
+    return render(request, 'teacher_template/bangDiemGV.html', context=context)
+
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def bangDiemGV(request):
+    return bangDiemGVFilter(request, '---', '---', '---')
+
+
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def capNhatDiem(request, mark_id):
+    mark = get_object_or_404(Mark, id=mark_id)
+    form = transcriptForm(request.POST or None, instance=mark)
+    context = {
+        'form': form,
+        'mark_id': mark_id,
+        'page_title': 'capNhatDiem'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            markFifteen = form.cleaned_data.get('markFifteen')
+            markOne = form.cleaned_data.get('markOne')
+            markFinal = form.cleaned_data.get('markFinal')
+
+            try:
+                mark = Mark.objects.get(id=mark.id)
+                mark.markFifteen = markFifteen
+                mark.markOne = markOne
+                mark.markFinal = markFinal
+                mark.save()
+                messages.success(request, "Cập nhật thành công")
+                return redirect(reverse('bangDiem'))
+            except Exception as e:
+                messages.error(request, "Không thể cập nhật " + str(e))
+        else:
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
+    else:
+        return render(request, "teacher_template/capNhatDiem.html", context)
 
 # Student
 
-def bangDiem(request):
-    marks = Mark.objects.all()
-    myFilter = MarkFilter(request.GET, queryset=marks)
-    marks = myFilter.qs
+def bangDiemHSFilter(request, lop, mon, hocKy, nienKhoa):
+    marks = Mark.objects.filter(student__user=request.user)
+    if lop != '---':
+        marks = marks.filter(student__classOfSchool__classId = lop)
+    if mon != '---':
+        marks = marks.filter(subject__name = mon)
+    if hocKy != '---':
+        marks = marks.filter(semester_mark = hocKy)
+    if nienKhoa != '---':
+        marks = marks.filter(subject__year__year = nienKhoa)
+    student = Student.objects.get(user = request.user)
+    classes = [c.classId for c in student.classOfSchool.all()]
+    subjects = set([ m.subject for m in marks])
+    years = [c.year for c in student.classOfSchool.all()]
     context = {
         'marks': marks,
-        'myFilter': myFilter,
+        'classes': classes,
+        'subjects': subjects,
+        'years': years,
+        'current_class': lop,
+        'semester': hocKy,
+        'year': nienKhoa,
+        'subject': mon,
     }
-    return render(request, 'admin_template/bangDiem.html', context=context)
-
+    return render(request, 'student_template/bangDiemHS.html', context=context)
 
 def bangDiemHS(request):
-    print("bang diem hoc sinh")
-    print(request.user)
-    marks = Mark.objects.filter(student__user=request.user)
-    print(marks)
-
-    marks = marks.filter(student__classOfSchool__classId='10A1')
-    print(marks)
-    myFilter = MarkFilter(request.GET, queryset=marks)
-    marks = myFilter.qs
-    context = {
-        'marks': marks,
-        'myFilter': myFilter,
-    }
-    return render(request, 'student_template/bangDiem.html', context=context)
+    return bangDiemHSFilter(request, '---', '---', '---', '---')
