@@ -1,16 +1,29 @@
 {% load static %}
 
 <aside>
-    <!-- Brand Logo -->
     <div class="sidebar-header">
         <a href="{% url 'admin_home' %}" class="brand-link">
             <h4 class="">Quản lí học sinh</h4>
         </a>
     </div>
-
     <!-- Sidebar Menu -->
     <nav>
         <ul class="list-unstyled components">
+            <li class="info">
+                <a href="#profileMunu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle mb-2">
+                    <i class="nav-icon fas fa-user"></i>
+                    Tài khoản: {{user}}
+                </a>
+                <ul class="collapse list-unstyled" id="profileMunu">
+                    <li>
+                        {% url 'capNhatTaiKhoan' as capNhatTaiKhoan %}
+                        <a href="{{capNhatTaiKhoan}}">Chỉnh sửa thông tin</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 {% url 'admin_home' as admin_home %}
                 <a href="{{admin_home}}" class="{% if admin_home == request.path %} active {% endif %}">
@@ -36,20 +49,37 @@
                         <a href="{{tiep_nhan_hoc_sinh}}" class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
                     </li>
                     <li>
-                        {% url 'lapDSLop' as lapDSLop %}
-                        <a href="{{lapDSLop}}" class="{% if lapDSLop == request.path %} active {% endif %}">Giáo viên</a>
+                        {% url 'themGV' as them_tk_GV %}
+                        <a href="{{them_tk_GV}}" class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo viên</a>
+                    </li>
+                    <li>
+                        {% url 'themAdmin' as them_tk_Admin %}
+                        <a href="{{them_tk_Admin}}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
                     </li>
                 </ul>
             </li>
 
             <li>
-                {% url 'admin_notify_staff' as admin_notify_staff %}
-                <a href="{{admin_notify_staff}}" class="{% if admin_notify_staff == request.path %} active {% endif %}">
+                <a href="#listAccountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Hệ thống
                     </span>
                 </a>
+                <ul class="collapse list-unstyled" id="listAccountSubmenu">
+                    <li>
+                        {% url 'dsTaiKhoanHS' as danh_sach_tai_khoan_hoc_sinh %}
+                        <a href="{{danh_sach_tai_khoan_hoc_sinh}}" class="{% if danh_sach_tai_khoan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
+                    </li>
+                    <li>
+                        {% url 'dsTaiKhoanGV' as danh_sach_tai_khoan_giao_vien %}
+                        <a href="{{danh_sach_tai_khoan_giao_vien}}" class="{% if danh_sach_tai_khoan_giao_vien == request.path %} active {% endif %}">Giáo viên</a>
+                    </li>
+                    <li>
+                        {% url 'dsTaiKhoanAdmin' as danh_sach_tai_khoan_admin %}
+                        <a href="{{danh_sach_tai_khoan_admin}}" class="{% if danh_sach_tai_khoan_admin == request.path %} active {% endif %}">Admin</a>
+                    </li>
+                </ul>
             </li>
 
             <div class="sidebar-content"><p>Thông tin/Điểm</p></div>
@@ -65,8 +95,8 @@
             </li>
             
             <li>
-                {% url 'traCuu' as tra_cuu_hoc_sinh %}
-                <a href="{{tra_cuu_hoc_sinh}}" class="{% if tra_cuu_hoc_sinh == request.path %} active {% endif %}">
+                {% url 'chonNienKhoaTraCuu' as chonNienKhoaTraCuu %}
+                <a href="{{chonNienKhoaTraCuu}}" class="{% if chonNienKhoaTraCuu == request.path %} active {% endif %}">
                     <i class="nav-icon fas fa-th"></i>
                     <span>
                         Tra cứu học sinh
@@ -137,9 +167,6 @@
                     </span>
                 </a>
             </li>
-        <li>
-            <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
-        </li>
         </ul>
     </nav>
 </aside>
