@@ -3,18 +3,19 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-
+    #admin
+    path("", views.loginPage, name='login'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
     path('reset_password/',
-            auth_views.PasswordResetView.as_view(),
-            name='reset_password'),
+         auth_views.PasswordResetView.as_view(),
+         name='reset_password'),
     path('reset_password_sent/',
-            auth_views.PasswordResetDoneView.as_view(),
-            name='password_reset_done'),
+         auth_views.PasswordResetDoneView.as_view(),
+         name='password_reset_done'),
     path('reset/<uidb64>/<token>/',
-            auth_views.PasswordResetConfirmView.as_view(),
-            name='password_reset_confirm'),
+         auth_views.PasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
     path('reset_password_complete/',
             auth_views.PasswordResetCompleteView.as_view(),
             name='password_reset_complete'),
@@ -49,7 +50,8 @@ urlpatterns = [
     path("bangdiem/", views.bangDiem, name='bangDiem'),
     path("bangdiem/capnhat/<int:mark_id>", views.capNhatDiem, name='capNhatDiem'),
 
-    path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMonHoc'),
+    path("baocaomonhoc/", views.baoCaoMH, name='baoCaoMH'),
+    path("baocaomonhoc/<str:lop>/<str:mon>/<int:hocKy>/<str:nienKhoa>", views.baoCaoMonHoc, name='baoCaoMonHoc'),
     path("baocaohocki/", views.baoCaoHK, name='baoCaoHocKi'),
     path("baocaohocki/<str:lop>/<str:hocKy>/<str:nienKhoa>/", views.baoCaoHocKy, name='baoCaoHK'),
 
@@ -67,4 +69,11 @@ urlpatterns = [
     path("quanlimon/capnhat/<int:subject_id>", views.capNhatMon, name='capNhatMon'),
     path("subject/delete/<int:subject_id>", views.xoaMon, name='xoaMon'),
     path("subject/add", views.themMon, name='themMon'),
+
+    #teacher
+    path("bangdiemGV/", views.bangDiemGV, name='bangDiemGV'),
+    path("bangdiemGV/<str:lop>/<int:hocKy>/<str:nienKhoa>", views.bangDiemGVFilter, name='bangDiemGVFilter'),
+    #student
+    path("bangdiemHS/", views.bangDiemHS, name='bangDiemHS'),
+    path("bangdiemHS/<str:lop>/<str:mon>/<int:hocKy>/<str:nienKhoa>", views.bangDiemHSFilter, name='bangDiemHSFilter'),
 ]

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
 from datetime import datetime
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 import numpy as np
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
@@ -13,12 +13,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .filters import *
 from .forms import *
 from .models import *
+from .report_child_classes import *
+
 semester = 2
 
 
 # Create your views here.
 
 @login_required(login_url='login')
+@allowed_users(roles=['1'])
 def admin_home(request):
     total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
@@ -66,17 +69,18 @@ def capNhatTaiKhoan(request):
     return render(request, 'admin_template/capNhatTaiKhoan.html', {'profile_form': profile_form})
 
 
-
 class doiMatKhau(SuccessMessageMixin, PasswordChangeView):
     template_name = 'admin_template/capNhatMatKhau.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('capNhatTaiKhoan')
 
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def themAdmin(request):
     form = AdminForm(request.POST or None)
     context = {
@@ -109,6 +113,9 @@ def themAdmin(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themAdmin.html', context=context)
 
+
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def themGV(request):
     form = TeacherForm(request.POST or None)
     context = {
@@ -146,10 +153,8 @@ def themGV(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themGV.html', context=context)
 
-
-# def khoiTaoDiem(student, classOfSchool):
-#     student.
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def tiepNhanHS(request):
     form = StudentForm(request.POST or None)
     context = {
@@ -165,7 +170,6 @@ def tiepNhanHS(request):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-            # classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
                 user = CustomUser.objects._create_user(
                     username = username, password= password, name = name, role ='3',
@@ -173,11 +177,6 @@ def tiepNhanHS(request):
                     sex = sex, email = email, phone = phone, address = address)
                 student = Student(user = user)
                 student.save()
-                # c = ClassOfSchool.objects.get(classId = classOfSchool)
-                # student.classOfSchool.add(c)
-                # student.save()
-                # for subject in Subject.objects.all():
-                #     c.year.year
                 messages.success(request, "Thêm thành công")
             except:
                 messages.error(request, "Không thể thêm")
@@ -186,10 +185,9 @@ def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html',context=context)
 
 
-def dsTaiKhoan(request):
-    return render(request, 'admin_template/dsTaiKhoan.html')
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def dsLop(request):
     students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
@@ -200,6 +198,8 @@ def dsLop(request):
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def chonNienKhoaLop(request):
     form = YearForm()
     age = Age.objects.all()
@@ -209,7 +209,8 @@ def chonNienKhoaLop(request):
     }
     return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def lapDSLop(request,age_id):
     year = Age.objects.get(id =age_id)
     student_with_year = []
@@ -255,6 +256,8 @@ def trungBinhMon(subject, student):
     return avgMarks1, avgMarks2
 
 
+@login_required(login_url='login')
+@allowed_users(roles=['1','2'])
 def chonNienKhoaTraCuu(request):
     form = YearForm()
     age = Age.objects.all()
@@ -264,6 +267,8 @@ def chonNienKhoaTraCuu(request):
     }
     return render(request, 'admin_template/chonNienKhoaTraCuu.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(roles=['1','2'])
 def traCuu(request,age_id):
     year = Age.objects.get(id =age_id)
     marks = Mark.objects.filter(subject__year= year)
@@ -294,7 +299,8 @@ def traCuu(request,age_id):
     }
     return render(request, 'admin_template/traCuu.html', context=context)
 
-
+@login_required(login_url='login')
+@allowed_users(roles=['1'])
 def bangDiem(request):
     marks = Mark.objects.all()
     myFilter = MarkFilter(request.GET, queryset=marks)
@@ -305,79 +311,49 @@ def bangDiem(request):
     }
     return render(request, 'admin_template/bangDiem.html', context=context)
 
+@login_required(login_url='login')
+def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
+    all_classes = Subject_Report().remove_duplicate(ClassOfSchool.objects.all())
+    subjects = Subject.objects.all()
+    years = Age.objects.all()
+    id = request.user.username
+    reports = Subject_Report().report_to_show(id, lop, mon, hocKy, nienKhoa)
+    context = {'reports': reports,
+               'classes': all_classes,
+               'current_class': lop,
+               'semester': hocKy,
+               'years': years,
+               'year': nienKhoa,
+               'subjects': subjects,
+               'subject': mon}
+    return render(request, 'admin_template/baoCaoMonHoc.html', context)
 
-def capNhatDiem(request, mark_id):
-    mark = get_object_or_404(Mark, id=mark_id)
-    form = transcriptForm(request.POST or None, instance=mark)
-    context = {
-        'form': form,
-        'mark_id': mark_id,
-        'page_title': 'capNhatDiem'
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            markFifteen = form.cleaned_data.get('markFifteen')
-            markOne = form.cleaned_data.get('markOne')
-            markFinal = form.cleaned_data.get('markFinal')
-
-            try:
-                mark = Mark.objects.get(id=mark.id)
-                mark.markFifteen = markFifteen
-                mark.markOne = markOne
-                mark.markFinal = markFinal
-                mark.save()
-                messages.success(request, "Cập nhật thành công")
-                return redirect(reverse('bangDiem'))
-            except Exception as e:
-                messages.error(request, "Could Not Update " + str(e))
-        else:
-            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
-    else:
-        return render(request, "admin_template/capNhatDiem.html", context)
-
-
+@login_required(login_url='login')
 def baoCaoMH(request):
-    return render(request, 'admin_template/baoCaoMonHoc.html')
-
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoMonHoc(request, '---', '---', 1, current_year['year__max'])
 
 @unauthenticated_user
-# def baoCaoHocKy(request, lop, hocKy, nienKhoa):
-#     all_classes = ClassOfSchool.objects.all()
-#     id = request.user.username
-#     report = Report()
-#     report1 = [report.show(id, lop, hocKy, nienKhoa)]
-#     all_nienKhoa = Age.objects.all()
-#     context = {'reports': report1,
-#                'classes': all_classes,
-#                'lop': lop,
-#                'hocky': hocKy,
-#                'nienKhoa': nienKhoa,
-#                'all_nienKhoa': all_nienKhoa}
-
-#     return render(request, 'admin_template/baoCaoHocKi.html', context)
-
+@login_required(login_url='login')
 def baoCaoHocKy(request, lop, hocKy, nienKhoa):
-    all_classes = ClassOfSchool.objects.all()
-    # print('all_classes',all_classes)
-    id = request.user.id
-    report = Report()
-    report1 = [report.show(id, lop, hocKy, nienKhoa)]
+    all_classes = Semester_Report().remove_duplicate(ClassOfSchool.objects.all())
+    reports = Semester_Report().report_to_show(request.user.username, lop, hocKy, nienKhoa)
     all_nienKhoa = Age.objects.all()
-    context = {
-        'reports': report1,
-        'classes': all_classes,
-        'lop': lop,
-        'hocky': hocKy,
-        'nienKhoa': nienKhoa,
-        'all_nienKhoa': all_nienKhoa
-    }
+    context = {'reports': reports,
+               'classes': all_classes,
+               'lop': lop,
+               'hocky': hocKy,
+               'nienKhoa': nienKhoa,
+               'all_nienKhoa': all_nienKhoa}
 
     return render(request, 'admin_template/baoCaoHocKi.html', context)
 
 
 def baoCaoHK(request):
-    return baoCaoHocKy(request, '---', '1', '2021-2022')
-
+    years = Age.objects.all()
+    current_year = years.aggregate(Max('year'))
+    return baoCaoHocKy(request, "---", 1, current_year['year__max'])
 
 def quanLiTuoi(request):
     age = Age.objects.all()
@@ -475,12 +451,17 @@ def capNhatLop(request, class_id):
     }
     if request.method == 'POST':
         if form.is_valid():
-            ClassId = form.cleaned_data.get('ClassId')
+            classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
+            print(classId)
+            if len(classId) > 10:
+                messages.error(request, "Tên lớp quá dài")
+            elif len(classId) ==0:
+                messages.error(request, "Tên lớp quá ngắn")
             try:
                 Class = ClassOfSchool.objects.get(id=Class.id)
-                Class.ClassId = ClassId
+                Class.ClassId = classId
                 Class.year = year
                 Class.max_number = max_number
                 Class.save()
@@ -583,6 +564,9 @@ def themMon(request):
     if request.method == 'POST':
         if form.is_valid():
             SubjectID = form.cleaned_data.get('SubjectID')
+            if len(SubjectID) > 10 : 
+                messages.error(request, "Quá dài")
+                return render(request, 'admin_template/themMon.html', context)
             name = form.cleaned_data.get('name')
             approved_mark = form.cleaned_data.get('approved_mark')
             year = form.cleaned_data.get('year')
@@ -614,21 +598,6 @@ def themMon(request):
     return render(request, 'admin_template/themMon.html', context)
 
 
-# Teacher
-
-
-# Student
-
-def student_bangDiem(request):
-    student = get_object_or_404(Student, user=request.user)
-    if request.method != 'POST':
-        classOfSchool = get_object_or_404(ClassOfSchool, classId=student.classOfSchool.classId)
-
-        context = {
-            # 'subjects': Subject.objects.filter(course=course),
-            # 'page_title': 'View Attendance'
-        }
-        return render(request, 'admin_template/bangDiem.html', context)
 
 def dsTaiKhoanHS(request):
     accountsStudent = Student.objects.all()
@@ -640,7 +609,40 @@ def dsTaiKhoanHS(request):
     return render(request, 'admin_template/dsTaiKhoanHS.html', context=context)
 
 def capNhatTKHS(request,account_id):
-    return render(request, 'admin_template/dsTaiKhoanHS.html')
+    account = get_object_or_404(Student, id=account_id)
+    user = get_object_or_404(CustomUser, id=account.user.id)
+    form = updateCustomUserForm(request.POST or None, instance=user)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            try:
+                account = Student.objects.get(id=account.id)
+                user = CustomUser.objects.get(id = account.user.id)
+                user.username = username
+                user.name = name
+                user.dateOfBirth = dateOfBirth
+                user.sex = sex
+                user.email = email
+                user.phone = phone
+                user.address = address
+                user.save()
+                messages.success(request, "Cập nhật thành công")
+                return redirect(to='dsTaiKhoanHS')
+            except:
+                messages.error(request, "Không thể Không thể cập nhật")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    else:
+        return render(request, "admin_template/capNhatHS.html", context)
 
 def xoaTKHS(request,account_id):
     account = get_object_or_404(Student, id=account_id)
@@ -663,7 +665,51 @@ def dsTaiKhoanGV(request):
 
 
 def capNhatTKGV(request,account_id):
-    return render(request, 'admin_template/dsTaiKhoanGV.html')
+    account = get_object_or_404(Teacher, id=account_id)
+    user = get_object_or_404(CustomUser, id=account.user.id)
+    form = updateCustomUserForm(request.POST or None, instance=user)
+    formTeacher = ClassTeacherForm(request.POST or None, instance=account)
+    context = {
+        'form': form,
+        'formTeacher': formTeacher,
+    }
+    if request.method == 'POST':
+        print(form.is_valid(),formTeacher.is_valid())
+        if form.is_valid() and formTeacher.is_valid():
+            username = form.cleaned_data.get('username')
+            name = form.cleaned_data.get('name')
+            dateOfBirth = form.cleaned_data.get('dateOfBirth')
+            sex = form.cleaned_data.get('sex')
+            email = form.cleaned_data.get('email')
+            phone = form.cleaned_data.get('phone')
+            address = form.cleaned_data.get('address')
+            subject = formTeacher.cleaned_data.get('subject')
+            classOfSchool = formTeacher.cleaned_data.get('classOfSchool')
+            try:
+                account = Teacher.objects.get(id=account.id)
+                user = CustomUser.objects.get(id = account.user.id)
+                user.username = username
+                user.name = name
+                user.dateOfBirth = dateOfBirth
+                user.sex = sex
+                user.email = email
+                user.phone = phone
+                user.address = address
+                user.save()
+                if subject:
+                    account.subject = subject
+                account.save()
+                for c  in classOfSchool:
+                    account.classOfSchool.add(c)
+                account.save()
+                messages.success(request, "Cập nhật thành công")
+                return redirect(to='dsTaiKhoanGV')
+            except:
+                messages.error(request, "Không thể Không thể cập nhật")
+        else:
+            messages.error(request, "Dữ liệu không phù hợp")
+    else:
+        return render(request, "admin_template/capNhatGV.html", context)
 
 def xoaTKGV(request,account_id):
     account = get_object_or_404(Teacher, id=account_id)
@@ -683,17 +729,13 @@ def dsTaiKhoanAdmin(request):
 def capNhatTKAdmin(request,account_id):
     account = get_object_or_404(Admin, id=account_id)
     user = get_object_or_404(CustomUser, id=account.user.id)
-    print(account)
-    form = updateAdminForm(request.POST or None, instance=user)
+    form = updateCustomUserForm(request.POST or None, instance=user)
     context = {
         'form': form,
         'account_id': account_id,
     }
     if request.method == 'POST':
-        print('---------------post-----------------')
-        print(form.is_valid())
         if form.is_valid():
-            print('---------------valid-----------------')
             username = form.cleaned_data.get('username')
             name = form.cleaned_data.get('name')
             dateOfBirth = form.cleaned_data.get('dateOfBirth')
@@ -701,8 +743,6 @@ def capNhatTKAdmin(request,account_id):
             email = form.cleaned_data.get('email')
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
-            print('---------------valid-----------------')
-
             try:
                 account = Admin.objects.get(id=account.id)
                 user = CustomUser.objects.get(id = account.user.id)
@@ -715,12 +755,9 @@ def capNhatTKAdmin(request,account_id):
                 user.address = address
                 user.save()
                 messages.success(request, "Cập nhật thành công")
-                print("----------------a----------------------")
                 return redirect(to='dsTaiKhoanAdmin')
             except:
                 messages.error(request, "Không thể Không thể cập nhật")
-            # form.save()
-            # messages.success(request, 'Cập nhật thành công')
         else:
             messages.error(request, "Dữ liệu không phù hợp")
     else:
@@ -732,3 +769,105 @@ def xoaTKAdmin(request,account_id):
     account.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanAdmin'))
+
+
+# Teacher
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
+    mark_query = []
+    classes = []
+    years = []
+    teacher = Teacher.objects.get(user = request.user)
+    for c in teacher.classOfSchool.all():
+        classes.append(c.classId) 
+        years.append(c.year)
+        mark_query.append(Mark.objects.filter(subject=teacher.subject).filter(student__classOfSchool__classId=c.classId))
+    marks = mark_query[0]
+    for i in range(1,len(mark_query)):
+        marks = marks | mark_query[i]
+
+    if lop != '---':
+        marks = marks.filter(student__classOfSchool__classId = lop)
+    if hocKy != '---':
+        marks = marks.filter(semester_mark = hocKy)
+    if nienKhoa != '---':
+        marks = marks.filter(subject__year__year = nienKhoa)
+
+    context = {
+        'marks': marks,
+        'classes': classes,
+        'years': years,
+        'current_class': lop,
+        'semester': hocKy,
+        'year': nienKhoa,
+    }
+    return render(request, 'teacher_template/bangDiemGV.html', context=context)
+
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def bangDiemGV(request):
+    return bangDiemGVFilter(request, '---', '---', '---')
+
+
+@login_required(login_url='login')
+@allowed_users(roles=['2'])
+def capNhatDiem(request, mark_id):
+    mark = get_object_or_404(Mark, id=mark_id)
+    form = transcriptForm(request.POST or None, instance=mark)
+    context = {
+        'form': form,
+        'mark_id': mark_id,
+        'page_title': 'capNhatDiem'
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            markFifteen = form.cleaned_data.get('markFifteen')
+            markOne = form.cleaned_data.get('markOne')
+            markFinal = form.cleaned_data.get('markFinal')
+
+            try:
+                mark = Mark.objects.get(id=mark.id)
+                mark.markFifteen = markFifteen
+                mark.markOne = markOne
+                mark.markFinal = markFinal
+                mark.save()
+                messages.success(request, "Cập nhật thành công")
+                return redirect(reverse('bangDiem'))
+            except Exception as e:
+                messages.error(request, "Không thể cập nhật " + str(e))
+        else:
+            messages.error(request, "Hãy điều đầy đủ vào ô thông tin !!!")
+    else:
+        return render(request, "teacher_template/capNhatDiem.html", context)
+
+# Student
+
+def bangDiemHSFilter(request, lop, mon, hocKy, nienKhoa):
+    marks = Mark.objects.filter(student__user=request.user)
+    if lop != '---':
+        marks = marks.filter(student__classOfSchool__classId = lop)
+    if mon != '---':
+        marks = marks.filter(subject__name = mon)
+    if hocKy != '---':
+        marks = marks.filter(semester_mark = hocKy)
+    if nienKhoa != '---':
+        marks = marks.filter(subject__year__year = nienKhoa)
+    student = Student.objects.get(user = request.user)
+    classes = [c.classId for c in student.classOfSchool.all()]
+    subjects = set([ m.subject for m in marks])
+    years = [c.year for c in student.classOfSchool.all()]
+    context = {
+        'marks': marks,
+        'classes': classes,
+        'subjects': subjects,
+        'years': years,
+        'current_class': lop,
+        'semester': hocKy,
+        'year': nienKhoa,
+        'subject': mon,
+    }
+    return render(request, 'student_template/bangDiemHS.html', context=context)
+
+def bangDiemHS(request):
+    return bangDiemHSFilter(request, '---', '---', '---', '---')
