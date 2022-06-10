@@ -494,6 +494,11 @@ def xoaLop(request, class_id):
 
 
 def themLop(request):
+    classList = {'10A1', '10A2', '10A3', '10A4', '11A1', '11A2', '11A3', '12A1', '12A2'}
+    classes = ClassOfSchool.objects.all()
+    yearFilter = YearFilter(request.GET, queryset=classes)
+    classes = yearFilter.qs
+    check = False
     form = classForm(request.POST or None)
     context = {
         'form': form,
@@ -504,16 +509,25 @@ def themLop(request):
             classId = form.cleaned_data.get('classId')
             year = form.cleaned_data.get('year')
             max_number = form.cleaned_data.get('max_number')
-            try:
-                Class = ClassOfSchool()
-                Class.classId = classId
-                Class.year = year
-                Class.max_number = max_number
-                Class.save()
-                messages.success(request, "Thêm thành công")
-                return redirect(reverse('quanLiLop'))
-            except:
-                messages.error(request, "Không thể thêm")
+            if classId not in classList:
+                messages.error(request, "Không thể mở lớp này")
+            else:
+                for Class in classes:
+                    if classId == Class.classId and year == Class.year:
+                        messages.error(request, "Lớp đã tồn tại")
+                        check = True
+                        break
+                if check == False:
+                    try:
+                        Class = ClassOfSchool()
+                        Class.classId = classId
+                        Class.year = year
+                        Class.max_number = max_number
+                        Class.save()
+                        messages.success(request, "Thêm thành công")
+                        return redirect(reverse('quanLiLop'))
+                    except:
+                        messages.error(request, "Không thể thêm")
         else:
             messages.error(request, "Lỗi định dạng")
     return render(request, 'admin_template/themLop.html', context)
