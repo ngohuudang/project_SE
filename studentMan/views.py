@@ -13,6 +13,7 @@ from .filters import *
 from .forms import *
 from .models import *
 from .report_child_classes import *
+from django.db.models import Max
 
 semester = 2
 
@@ -78,8 +79,9 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
+@allowed_users(allowed_roles=['Admin'])
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
 def themAdmin(request):
     form = AdminForm(request.POST or None)
     context = {
@@ -98,9 +100,9 @@ def themAdmin(request):
             try:
                 admin = Admin()
                 user = CustomUser.objects.create_superuser(
-                    username = username, password= password, name = name,
-                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
-                    sex = sex, email = email, phone = phone, address = address)
+                    username=username, password=password, name=name,
+                    dateOfBirth=datetime.strptime(dateOfBirth, '%Y-%m-%d'),
+                    sex=sex, email=email, phone=phone, address=address)
                 user.save()
                 admin.user = user
                 admin.save()
@@ -113,8 +115,8 @@ def themAdmin(request):
     return render(request, 'admin_template/themAdmin.html', context=context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
 def themGV(request):
     form = TeacherForm(request.POST or None)
     context = {
@@ -134,14 +136,14 @@ def themGV(request):
             classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
                 user = CustomUser.objects.create_user(
-                    username = username, password= password, name = name, role ='2',
-                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
-                    sex = sex, email = email, phone = phone, address = address)
-                teacher = Teacher(user = user)
+                    username=username, password=password, name=name, role='2',
+                    dateOfBirth=datetime.strptime(dateOfBirth, '%Y-%m-%d'),
+                    sex=sex, email=email, phone=phone, address=address)
+                teacher = Teacher(user=user)
                 if subject:
                     teacher.subject = subject
                 teacher.save()
-                for c  in classOfSchool:
+                for c in classOfSchool:
                     teacher.classOfSchool.add(c)
                 teacher.save()
                 messages.success(request, "Thêm thành công")
@@ -152,8 +154,9 @@ def themGV(request):
             messages.error(request, "Dữ liệu không phù hợp")
     return render(request, 'admin_template/themGV.html', context=context)
 
+
+@allowed_users(allowed_roles=['Admin'])
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
 def tiepNhanHS(request):
     form = StudentForm(request.POST or None)
     context = {
@@ -171,22 +174,22 @@ def tiepNhanHS(request):
             address = form.cleaned_data.get('address')
             try:
                 user = CustomUser.objects._create_user(
-                    username = username, password= password, name = name, role ='3',
-                    dateOfBirth = datetime.strptime(dateOfBirth,'%Y-%m-%d'),
-                    sex = sex, email = email, phone = phone, address = address)
-                student = Student(user = user)
+                    username=username, password=password, name=name, role='3',
+                    dateOfBirth=datetime.strptime(dateOfBirth, '%Y-%m-%d'),
+                    sex=sex, email=email, phone=phone, address=address)
+                student = Student(user=user)
                 student.save()
                 messages.success(request, "Thêm thành công")
             except:
                 messages.error(request, "Không thể thêm")
         else:
             messages.error(request, "Dữ liệu không phù hợp")
-    return render(request, 'admin_template/tiepNhanHS.html',context=context)
+    return render(request, 'admin_template/tiepNhanHS.html', context=context)
 
 
 
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
+@allowed_users(roles=['Admin'])
 def dsLop(request):
     students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
@@ -197,8 +200,9 @@ def dsLop(request):
     }
     return render(request, 'admin_template/dsLop.html', context=context)
 
+
+@allowed_users(allowed_roles=['Admin'])
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
 def chonNienKhoaLop(request):
     form = YearForm()
     age = Age.objects.all()
@@ -208,21 +212,22 @@ def chonNienKhoaLop(request):
     }
     return render(request, 'admin_template/chonNienKhoaLop.html', context=context)
 
+
+@allowed_users(allowed_roles=['Admin'])
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
 def lapDSLop(request,age_id):
     year = Age.objects.get(id =age_id)
     student_with_year = []
     for student in Student.objects.all():
         for c in student.classOfSchool.all():
-            if c.year ==year:
+            if c.year == year:
                 student_with_year.append(student)
                 break
-    student_dont_with_year =[]
+    student_dont_with_year = []
     for student in Student.objects.all():
         if student not in student_with_year:
             student_dont_with_year.append(student)
-    form = CreateClassForm(request.POST, age_id = age_id)
+    form = CreateClassForm(request.POST, age_id=age_id)
 
     if request.method == 'POST':
         usernames = request.POST.getlist('username_class')
@@ -237,7 +242,7 @@ def lapDSLop(request,age_id):
                         student.classOfSchool.add(classOfSchool)
                         student.save()
                     messages.success(request, "Thêm thành công")
-                    return redirect(reverse('lapDSLop', kwargs={'age_id':age_id}))
+                    return redirect(reverse('lapDSLop', kwargs={'age_id': age_id}))
                 else:
                     messages.success(request, "Số lượng học sinh vượt quá qui định")
     context = {
@@ -246,8 +251,9 @@ def lapDSLop(request,age_id):
     }
     return render(request, 'admin_template/lapDS.html', context=context)
 
+
 def trungBinhMon(subject, student):
-    for mark in Mark.objects.filter(student = student).filter(subject = subject):
+    for mark in Mark.objects.filter(student=student).filter(subject=subject):
         if mark.semester_mark == '1':
             avgMarks1 = round((mark.markFifteen + 2 * mark.markOne + 3 * mark.markFinal) / 6, 2)
         else:
@@ -255,8 +261,8 @@ def trungBinhMon(subject, student):
     return avgMarks1, avgMarks2
 
 
+@allowed_users(allowed_roles=['Admin', 'Teacher'])
 @login_required(login_url='login')
-@allowed_users(roles=['1','2'])
 def chonNienKhoaTraCuu(request):
     form = YearForm()
     age = Age.objects.all()
@@ -266,8 +272,9 @@ def chonNienKhoaTraCuu(request):
     }
     return render(request, 'admin_template/chonNienKhoaTraCuu.html', context=context)
 
+
+@allowed_users(allowed_roles=['Admin', 'Teacher'])
 @login_required(login_url='login')
-@allowed_users(roles=['1','2'])
 def traCuu(request,age_id):
     year = Age.objects.get(id =age_id)
     marks = Mark.objects.filter(subject__year= year)
@@ -294,7 +301,7 @@ def traCuu(request,age_id):
             if c.year == year:
                 classOfSchool.append(c)
                 break
-    
+
     marks = zip(students, classOfSchool, avgMarks1, avgMarks2)
     context = {
         'marks': marks,
@@ -303,7 +310,7 @@ def traCuu(request,age_id):
     return render(request, 'admin_template/traCuu.html', context=context)
 
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
+@allowed_users(roles=['Admin'])
 def bangDiem(request):
     marks = Mark.objects.all()
     myFilter = MarkFilter(request.GET, queryset=marks)
@@ -330,6 +337,7 @@ def baoCaoMonHoc(request, lop, mon, hocKy, nienKhoa):
                'subjects': subjects,
                'subject': mon}
     return render(request, 'admin_template/baoCaoMonHoc.html', context)
+
 
 @login_required(login_url='login')
 def baoCaoMH(request):
@@ -358,12 +366,15 @@ def baoCaoHK(request):
     current_year = years.aggregate(Max('year'))
     return baoCaoHocKy(request, "---", 1, current_year['year__max'])
 
+
+@allowed_users(allowed_roles=['Admin'])
 def quanLiTuoi(request):
     age = Age.objects.all()
     context = {'age': age}
     return render(request, 'admin_template/quanLiTuoi.html', context=context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def capNhatTuoi(request, age_id):
     age = get_object_or_404(Age, id=age_id)
     form = ageForm(request.POST or None, instance=age)
@@ -397,6 +408,7 @@ def capNhatTuoi(request, age_id):
         return render(request, "admin_template/capNhatTuoi.html", context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def xoaTuoi(request, age_id):
     age = get_object_or_404(Age, id=age_id)
     age.delete()
@@ -404,6 +416,7 @@ def xoaTuoi(request, age_id):
     return redirect(reverse('quanLiTuoi'))
 
 
+@allowed_users(allowed_roles=['Admin'])
 def themTuoi(request):
     form = ageForm(request.POST or None)
     context = {
@@ -434,6 +447,7 @@ def themTuoi(request):
     return render(request, 'admin_template/themTuoi.html', context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def quanLiLop(request):
     classes = ClassOfSchool.objects.all()
     yearFilter = YearFilter(request.GET, queryset=classes)
@@ -445,6 +459,7 @@ def quanLiLop(request):
     return render(request, 'admin_template/quanLiLop.html', context=context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def capNhatLop(request, class_id):
     Class = get_object_or_404(ClassOfSchool, id=class_id)
     form = classForm(request.POST or None, instance=Class)
@@ -478,6 +493,7 @@ def capNhatLop(request, class_id):
         return render(request, "admin_template/capNhatLop.html", context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def xoaLop(request, class_id):
     Class = get_object_or_404(ClassOfSchool, id=class_id)
     Class.delete()
@@ -485,6 +501,7 @@ def xoaLop(request, class_id):
     return redirect(reverse('quanLiLop'))
 
 
+@allowed_users(allowed_roles=['Admin'])
 def themLop(request):
     form = classForm(request.POST or None)
     context = {
@@ -511,6 +528,7 @@ def themLop(request):
     return render(request, 'admin_template/themLop.html', context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def quanLiMon(request):
     subjects = Subject.objects.all()
     subjectWithYearFilter = SubjectWithYearFilter(request.GET, queryset=subjects)
@@ -522,6 +540,7 @@ def quanLiMon(request):
     return render(request, 'admin_template/quanLiMon.html', context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def capNhatMon(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     form = subjectForm(request.POST or None, instance=subject)
@@ -551,6 +570,7 @@ def capNhatMon(request, subject_id):
         return render(request, "admin_template/capNhatMon.html", context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def xoaMon(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     subject.delete()
@@ -558,6 +578,7 @@ def xoaMon(request, subject_id):
     return redirect(reverse('quanLiMon'))
 
 
+@allowed_users(allowed_roles=['Admin'])
 def themMon(request):
     form = subjectForm(request.POST or None)
     context = {
@@ -578,7 +599,7 @@ def themMon(request):
                 subject.SubjectID = SubjectID
                 subject.name = name
                 subject.approved_mark = approved_mark
-                subject.year = Age.objects.get(year = year)
+                subject.year = Age.objects.get(year=year)
                 subject.save()
                 # thêm điểm vào tất cả học sinh có trong hệ thống
                 students = Student.objects.all()
@@ -602,15 +623,20 @@ def themMon(request):
 
 
 
+
+@allowed_users(allowed_roles=['Admin'])
 def dsTaiKhoanHS(request):
     accountsStudent = Student.objects.all()
     formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsStudent]
-    accounts = zip(accountsStudent,formatDate)
+    accounts = zip(accountsStudent, formatDate)
     context = {
-            'accounts': accounts,
-        }
+        'accounts': accounts,
+    }
     return render(request, 'admin_template/dsTaiKhoanHS.html', context=context)
 
+
+
+@allowed_users(allowed_roles=['Admin'])
 def capNhatTKHS(request,account_id):
     account = get_object_or_404(Student, id=account_id)
     user = get_object_or_404(CustomUser, id=account.user.id)
@@ -647,12 +673,17 @@ def capNhatTKHS(request,account_id):
     else:
         return render(request, "admin_template/capNhatHS.html", context)
 
-def xoaTKHS(request,account_id):
+
+
+@allowed_users(allowed_roles=['Admin'])
+def xoaTKHS(request, account_id):
     account = get_object_or_404(Student, id=account_id)
     account.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanHS'))
 
+
+@allowed_users(allowed_roles=['Admin'])
 def dsTaiKhoanGV(request):
     accountsTeacher = Teacher.objects.all()
     formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsTeacher]
@@ -660,13 +691,14 @@ def dsTaiKhoanGV(request):
     for a in accountsTeacher:
         classes.append([c.classId for c in a.classOfSchool.all()])
 
-    accounts = zip(accountsTeacher,formatDate, classes)
+    accounts = zip(accountsTeacher, formatDate, classes)
     context = {
-            'accounts': accounts,
-        }
+        'accounts': accounts,
+    }
     return render(request, 'admin_template/dsTaiKhoanGV.html', context=context)
 
 
+@allowed_users(allowed_roles=['Admin'])
 def capNhatTKGV(request,account_id):
     account = get_object_or_404(Teacher, id=account_id)
     user = get_object_or_404(CustomUser, id=account.user.id)
@@ -714,22 +746,29 @@ def capNhatTKGV(request,account_id):
     else:
         return render(request, "admin_template/capNhatGV.html", context)
 
-def xoaTKGV(request,account_id):
+
+
+@allowed_users(allowed_roles=['Admin'])
+def xoaTKGV(request, account_id):
     account = get_object_or_404(Teacher, id=account_id)
     account.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanGV'))
 
+
+@allowed_users(allowed_roles=['Admin'])
 def dsTaiKhoanAdmin(request):
     accountsAdmin = Admin.objects.all()
     formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in accountsAdmin]
-    accounts = zip(accountsAdmin,formatDate)
+    accounts = zip(accountsAdmin, formatDate)
     context = {
-            'accounts': accounts,
-        }
+        'accounts': accounts,
+    }
     return render(request, 'admin_template/dsTaiKhoanAdmin.html', context=context)
 
-def capNhatTKAdmin(request,account_id):
+
+@allowed_users(allowed_roles=['Admin'])
+def capNhatTKAdmin(request, account_id):
     account = get_object_or_404(Admin, id=account_id)
     user = get_object_or_404(CustomUser, id=account.user.id)
     form = updateCustomUserForm(request.POST or None, instance=user)
@@ -748,7 +787,7 @@ def capNhatTKAdmin(request,account_id):
             address = form.cleaned_data.get('address')
             try:
                 account = Admin.objects.get(id=account.id)
-                user = CustomUser.objects.get(id = account.user.id)
+                user = CustomUser.objects.get(id=account.user.id)
                 user.username = username
                 user.name = name
                 user.dateOfBirth = dateOfBirth
@@ -767,7 +806,8 @@ def capNhatTKAdmin(request,account_id):
         return render(request, "admin_template/capNhatAdmin.html", context)
 
 
-def xoaTKAdmin(request,account_id):
+@allowed_users(allowed_roles=['Admin'])
+def xoaTKAdmin(request, account_id):
     account = get_object_or_404(Admin, id=account_id)
     account.delete()
     messages.success(request, "Xóa thành công !")
@@ -776,7 +816,7 @@ def xoaTKAdmin(request,account_id):
 
 # Teacher
 @login_required(login_url='login')
-@allowed_users(roles=['2'])
+@allowed_users(roles=['Teacher'])
 def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
     mark_query = []
     classes = []
@@ -808,13 +848,13 @@ def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
     return render(request, 'teacher_template/bangDiemGV.html', context=context)
 
 @login_required(login_url='login')
-@allowed_users(roles=['2'])
+@allowed_users(roles=['Teacher'])
 def bangDiemGV(request):
     return bangDiemGVFilter(request, '---', '---', '---')
 
 
 @login_required(login_url='login')
-@allowed_users(roles=['2'])
+@allowed_users(roles=['Teacher'])
 def capNhatDiem(request, mark_id):
     mark = get_object_or_404(Mark, id=mark_id)
     form = transcriptForm(request.POST or None, instance=mark)
