@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <h3 class="label">Tài khoản học sinh</h3>
-    <div class="card card-body">
+    <div class="card card-body shadow-lg">
 
         <table class="table table-sm">
             <tr>
@@ -29,8 +29,8 @@
                     <td>{{account.user.phone}}</td>
                     <td>{{account.user.address}}</td>
                     <td>
-                        <a href="{% url 'capNhatTKAdmin' account.id %}" class="btn btn-primary">Cập nhật</a> -
-                        <a href="{% url 'xoaTKAdmin' account.id %}" onclick="return confirm('Xác nhận xóa tài khoản này ?')" class="btn btn-danger">Xóa</a>
+                        <a href="{% url 'capNhatTKHS' account.id %}" class="btn btn-primary">Cập nhật</a> -
+                        <a href="{% url 'xoaTKHS' account.id %}" onclick="return confirm('Xác nhận xóa tài khoản này ?')" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             {% endfor %}

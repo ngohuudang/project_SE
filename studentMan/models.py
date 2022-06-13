@@ -61,12 +61,12 @@ class Age(models.Model):
 
 
 class ClassOfSchool(models.Model):
-    classId = models.CharField(max_length=200, null=False, unique=False)
+    classId = models.CharField(max_length=10, null=False, unique=False)
     max_number = models.IntegerField(null=False)
     year = models.ForeignKey(Age, null=False, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.classId
+        return self.classId+ '_'+ self.year.year
 
 
 class Subject(models.Model):

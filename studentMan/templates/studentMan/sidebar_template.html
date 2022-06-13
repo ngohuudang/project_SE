@@ -10,54 +10,53 @@
     <link rel="stylesheet" href="{% static './css/roles.css' %}">
 
     <!-- Sidebar Menu -->
-    <div class="bigdiv">
-        <div class="roles">
-            <p class="p1">
-                {{ role }}
-            </p>
-        </div>
-        <nav>
-            <ul class="list-unstyled components">
-                <li>
-                    {% url 'admin_home' as admin_home %}
-                    <a href="{{ admin_home }}" class="{% if admin_home == request.path %} active {% endif %}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <span>
+    <nav>
+        <ul class="list-unstyled components">
+            <li class="info">
+                <a href="#profileMunu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle mb-2">
+                    <i class="nav-icon fas fa-user"></i>
+                    Tài khoản: {{user}}
+                </a>
+                <ul class="collapse list-unstyled" id="profileMunu">
+                    <li>
+                        {% url 'capNhatTaiKhoan' as capNhatTaiKhoan %}
+                        <a href="{{capNhatTaiKhoan}}">Chỉnh sửa thông tin</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Đăng xuất</a>
+                    </li>
+                </ul>
+            </li>
+            {% if role == 'Admin' %}
+            <li>
+                {% url 'admin_home' as admin_home %}
+                <a href="{{ admin_home }}" class="{% if admin_home == request.path %} active {% endif %}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <span>
                         Trang chủ
                     </span>
                     </a>
                 </li>
-                {% if role == 'Admin' %}
+           
                     <div class="sidebar-content"><p>Tài khoản</p></div>
                     <li>
-                        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="nav-icon fas fa-th"></i>
-                            <span>
-                                Thêm tài khoản
-                            </span>
-                        </a>
-                        <ul class="collapse list-unstyled" id="accountSubmenu">
-                            <li>
-                                {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
-                                <a href="{{ tiep_nhan_hoc_sinh }}"
-                                   class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
-                            </li>
-                            <li>
-                                {% url 'themGV' as them_tk_GV %}
-                                <a href="{{ them_tk_GV }}"
-                                   class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo
-                                    viên</a>
-                            </li>
-                            <li>
-                                {% url 'themAdmin' as them_tk_Admin %}
-                                <a href="{{ them_tk_Admin }}"
-                                   class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
-                            </li>
-                        </ul>
+                        {% url 'tiepNhanHS' as tiep_nhan_hoc_sinh %}
+                        <a href="{{ tiep_nhan_hoc_sinh }}"
+                           class="{% if tiep_nhan_hoc_sinh == request.path %} active {% endif %}">Học sinh</a>
                     </li>
-
-
                     <li>
+                        {% url 'themGV' as them_tk_GV %}
+                        <a href="{{ them_tk_GV }}" class="{% if them_tk_GV == request.path %} active {% endif %}">Giáo
+                            viên</a>
+                    </li>
+                    <li>
+                        {% url 'themAdmin' as them_tk_Admin %}
+                        <a href="{{ them_tk_Admin }}" class="{% if them_tk_Admin == request.path %} active {% endif %}">Admin</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
                         <a href="#listAccountSubmenu" data-toggle="collapse" aria-expanded="false"
                            class="dropdown-toggle">
                             <i class="nav-icon fas fa-th"></i>
@@ -87,7 +86,6 @@
                     </li>
                 {% endif %}
 
-
                 <div class="sidebar-content"><p>Thông tin/Điểm</p></div>
 
                 <li>
@@ -112,7 +110,6 @@
                         </a>
                     </li>
                 {% endif %}
-
                 <li>
                     {% url 'bangDiem' as bangDiem %}
                     <a href="{{ bangDiem }}"
@@ -167,7 +164,6 @@
                     </span>
                         </a>
                     </li>
-
                     <li class="nav-item">
                         {% url 'quanLiMon' as quan_li_mon_hoc %}
                         <a href="{{ quan_li_mon_hoc }}"
@@ -179,9 +175,6 @@
                         </a>
                     </li>
                 {% endif %}
-                <li>
-                    <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
-                </li>
             </ul>
         </nav>
     </div>
