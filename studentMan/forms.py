@@ -57,51 +57,56 @@ class ageForm(forms.ModelForm):
         fields = '__all__'
 
 class YearForm(forms.ModelForm):
-    year_choices = set([(a, a.year) for a in Age.objects.all()])
-    year = forms.CharField(label="",widget=forms.Select(
-        choices=year_choices, 
-        attrs={'class': 'form-select'
-    }))
+    try:
+        year_choices = set([(a, a.year) for a in Age.objects.all()])
+        year = forms.CharField(label="",widget=forms.Select(
+            choices=year_choices, 
+            attrs={'class': 'form-select'
+        }))
+    except:
+        ''''''
     class Meta:
         model = Age
         fields = ['year']
 
 
 class CustomUserForm(forms.ModelForm):
-    username = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':"username_user", 'class':"form-control"
-    }))
+    try:
+        username = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':"username_user", 'class':"form-control"
+        }))
 
-    password = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':"password_user", 'class':"form-control"
-    }))
+        password = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':"password_user", 'class':"form-control"
+        }))
 
-    name = forms.CharField(label='', widget=forms.TextInput(
-        attrs={'id':"name_user", 'class':"form-control"
-    }))
-    dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
-        attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
-    }))
+        name = forms.CharField(label='', widget=forms.TextInput(
+            attrs={'id':"name_user", 'class':"form-control"
+        }))
+        dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
+            attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
+        }))
 
-    sex = forms.CharField(label="",widget=forms.Select(
-        choices=CustomUser().SEX_CATELOGY, 
-        attrs={'class': 'form-select', 'id': 'sex_user'
-    }))
+        sex = forms.CharField(label="",widget=forms.Select(
+            choices=CustomUser().SEX_CATELOGY, 
+            attrs={'class': 'form-select', 'id': 'sex_user'
+        }))
 
-    email = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
-    }))
+        email = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
+        }))
 
-    address = forms.CharField(label="",widget=forms.Textarea(
-        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
-            'placeholder':"12, đường 01, quận 1, tp HCM"
-    }))
+        address = forms.CharField(label="",widget=forms.Textarea(
+            attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
+                'placeholder':"12, đường 01, quận 1, tp HCM"
+        }))
 
 
-    phone = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':'phone_user', 'class': 'form-control',
-    }))
-
+        phone = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':'phone_user', 'class': 'form-control',
+        }))
+    except:
+        ''''''
     # def __init__(self, *args, **kwargs):
     #     super(CustomUserForm, self).__init__(*args, **kwargs)
     #     if kwargs.get('instance'):
@@ -137,13 +142,15 @@ class TeacherForm(CustomUserForm):
 
 
 class StudentForm(CustomUserForm):
-    class_choices = {(None, '-----')}
-    class_choices.update(set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()]))
-    classOfSchool = forms.CharField(label="",widget=forms.Select(
-        choices=class_choices, 
-        attrs={'class': 'form-select'
-    }), required = False)
-    
+    try:
+        class_choices = {(None, '-----')}
+        class_choices.update(set([(c.classId, c.classId) for c in ClassOfSchool.objects.all()]))
+        classOfSchool = forms.CharField(label="",widget=forms.Select(
+            choices=class_choices, 
+            attrs={'class': 'form-select'
+        }), required = False)
+    except:
+        ''''''
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.fields['classOfSchool'].required = False
@@ -169,68 +176,72 @@ class subjectForm(forms.ModelForm):
         fields = YearForm.Meta.fields + ['SubjectID', 'name', 'approved_mark']
 
 class userUpdateForm(forms.ModelForm):
-    name = forms.CharField(label='', widget=forms.TextInput(
-        attrs={'id':"name_user", 'class':"form-control"
-    }))
-    dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
-        attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
-    }))
+    try:
+        name = forms.CharField(label='', widget=forms.TextInput(
+            attrs={'id':"name_user", 'class':"form-control"
+        }))
+        dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
+            attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
+        }))
 
-    sex = forms.CharField(label="",widget=forms.Select(
-        choices=CustomUser().SEX_CATELOGY, 
-        attrs={'class': 'form-select', 'id': 'sex_user'
-    }))
+        sex = forms.CharField(label="",widget=forms.Select(
+            choices=CustomUser().SEX_CATELOGY, 
+            attrs={'class': 'form-select', 'id': 'sex_user'
+        }))
 
-    email = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
-    }))
+        email = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
+        }))
 
-    address = forms.CharField(label="",widget=forms.Textarea(
-        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
-            'placeholder':"12, đường 01, quận 1, tp HCM"
-    }))
+        address = forms.CharField(label="",widget=forms.Textarea(
+            attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
+                'placeholder':"12, đường 01, quận 1, tp HCM"
+        }))
 
 
-    phone = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':'phone_user', 'class': 'form-control',
-    }))
-
+        phone = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':'phone_user', 'class': 'form-control',
+        }))
+    except:
+        ''''''
     class Meta:
         model = CustomUser
         fields = ('name', 'dateOfBirth', 'sex', 'phone', 'email', 'address')
 
 
 class updateCustomUserForm(forms.ModelForm):
-    username = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':"username_user", 'class':"form-control"
-    }))
+    try:
+        username = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':"username_user", 'class':"form-control"
+        }))
 
-    name = forms.CharField(label='', widget=forms.TextInput(
-        attrs={'id':"name_user", 'class':"form-control"
-    }))
-    dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
-        attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
-    }))
+        name = forms.CharField(label='', widget=forms.TextInput(
+            attrs={'id':"name_user", 'class':"form-control"
+        }))
+        dateOfBirth = forms.CharField(label="",widget=forms.DateInput(
+            attrs={'type': 'date', 'id':"datepicker", 'class': 'form-control' 
+        }))
 
-    sex = forms.CharField(label="",widget=forms.Select(
-        choices=CustomUser().SEX_CATELOGY, 
-        attrs={'class': 'form-select', 'id': 'sex_user'
-    }))
+        sex = forms.CharField(label="",widget=forms.Select(
+            choices=CustomUser().SEX_CATELOGY, 
+            attrs={'class': 'form-select', 'id': 'sex_user'
+        }))
 
-    email = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
-    }))
+        email = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'type': 'email', 'id':'email_user', 'class': 'form-control',
+        }))
 
-    address = forms.CharField(label="",widget=forms.Textarea(
-        attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
-            'placeholder':"12, đường 01, quận 1, tp HCM"
-    }))
+        address = forms.CharField(label="",widget=forms.Textarea(
+            attrs={"rows":4, 'class': 'form-control', 'id': 'address_user', 
+                'placeholder':"12, đường 01, quận 1, tp HCM"
+        }))
 
 
-    phone = forms.CharField(label="",widget=forms.TextInput(
-        attrs={'id':'phone_user', 'class': 'form-control',
-    }))
-
+        phone = forms.CharField(label="",widget=forms.TextInput(
+            attrs={'id':'phone_user', 'class': 'form-control',
+        }))
+    except:
+        ''''''
     class Meta:
         model = CustomUser
         fields = ['username', 'name', 'dateOfBirth', 'sex', 'email','address', 'phone']
