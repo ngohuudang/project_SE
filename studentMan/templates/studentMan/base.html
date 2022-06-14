@@ -37,7 +37,9 @@
 
             <section class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                    </button>
                 </div>
             </section>
             <div class="container-fluid">
@@ -66,17 +68,17 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     {% comment %} <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> {% endcomment %}
 
-    <!--     
+    {% block custom_js %}
+
+    {% endblock custom_js %}
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
         });
-    </script> -->
-    {% block custom_js %}
-
-    {% endblock custom_js %}
+        
+    </script>
 </body>
 
 </html>

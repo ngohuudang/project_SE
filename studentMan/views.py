@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.forms import *
 from .report import *
 from datetime import datetime
-from .decorators import unauthenticated_user, allowed_users
-from django.urls import reverse,reverse_lazy
+from .decorators import *
+from django.urls import reverse, reverse_lazy
+
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from .filters import *
@@ -21,7 +22,7 @@ semester = 2
 # Create your views here.
 
 @login_required(login_url='login')
-@allowed_users(roles=['1'])
+@allowed_users(allowed_roles=['Admin', 'Teacher', 'Student'])
 def admin_home(request):
     total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
@@ -46,9 +47,15 @@ def loginPage(request):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
-            login(request, user)
-            return redirect('admin_home')
+            login(request, user)     
+            if request.user.role == '1':
+                return redirect(reverse("admin_home"))
+            elif request.user.role == '2':
+                return redirect(reverse("admin_home"))
+            else:
+                return redirect(reverse("admin_home"))
         else:
             messages.info(request, 'Username or Password is incorrect')
     context = {}
@@ -187,9 +194,8 @@ def tiepNhanHS(request):
     return render(request, 'admin_template/tiepNhanHS.html', context=context)
 
 
-
 @login_required(login_url='login')
-@allowed_users(roles=['Admin'])
+@allowed_users(allowed_roles=['Admin', 'Teacher'])
 def dsLop(request):
     students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
@@ -310,7 +316,7 @@ def traCuu(request,age_id):
     return render(request, 'admin_template/traCuu.html', context=context)
 
 @login_required(login_url='login')
-@allowed_users(roles=['Admin'])
+@allowed_users(allowed_roles=['Admin'])
 def bangDiem(request):
     marks = Mark.objects.all()
     myFilter = MarkFilter(request.GET, queryset=marks)
@@ -816,7 +822,7 @@ def xoaTKAdmin(request, account_id):
 
 # Teacher
 @login_required(login_url='login')
-@allowed_users(roles=['Teacher'])
+@allowed_users(allowed_roles=['Teacher'])
 def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
     mark_query = []
     classes = []
@@ -848,13 +854,13 @@ def bangDiemGVFilter(request, lop,hocKy, nienKhoa):
     return render(request, 'teacher_template/bangDiemGV.html', context=context)
 
 @login_required(login_url='login')
-@allowed_users(roles=['Teacher'])
+@allowed_users(allowed_roles=['Teacher'])
 def bangDiemGV(request):
     return bangDiemGVFilter(request, '---', '---', '---')
 
 
 @login_required(login_url='login')
-@allowed_users(roles=['Teacher'])
+@allowed_users(allowed_roles=['Teacher'])
 def capNhatDiem(request, mark_id):
     mark = get_object_or_404(Mark, id=mark_id)
     form = transcriptForm(request.POST or None, instance=mark)
