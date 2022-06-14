@@ -167,3 +167,14 @@ AUTH_USER_MODEL = 'studentMan.CustomUser'
 USE_TZ = False
 
 TEMPLATES[0]['OPTIONS']['context_processors'].append("studentMan.context_processors.get_role")
+
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ngohuudang2001@gmail.com'
+EMAIL_HOST_PASSWORD = ''
