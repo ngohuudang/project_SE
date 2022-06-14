@@ -50,11 +50,22 @@ class classForm(forms.ModelForm):
     class Meta:
         model = ClassOfSchool
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(classForm, self).__init__(*args, **kwargs)
+        self.fields['classId'].widget.attrs.update({'class': 'form-control'})
+        self.fields['max_number'].widget.attrs.update({'class': 'form-control'})
+        self.fields['year'].widget.attrs.update({'class': 'form-select'})
+
 
 class ageForm(forms.ModelForm):
     class Meta:
         model = Age
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(ageForm, self).__init__(*args, **kwargs)
+        self.fields['year'].widget.attrs.update({'class': 'form-control'})
+        self.fields['max_age'].widget.attrs.update({'class': 'form-control'})
+        self.fields['min_age'].widget.attrs.update({'class': 'form-control'})
 
 class YearForm(forms.ModelForm):
     try:
