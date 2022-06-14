@@ -25,45 +25,45 @@
 
 **Cài đặt môi trường**
 ```
-$  pip install virtualenv
+pip install virtualenv
 ```
 
 **Tạo môi trường**
 
 Trên Windows
 ```
-$  python -m venv venv
+python -m venv venv
 ```
 Trên Linux
 ```
-$  virtualenv .
+virtualenv .
 ```
 
 **Kích hoạt môi trường**
 
 Trên Windows
 ```
-$  source venv/scripts/activate
+source venv/scripts/activate
 ```
 
 Trên Linux
 ```
-$  source bin/activate
+source bin/activate
 ```
 
 **3. Clone project**
 ```
-$  git clone https://github.com/ngohuudang2001/project_SE.git
+git clone https://github.com/ngohuudang2001/project_SE.git
 ```
 
 Chuyển đến thư mục chứa project
 ```
-$  cd project_SE
+cd project_SE
 ```
 
 **4. Cài đặt các thư viện từ 'requirements.txt'**
 ```python
-$  pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 **5. Database migration**
@@ -74,13 +74,13 @@ $ python manage.py migrate
 
 **6. Chạy chương trình**
 ```python
-$ python manage.py runserver
+python manage.py runserver
 ```
 
 **7. Tạo tài khoản Admin(Super User)**
 
 ```python
-$  python manage.py createsuperuser
+python manage.py createsuperuser
 ``` 
 **8. Đăng nhập và sử dụng**
 
