@@ -890,7 +890,8 @@ def capNhatDiem(request, mark_id):
         return render(request, "teacher_template/capNhatDiem.html", context)
 
 # Student
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Student'])
 def bangDiemHSFilter(request, lop, mon, hocKy, nienKhoa):
     marks = Mark.objects.filter(student__user=request.user)
     if lop != '---':
@@ -917,5 +918,35 @@ def bangDiemHSFilter(request, lop, mon, hocKy, nienKhoa):
     }
     return render(request, 'student_template/bangDiemHS.html', context=context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Student'])
 def bangDiemHS(request):
     return bangDiemHSFilter(request, '---', '---', '---', '---')
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Student'])
+
+def dsLopHSFilter(request, lop):
+    user = Student.objects.get(user=request.user)
+    classofuser = user.classOfSchool.all()
+    stds = []
+    listStd = Student.objects.all().order_by('user__name')
+    for c in classofuser:
+        for std in listStd:
+            if c in std.classOfSchool.all():
+                stds.append(std.id)
+    resultStd=Student.objects.filter(pk__in=stds)
+    print(lop)
+    if lop != '---':
+        resultStd = resultStd.filter(classOfSchool__classId = lop)
+
+    context = {
+        'resultStd': resultStd,
+        'current_class': lop,
+        'classofuser': classofuser,
+
+    }
+    return render(request, 'student_template/dsLopHS.html', context=context)
+
+def dsLopHS(request):
+    return dsLopHSFilter(request, '---')
