@@ -1,9 +1,9 @@
 {% extends 'studentMan/base.html' %}
 {% load static %}
 {% block content %}
-    <h3 class="label">Danh sách lớp</h3>
+    <h3 class="label">Danh sách lớp của học sinh</h3>
     <div class="card card-body shadow-lg">
-        <form method="get" class="main_form-header row">
+    <form method="get" class="main_form-header row">
             {% csrf_token %}
             <div class="main_form_class col-lg-3">
                 <div class="row">
@@ -27,11 +27,10 @@
             </div>
             <div class="main_form_term col-lg-2">
                 <div class="row">
-                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>                              
+                    <button type="submit" class="btn btn-outline-primary col-lg-11">Xem kết quả</button>
                 </div>
             </div>
         </form>
-
         <table class="table table-sm">
             <tr>
                 <th>STT</th>
@@ -41,7 +40,7 @@
                 <th>Email</th>
                 <th>Địa chỉ</th>
             </tr>
-            {% for student in students %}
+            {% for student in resultStd %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{student.user.name}}</td>
@@ -58,5 +57,31 @@
         </table>
     </div>
     <br>
-    <a href="{% url 'chonNienKhoaLop' %}" type="button" class="btn btn-outline-primary" >Lập danh sách lớp</a> 
 {% endblock content %}
+
+{% block custom_js %}
+    <script>
+        document.getElementById("class_select").value = "{{current_class}}"
+        document.getElementById("subject_select").value = "{{ subject }}"
+        document.getElementById("semester_select").value = "{{ semester }}"
+        document.getElementById("year_select").value = "{{ year }}"
+        function getNewViews() {
+            var e = document.getElementById("class_select");
+            var classSelected = e.options[e.selectedIndex].text;
+            var semesters = document.getElementById("semester_select");
+            var semester = semesters.options[semesters.selectedIndex].text;
+            var years = document.getElementById("year_select");
+            var year = years.options[years.selectedIndex].text;
+            var subjects = document.getElementById("subject_select");
+            var subject = subjects.options[subjects.selectedIndex].text;
+            window.location.href = {% url 'baoCaoMH' %} +classSelected + "/" + subject + "/" + semester + "/" + year;
+        }
+
+        btn = document.getElementById("search");
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            getNewViews();
+        })
+    </script>
+
+{% endblock custom_js %}

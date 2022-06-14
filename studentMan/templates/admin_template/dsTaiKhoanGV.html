@@ -34,7 +34,7 @@
                     <td>{{account.subject.name}}</td>
                     <td>
                         <a href="{% url 'capNhatTKGV' account.id %}" class="btn btn-primary mb-2">Cập nhật</a>
-                        <a href="{% url 'xoaTKGV' account.id %}" onclick="return confirm('Xác nhận xóa tài khoản này ?')" class="btn btn-danger mb-2">Xóa</a>
+                        <a href="{% url 'xoaTKGV' account.id %}" onclick="return confirm('Xác nhận xóa tài khoản này ?')" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             {% endfor %}
