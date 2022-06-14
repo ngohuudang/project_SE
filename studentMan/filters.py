@@ -72,26 +72,11 @@ class StudentInMarkFilter(django_filters.FilterSet):
             widget=forms.TextInput(attrs={'class': 'form-control'}),
             lookup_expr='icontains'
         )
-        class_list=[]
-        for mark in Mark.objects.all():
-            for c in mark.student.classOfSchool.filter(year = mark.subject.year):
-                class_list.append(c)
-        class_choices = [(c.classId, c.classId) for c in set(class_list)]
-        classOfSchool = ChoiceFilter(
-            label='',
-            choices=class_choices,
-            method='filter_by_class',
-            widget=forms.Select(attrs={'class': 'form-select'})
-        )
     except:
         ''''''
     class Meta:
         model = Mark
         fields = []
-
-    def filter_by_class(self, queryset, name, value):
-        return queryset.filter(student__classOfSchool__classId=value)
-
 
 class ClassFilter(django_filters.FilterSet):
     try:
