@@ -88,6 +88,8 @@ python manage.py runserver
 ```
 git clone <đường dẫn HTTPS của repo>
 ```
+Sau đó cd vào repo vừa clone về
+
 **2. Viết file requirements.txt**
 
 Tạo file requirements.txt ở thư mục gốc của repo. Nội dung là tên các thư viện mà project cần sử dụng, và phiên bản của chúng nếu cần.
