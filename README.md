@@ -90,11 +90,11 @@ git clone <đường dẫn HTTPS của repo>
 ```
 **2. Viết file requirements.txt**
 
-Tạo file requirements.txt từ thư mục gốc của repo. Nội dung là tên các thư viện mà project cần sử dụng, và phiên bản của chúng nếu cần.
+Tạo file requirements.txt ở thư mục gốc của repo. Nội dung là tên các thư viện mà project cần sử dụng, và phiên bản của chúng nếu cần.
 
 **3. Tạo file Procfile**
 
-Tạo file Procfile để chỉ định cho heroku cách chạy project
+Tạo file Procfile ở thư mục gốc của repo để chỉ định cho heroku cách chạy project
 
 **4. Chỉnh sửa settings.py**
 
@@ -108,17 +108,14 @@ if 'DATABASE_URL' in os.environ:
 
 **5. Update schema**
 
-Chạy lệnh
 ```
 python manage.py migrate
 ```
-Để update schema
 
 **6. Tạo heroku app**
 ```python
 heroku create <tên app>
 ```
-Để tạo heroku app
 
 **7. Kết nối heroku app với repo hiện tại**
 ```python
