@@ -93,15 +93,24 @@
 
             <div class="sidebar-content"><p>Thông tin/Điểm</p></div>
 
-            <li>
-                {% url 'dsLop' as dsLop %}
-                <a href="{{ dsLop }}" class="{% if dsLop == request.path %} active {% endif %}">
-                    <i class="nav-icon fas fa-th"></i>
-                    <span>
-                    Danh sách lớp
-                </span>
-                </a>
-            </li>
+            
+            {% if role == 'Admin' or role == 'Teacher' %}
+                <li>
+                    {% url 'dsLop' as dsLop %}
+                    <a href="{{ dsLop }}" class="{% if dsLop == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <span>Danh sách lớp</span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    {% url 'dsLopHS' as dsLophocsinh %}
+                    <a href="{{ dsLophocsinh }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <span>Danh sách lớp</span>
+                    </a>
+                </li>
+            {%endif%}
             {% if role == 'Admin' or role == 'Teacher' %}
                 <li>
                     {% url 'chonNienKhoaTraCuu' as chonNienKhoaTraCuu %}
@@ -114,16 +123,29 @@
                     </a>
                 </li>
             {% endif %}
-            <li>
-                {% url 'bangDiem' as bangDiem %}
-                <a href="{{ bangDiem }}"
-                    class="{% if bangDiem == request.path %} active {% endif %}">
-                    <i class="nav-icon fas fa-th"></i>
-                    <span>
-                    Bảng điểm
-                </span>
-                </a>
-            </li>
+            {% if role == 'Admin' or role == 'Teacher' %}
+                <li>
+                    {% url 'bangDiem' as bangDiem %}
+                    <a href="{{ bangDiem }}"
+                        class="{% if bangDiem == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <span>
+                        Bảng điểm
+                    </span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    {% url 'bangDiemHS' as bangDiemHS %}
+                    <a href="{{ bangDiemHS }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <span>
+                        Bảng điểm
+                    </span>
+                    </a>
+                </li>
+            {%endif%}
+            
             {% if role == 'Admin' %}
             <li>
                 <a href="#summarySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">

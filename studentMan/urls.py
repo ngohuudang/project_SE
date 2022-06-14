@@ -76,4 +76,6 @@ urlpatterns = [
     #student
     path("bangdiemHS/", views.bangDiemHS, name='bangDiemHS'),
     path("bangdiemHS/<str:lop>/<str:mon>/<int:hocKy>/<str:nienKhoa>", views.bangDiemHSFilter, name='bangDiemHSFilter'),
+    path("danhsachlopHS/", views.dsLopHS, name='dsLopHS'),
+    path("danhsachlopHS/<str:lop>", views.dsLopHSFilter, name='dsLopHSFilter'),
 ]
