@@ -167,3 +167,7 @@ AUTH_USER_MODEL = 'studentMan.CustomUser'
 USE_TZ = False
 
 TEMPLATES[0]['OPTIONS']['context_processors'].append("studentMan.context_processors.get_role")
+
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
