@@ -58,8 +58,7 @@ def loginPage(request):
                 return redirect(reverse("admin_home"))
         else:
             messages.info(request, 'Username or Password is incorrect')
-    context = {}
-    return render(request, 'admin_template/login.html', context)
+    return render(request, 'admin_template/login.html')
 
 
 @login_required(login_url='login')
