@@ -41,6 +41,7 @@ urlpatterns = [
     path("danhsachtaikhoanAdmin/delete/<int:account_id>", views.xoaTKAdmin, name='xoaTKAdmin'),
 
     path("danhsachlop/", views.dsLop, name='dsLop'),
+    path("danhsachlopHS/", views.dsLopHS, name='dsLopHS'),
     path("danhsachlop/nienkhoa", views.chonNienKhoaLop, name='chonNienKhoaLop'),
     path("lapdanhsachlop/nienkhoa_<int:age_id>", views.lapDSLop, name='lapDSLop'),
 

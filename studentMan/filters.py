@@ -9,6 +9,7 @@ class MarkFilter(django_filters.FilterSet):
     try:
         years = set([mark.subject.year for mark in Mark.objects.all()])
         year_choices = [(y, y) for y in years]
+
         year = ChoiceFilter(
             label='Niên khóa',
             choices=year_choices,
@@ -76,7 +77,7 @@ class StudentInMarkFilter(django_filters.FilterSet):
         for mark in Mark.objects.all():
             for c in mark.student.classOfSchool.filter(year = mark.subject.year):
                 class_list.append(c)
-        class_choices = [(c.classId, c.classId) for c in set(class_list)]
+        class_choices = [(c, c) for c in set(class_list)]
         classOfSchool = ChoiceFilter(
             label='',
             choices=class_choices,
@@ -101,7 +102,7 @@ class ClassFilter(django_filters.FilterSet):
             for c in student.classOfSchool.all():
                 class_list.append(c)
                 year_list.append(c.year.year)
-        class_choices = [(c.classId, c.classId) for c in set(class_list)]
+        class_choices = [(c, c.classId) for c in set(class_list)]
         classOfSchool = ChoiceFilter(
             label='',
             choices=class_choices,
@@ -122,12 +123,13 @@ class ClassFilter(django_filters.FilterSet):
     class Meta:
         model = Student
         fields = []
-    
+
     def filter_by_class(self, queryset, name, value):
         return queryset.filter(classOfSchool__classId=value)
 
     def filter_by_year(self, queryset, name, value):
         return queryset.filter(classOfSchool__year=Age.objects.get(year = value))
+
 
 class YearFilter(django_filters.FilterSet):
     try:
