@@ -28,13 +28,13 @@ urlpatterns = [
     path("taotkhocsinh/",views.taoTKHocSinh,name='taoTKHocSinh')
     
     path('reset_password/',
-            auth_views.PasswordResetView.as_view(template_name='admin_template/capNhatMatKhau.html'),
+            auth_views.PasswordResetView.as_view(template_name='admin_template/reset_password_form.html'),
             name='reset_password'),
     path('reset_password_sent/',
             auth_views.PasswordResetDoneView.as_view(template_name='admin_template/thongBaoResetMatKhau.html'),
             name='password_reset_done'),
     path('reset/<uidb64>/<token>/',
-            auth_views.PasswordResetConfirmView.as_view(template_name='admin_template/reset_password_form.html'),
+            auth_views.PasswordResetConfirmView.as_view(template_name='admin_template/capNhatMatKhau.html'),
             name='password_reset_confirm'),
     path('reset_password_complete/',
             auth_views.PasswordResetCompleteView.as_view(template_name='admin_template/thongBaoResetMatKhauThanhCong.html'),
