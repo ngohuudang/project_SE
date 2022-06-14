@@ -66,17 +66,23 @@ $  cd project_SE
 $  pip3 install -r requirements.txt
 ```
 
-**5. Chạy chương trình**
+**5. Database migration**
 ```python
-$ python3 manage.py runserver
+$ python manage.py migrate
 ```
 
-**6. Tạo tài khoản Admin(Super User)**
 
+**6. Chạy chương trình**
+```python
+$ python manage.py runserver
 ```
-$  python3 manage.py createsuperuser
+
+**7. Tạo tài khoản Admin(Super User)**
+
+```python
+$  python manage.py createsuperuser
 ``` 
-**7. Đăng nhập và sử dụng**
+**8. Đăng nhập và sử dụng**
 
 # Hướng dẫn deploy project lên Heroku
 
