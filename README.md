@@ -136,6 +136,9 @@ git push heroku <tên branch muốn push>
 # Link demo trên Youtube 
 https://www.youtube.com/watch?v=kcMie5_ZDmM
 
+# Link web 
+https://student-management-hcmus.herokuapp.com/
+
 # Các chức năng đã hoàn thành
 - Tiếp nhận học sinh
 - Lập danh sách lớp
