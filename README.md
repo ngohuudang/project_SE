@@ -134,7 +134,16 @@ git push heroku <tên branch muốn push>
 ```
 
 # Link demo trên Youtube 
+https://www.youtube.com/watch?v=kcMie5_ZDmM
 
 # Các chức năng đã hoàn thành
+- Tiếp nhận học sinh
+- Lập danh sách lớp
+- Tra cứu học sinh
+- Nhận bảng điểm môn
+- Nhận báo cáo tổng kết
+- Quản lí qui định
 
 # Các chức năng cần làm thêm
+- xuất bảng điểm 
+- chỉnh sửa UI
