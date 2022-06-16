@@ -141,7 +141,7 @@ def themGV(request):
             subject = form.cleaned_data.get('subject')
             classOfSchool = form.cleaned_data.get('classOfSchool')
             try:
-                user = CustomUser.objects.create_user(
+                user = CustomUser.objects.create_staff(
                     username=username, password=password, name=name, role='2',
                     dateOfBirth=datetime.strptime(dateOfBirth, '%Y-%m-%d'),
                     sex=sex, email=email, phone=phone, address=address)
