@@ -48,11 +48,11 @@
                 <th>Email</th>
                 <th>Địa chỉ</th>
             </tr>
-            {% for student in students %}
+            {% for student, date in students %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{student.user.name}}</td>
-                    <td>{{student.user.dateOfBirth}}</td>
+                    <td>{{date}}</td>
                     {%if student.user.sex == '1'%}
                         <td>Nam</td>
                     {%else%}

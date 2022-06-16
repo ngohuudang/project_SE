@@ -123,11 +123,21 @@
                     </a>
                 </li>
             {% endif %}
-            {% if role == 'Admin' or role == 'Teacher' %}
+            {% if role == 'Admin' %}
                 <li>
                     {% url 'bangDiem' as bangDiem %}
                     <a href="{{ bangDiem }}"
                         class="{% if bangDiem == request.path %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <span>
+                        Bảng điểm
+                    </span>
+                    </a>
+                </li>
+            {% elif role == 'Teacher' %}
+                <li>
+                    {% url 'bangDiemGV' as bangDiemGV %}
+                    <a href="{{ bangDiemGV }}">
                         <i class="nav-icon fas fa-th"></i>
                         <span>
                         Bảng điểm
