@@ -15,11 +15,14 @@ class MarkFilter(django_filters.FilterSet):
             method='filter_by_year',
             widget=forms.Select(attrs={'class': 'form-select'})
         )
+        print(years)
+
         class_list=[]
         for mark in Mark.objects.all():
             for c in mark.student.classOfSchool.filter(year = mark.subject.year):
                 class_list.append(c)
         class_choices = [(c.classId, c.classId) for c in set(class_list)]
+        print(class_list)
         classOfSchool = ChoiceFilter(
             label='',
             choices=class_choices,

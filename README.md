@@ -101,7 +101,7 @@ Tạo file Procfile ở thư mục gốc của repo để chỉ định cho hero
 **4. Chỉnh sửa settings.py**
 
 - Thêm địa chỉ của heroku app, và localhost 127.0.0.1 vào ALLOWED_HOST
-- Thêm đoạn:
+- Thêm đoạn code bên dưới vào cuối file:
 ```
 if 'DATABASE_URL' in os.environ:
     import dj_database_url

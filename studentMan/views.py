@@ -22,7 +22,7 @@ semester = 2
 # Create your views here.
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Admin', 'Teacher', 'Student'])
+@allowed_users(allowed_roles=['Admin'])
 def admin_home(request):
     total_admins = Admin.objects.all().count()
     total_teachers = Teacher.objects.all().count()
@@ -53,9 +53,9 @@ def loginPage(request):
             if request.user.role == '1':
                 return redirect(reverse("admin_home"))
             elif request.user.role == '2':
-                return redirect(reverse("admin_home"))
+                return redirect(reverse("dsLop"))
             else:
-                return redirect(reverse("admin_home"))
+                return redirect(reverse("dsLopHS"))
         else:
             messages.info(request, 'Username or Password is incorrect')
     return render(request, 'admin_template/login.html')
@@ -179,11 +179,13 @@ def tiepNhanHS(request):
             phone = form.cleaned_data.get('phone')
             address = form.cleaned_data.get('address')
             try:
+                print("aaaaaaaaaaaaaaaaaaâ")
                 user = CustomUser.objects._create_user(
                     username=username, password=password, name=name, role='3',
                     dateOfBirth=datetime.strptime(dateOfBirth, '%Y-%m-%d'),
                     sex=sex, email=email, phone=phone, address=address)
                 student = Student(user=user)
+                print(student)
                 student.save()
                 messages.success(request, "Thêm thành công")
             except:
@@ -199,8 +201,9 @@ def dsLop(request):
     students = Student.objects.all().order_by('user__name')
     classFilter = ClassFilter(request.GET, queryset=students)
     students = classFilter.qs.order_by('user__name')
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in students]
     context = {
-        'students': students,
+        'students': zip(students,formatDate),
         'classFilter': classFilter,
     }
     return render(request, 'admin_template/dsLop.html', context=context)
@@ -232,11 +235,11 @@ def lapDSLop(request,age_id):
     for student in Student.objects.all():
         if student not in student_with_year:
             student_dont_with_year.append(student)
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in student_dont_with_year]
     form = CreateClassForm(request.POST, age_id=age_id)
-
     if request.method == 'POST':
         usernames = request.POST.getlist('username_class')
-        cl = request.POST.get('classOfSchool')
+        cl = request.POST.get('classId')
         class_list = ClassOfSchool.objects.all()
         for classOfSchool in class_list:
             if classOfSchool.classId == cl:
@@ -246,12 +249,22 @@ def lapDSLop(request,age_id):
                         student = Student.objects.get(user__username=username)
                         student.classOfSchool.add(classOfSchool)
                         student.save()
+                        for sub in Subject.objects.all():
+                            for semester_mark in range(1, semester + 1):
+                                mark = Mark()
+                                mark.student = student
+                                mark.subject = sub
+                                mark.semester_mark = semester_mark
+                                mark.markFifteen = 0
+                                mark.markOne = 0
+                                mark.markFinal = 0
+                                mark.save()
                     messages.success(request, "Thêm thành công")
                     return redirect(reverse('lapDSLop', kwargs={'age_id': age_id}))
                 else:
                     messages.success(request, "Số lượng học sinh vượt quá qui định")
     context = {
-        'students': student_dont_with_year,
+        'students': zip(student_dont_with_year,formatDate),
         'form': form,
     }
     return render(request, 'admin_template/lapDS.html', context=context)
@@ -291,6 +304,7 @@ def traCuu(request,age_id):
     classOfSchool = []
     marks_in_year = marks
     students_in_year = set([mark.student for mark in marks_in_year])
+    print(students_in_year)
     for student in students_in_year:
         students.append(student)
         subjects_in_year = set([mark.subject for mark in marks_in_year])
@@ -683,7 +697,8 @@ def capNhatTKHS(request,account_id):
 @allowed_users(allowed_roles=['Admin'])
 def xoaTKHS(request, account_id):
     account = get_object_or_404(Student, id=account_id)
-    account.delete()
+    user = CustomUser.objects.get(username = account.user.username)
+    user.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanHS'))
 
@@ -756,7 +771,8 @@ def capNhatTKGV(request,account_id):
 @allowed_users(allowed_roles=['Admin'])
 def xoaTKGV(request, account_id):
     account = get_object_or_404(Teacher, id=account_id)
-    account.delete()
+    user = CustomUser.objects.get(username = account.user.username)
+    user.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanGV'))
 
@@ -814,7 +830,8 @@ def capNhatTKAdmin(request, account_id):
 @allowed_users(allowed_roles=['Admin'])
 def xoaTKAdmin(request, account_id):
     account = get_object_or_404(Admin, id=account_id)
-    account.delete()
+    user = CustomUser.objects.get(username = account.user.username)
+    user.delete()
     messages.success(request, "Xóa thành công !")
     return redirect(reverse('dsTaiKhoanAdmin'))
 
@@ -881,7 +898,7 @@ def capNhatDiem(request, mark_id):
                 mark.markFinal = markFinal
                 mark.save()
                 messages.success(request, "Cập nhật thành công")
-                return redirect(reverse('bangDiem'))
+                return redirect(reverse('bangDiemGV'))
             except Exception as e:
                 messages.error(request, "Không thể cập nhật " + str(e))
         else:
@@ -939,9 +956,9 @@ def dsLopHSFilter(request, lop):
     print(lop)
     if lop != '---':
         resultStd = resultStd.filter(classOfSchool__classId = lop)
-
+    formatDate = [a.user.dateOfBirth.strftime("%d-%m-%y") for a in resultStd]
     context = {
-        'resultStd': resultStd,
+        'resultStd': zip(resultStd,formatDate),
         'current_class': lop,
         'classofuser': classofuser,
 
